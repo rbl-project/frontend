@@ -1,20 +1,36 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice,createAsyncThunk} from "@reduxjs/toolkit";
+import * as api from "../api";
 
 const initialState = {
-    count: 0,
-    data:{}
+    posts: [],
+    status: 'idle', //'idle' | 'loading' | 'succeeded' | 'failed'
+    error: null
 }
+
+export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
+    const response = await api.fetchPosts();
+    return response.data
+})
 
 const stateSlice = createSlice({
     name:"state2",
     initialState:initialState,
     reducers:{
-        increment2:(state,action) => {
-            state.count++;
-        },
-        decrement2:(state,action) => {
-            state.count--;
-        }
+    },
+    extraReducers:(builder)=>{
+        builder
+        .addCase(fetchPosts.pending, (state, action) => {
+            state.status = 'loading';
+        })
+        .addCase(fetchPosts.fulfilled, (state, action) => {
+            state.status = 'succeeded';
+            state.posts = action.payload;
+        })
+        .addCase(fetchPosts.rejected, (state, action) => {
+            state.status = 'failed';
+            state.error = action.error.message;
+        })
+
     }
 });
 

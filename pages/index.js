@@ -3,7 +3,8 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { useSelector, useDispatch } from 'react-redux';
 import { increment,decrement } from '../store/stateSlice';
-import { increment2,decrement2 } from '../store/stateSlice2';
+import { fetchPosts } from '../store/stateSlice2';
+import { useEffect } from 'react';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -15,11 +16,13 @@ export default function Home() {
       <Head>
         <title>Create Next App</title>
       </Head>
-      <h1>State1: {state1.count} and State2: {state2.count} </h1>
+      <h1>State1: {state1.count} </h1>
+      {state2.posts.map((post) => (
+        <h2 key={post.id}>{post.id}: {post.title}</h2>
+      ))}
       <button className="btn" onClick={() => { dispatch(increment(1)) }}>increment</button>
       <button className="btn" onClick={() => { dispatch(decrement(1)) }}>decrement</button>
-      <button className="btn" onClick={() => { dispatch(increment2(1)) }}>increment2</button>
-      <button className="btn" onClick={() => { dispatch(decrement2(1)) }}>decrement2</button>
+      <button className="btn" onClick={() => { dispatch(fetchPosts()) }}>get_posts</button>
     </div>
   )
 }
