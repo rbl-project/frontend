@@ -34,6 +34,5 @@ const stateSlice = createSlice({
     }
 });
 
-export const {increment2,decrement2} = stateSlice.actions;
 
 export default stateSlice.reducer;
