@@ -23,7 +23,7 @@ const Dashboard = () => {
     return (
 
         <DashboardLayout>
-            <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }} >
+            <Box component="main" sx={{ flexGrow: 1, p: 3 }} >
                 <Grid container spacing={3}>
                     <Grid xs={8}>
                         <Item>

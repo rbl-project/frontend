@@ -17,7 +17,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     ...theme.mixins.toolbar,
 }));
 
-const DashboardLayout = ({children}) => {
+const DashboardLayout = ({ children }) => {
 
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -31,7 +31,9 @@ const DashboardLayout = ({children}) => {
             <CssBaseline />
             < Navbar handleToggleDrawer={handleToggleDrawer} open={open} />
             < Sidebar open={open} drawerWidth={drawerWidth} DrawerHeader={DrawerHeader} />
-            {children}
+            <Box sx={{mt:8}}>
+                {children}
+            </Box>
         </Box>
     )
 }

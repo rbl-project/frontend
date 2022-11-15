@@ -4,6 +4,8 @@ import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import MuiDrawer from '@mui/material/Drawer';
 import Typography from '@mui/material/Typography';
+import Link from "next/link";
+import { useRouter } from 'next/router';
 
 import ListSubheader from '@mui/material/ListSubheader';
 import ListItem from '@mui/material/ListItem';
@@ -17,6 +19,7 @@ import MailIcon from '@mui/icons-material/Mail';
 const Sidebar = ({ open, drawerWidth, DrawerHeader }) => {
 
     const theme = useTheme();
+    const rounter = useRouter();
 
     const openedMixin = (theme) => ({
         width: drawerWidth,
@@ -69,20 +72,24 @@ const Sidebar = ({ open, drawerWidth, DrawerHeader }) => {
                     </Typography>
                 </ListSubheader>
                 <ListItem key={1} disablePadding sx={{ display: 'block' }}>
-                    <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5, }} >
-                        <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center', color: "white" }} >
-                            <InboxIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Data Overview" sx={{ opacity: open ? 1 : 0 }} />
-                    </ListItemButton>
+                    <Link href="/dashboard/exploratory-data-analysis/data-overview" >
+                        <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5, }} >
+                            <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center', color: "white" }} >
+                                <InboxIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Data Overview" sx={{ opacity: open ? 1 : 0 }} />
+                        </ListItemButton>
+                    </Link>
                 </ListItem>
                 <ListItem key={2} disablePadding sx={{ display: 'block' }}>
-                    <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5, }} >
-                        <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center', color: "white" }} >
-                            <MailIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Data Visualisation" sx={{ opacity: open ? 1 : 0 }} />
-                    </ListItemButton>
+                    <Link href="/dashboard/exploratory-data-analysis/data-visualization" >
+                        <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5, }} >
+                            <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center', color: "white" }} >
+                                <MailIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Data Visualization" sx={{ opacity: open ? 1 : 0 }} />
+                        </ListItemButton>
+                    </Link>
                 </ListItem>
             </List >
             <Divider light color="white" variant="middle" />
@@ -93,20 +100,24 @@ const Sidebar = ({ open, drawerWidth, DrawerHeader }) => {
                     </Typography>
                 </ListSubheader>
                 <ListItem key={1} disablePadding sx={{ display: 'block' }}>
-                    <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5, }} >
-                        <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center', color: "white" }} >
-                            <InboxIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Missing Value Imputation" sx={{ opacity: open ? 1 : 0 }} />
-                    </ListItemButton>
+                    <Link href="/dashboard/data-preprocessing/missing-value-imputation" >
+                        <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5, }} >
+                            <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center', color: "white" }} >
+                                <InboxIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Missing Value Imputation" sx={{ opacity: open ? 1 : 0 }} />
+                        </ListItemButton>
+                    </Link>
                 </ListItem>
                 <ListItem key={2} disablePadding sx={{ display: 'block' }}>
-                    <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5, }} >
-                        <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center', color: "white" }} >
-                            <MailIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Numerical Encoding" sx={{ opacity: open ? 1 : 0 }} />
-                    </ListItemButton>
+                    <Link href="/dashboard/data-preprocessing/numerical-encoding" >
+                        <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5, }} >
+                            <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center', color: "white" }} >
+                                <MailIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Numerical Encoding" sx={{ opacity: open ? 1 : 0 }} />
+                        </ListItemButton>
+                    </Link>
                 </ListItem>
             </List>
             <Divider light color="white" variant="middle" />
@@ -117,20 +128,24 @@ const Sidebar = ({ open, drawerWidth, DrawerHeader }) => {
                     </Typography>
                 </ListSubheader>
                 <ListItem key={1} disablePadding sx={{ display: 'block' }}>
-                    <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5, }} >
-                        <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center', color: "white" }} >
-                            <InboxIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Exponential Transformation" sx={{ opacity: open ? 1 : 0 }} />
-                    </ListItemButton>
+                    <Link href="/dashboard/feature-engineering/exponential-transformation" >
+                        <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5, }} >
+                            <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center', color: "white" }} >
+                                <InboxIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Exponential Transformation" sx={{ opacity: open ? 1 : 0 }} />
+                        </ListItemButton>
+                    </Link>
                 </ListItem>
                 <ListItem key={2} disablePadding sx={{ display: 'block' }}>
-                    <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5, }} >
-                        <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center', color: "white" }} >
-                            <MailIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Log Transformation" sx={{ opacity: open ? 1 : 0 }} />
-                    </ListItemButton>
+                    <Link href="/dashboard/feature-engineering/logarithmic-transformation" >
+                        <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5, }} >
+                            <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center', color: "white" }} >
+                                <MailIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Logarithmic Transformation" sx={{ opacity: open ? 1 : 0 }} />
+                        </ListItemButton>
+                    </Link>
                 </ListItem>
             </List>
         </Drawer >
