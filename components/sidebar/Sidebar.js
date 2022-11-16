@@ -5,7 +5,6 @@ import List from '@mui/material/List';
 import MuiDrawer from '@mui/material/Drawer';
 import Typography from '@mui/material/Typography';
 import Link from "next/link";
-import { useRouter } from 'next/router';
 
 import ListSubheader from '@mui/material/ListSubheader';
 import ListItem from '@mui/material/ListItem';
@@ -14,12 +13,24 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import { useSelector } from 'react-redux';
+
+const drawerWidth = 300;
+
+const DrawerHeader = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+}));
 
 
-const Sidebar = ({ open, drawerWidth, DrawerHeader }) => {
+const Sidebar = () => {
 
     const theme = useTheme();
-    const rounter = useRouter();
+    const open = useSelector((state) => state.global.openSidebar);
 
     const openedMixin = (theme) => ({
         width: drawerWidth,
@@ -64,7 +75,7 @@ const Sidebar = ({ open, drawerWidth, DrawerHeader }) => {
             <DrawerHeader>
 
             </DrawerHeader>
-            <Divider light color="white" variant="middle" />
+            {/* <Divider light color="white" variant="middle" /> */}
             <List sx={{ mt: 1 }} >
                 <ListSubheader color="inherit" sx={{ backgroundColor: "inherit" }} inset={!open} >
                     <Typography variant="h6" component="div" >

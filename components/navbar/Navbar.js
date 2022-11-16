@@ -5,10 +5,14 @@ import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import {toggleSidebar} from "/store/globalStateSlice";
+import { useSelector,useDispatch } from 'react-redux';
 
-const Navbar = ({ handleToggleDrawer, open }) => {
+const Navbar = () => {
 
     const theme = useTheme();
+    const dispatch = useDispatch();
+    const open = useSelector((state) => state.global.openSidebar);
 
     const AppBar = styled(MuiAppBar, {
         shouldForwardProp: (prop) => prop !== 'open',
@@ -21,9 +25,9 @@ const Navbar = ({ handleToggleDrawer, open }) => {
     }));
 
     return (
-        <AppBar position="fixed" open={open} sx={{bgcolor:"white",color:"black",zIndex: (theme) => theme.zIndex.drawer + 1 }} >
-            <Toolbar>
-                <IconButton color="inherit" aria-label="open drawer" onClick={handleToggleDrawer} edge="start" sx={{marginRight: 5}} >
+        <AppBar position="fixed" open={open} sx={{bgcolor:"white",color:"black",zIndex: (theme) => theme.zIndex.drawer + 1 }} elevation={0} >
+            <Toolbar variant='dense'>
+                <IconButton color="inherit" aria-label="open drawer" onClick={() => {dispatch(toggleSidebar())}} edge="start" sx={{marginRight: 5}} >
                     <MenuIcon />
                 </IconButton>
                 <Typography variant="h6" noWrap component="div">
