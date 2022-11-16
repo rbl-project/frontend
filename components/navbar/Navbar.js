@@ -25,7 +25,7 @@ const Navbar = () => {
     }));
 
     return (
-        <AppBar position="fixed" open={open} sx={{bgcolor:"white",color:"black",zIndex: (theme) => theme.zIndex.drawer + 1 }} elevation={0} >
+        <AppBar position="fixed" open={open} sx={{bgcolor:"white",color:"black",zIndex: (theme) => theme.zIndex.drawer + 1 }} elevation={1} >
             <Toolbar variant='dense'>
                 <IconButton color="inherit" aria-label="open drawer" onClick={() => {dispatch(toggleSidebar())}} edge="start" sx={{marginRight: 5}} >
                     <MenuIcon />

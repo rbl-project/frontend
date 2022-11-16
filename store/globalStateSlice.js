@@ -1,7 +1,8 @@
 import {createSlice} from "@reduxjs/toolkit";
 
 const initialState = {
-    openSidebar: false 
+    openSidebar: false,
+    openMenuItem:"", 
 }
 
 const stateSlice = createSlice({
@@ -11,9 +12,12 @@ const stateSlice = createSlice({
         toggleSidebar:(state) => {
             state.openSidebar = !state.openSidebar;
         },
+        setOpenMenuItem:(state,action) => {
+            state.openMenuItem = action.payload;
+        }
     }
 });
 
-export const {toggleSidebar} = stateSlice.actions;
+export const {toggleSidebar,setOpenMenuItem} = stateSlice.actions;
 
 export default stateSlice.reducer;

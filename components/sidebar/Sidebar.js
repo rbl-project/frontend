@@ -66,36 +66,36 @@ const Sidebar = () => {
     );
 
     return (
-        <Drawer variant="permanent" open={open} PaperProps={{ sx: { backgroundColor: "rgba(30,41,59,1)", color: "white" } }} >
+        <Drawer variant="permanent" open={open} PaperProps={{ sx: { backgroundColor: "rgba(30,41,59,1)", color: "white",px:1 } }} >
             <DrawerHeader></DrawerHeader>
-            <List sx={{ mt: 1 }} >
+            <List sx={{ mt:0 }} >
                 <ListSubheader color="inherit" sx={{ backgroundColor: "inherit" }} inset={!open} >
-                    <Typography variant="h6" component="div" >
+                    <Typography variant="overline" component="div" >
                         Exploratory Data Analysis
                     </Typography>
                 </ListSubheader>
-                <SidebarItem key={1} name="Data Overview" path="/dashboard/exploratory-data-analysis/data-overview" ItemIcon={InboxIcon} open={open} />
-                <SidebarItem key={2} name="Data Visualization" path="/dashboard/exploratory-data-analysis/data-visualization" ItemIcon={MailIcon} open={open} />
+                <SidebarItem itemKey={1} name="Data Overview" path="/dashboard/exploratory-data-analysis/data-overview" ItemIcon={InboxIcon} open={open} />
+                <SidebarItem itemKey={2} name="Data Visualization" path="/dashboard/exploratory-data-analysis/data-visualization" ItemIcon={MailIcon} open={open} />
             </List >
-            <Divider light color="white" variant="middle" />
-            <List sx={{ mt: 1 }} >
+            {open && (<Divider light color="white" sx={{ borderColor: "rgba(0,0,0,0.5)" }} variant="middle" />)}
+            <List sx={{ mt:0}} >
                 <ListSubheader color="inherit" sx={{ backgroundColor: "inherit" }} inset={!open} >
-                    <Typography variant="h6" noWrap component="div">
+                    <Typography variant="overline" noWrap component="div">
                         Data Preprocessing
                     </Typography>
                 </ListSubheader>
-                <SidebarItem key={1} name="Missing Value Imputation" path="/dashboard/data-preprocessing/missing-value-imputation" ItemIcon={InboxIcon} open={open} />
-                <SidebarItem key={2} name="Numerical Encoding" path="/dashboard/data-preprocessing/numerical-encoding" ItemIcon={MailIcon} open={open} />
+                <SidebarItem itemKey={1} name="Missing Value Imputation" path="/dashboard/data-preprocessing/missing-value-imputation" ItemIcon={InboxIcon} open={open} />
+                <SidebarItem itemKey={2} name="Numerical Encoding" path="/dashboard/data-preprocessing/numerical-encoding" ItemIcon={MailIcon} open={open} />
             </List>
-            <Divider light color="white" variant="middle" />
-            <List sx={{ mt: 1 }}>
+            {open && (<Divider light color="white" sx={{ borderColor: "rgba(0,0,0,0.5)" }} variant="middle" />)}
+            <List sx={{ mt:0 }}>
                 <ListSubheader color="inherit" sx={{ backgroundColor: "inherit" }} inset={!open} >
-                    <Typography variant="h6" noWrap component="div">
+                    <Typography variant="overline" noWrap component="div">
                         Feature Engineering
                     </Typography>
                 </ListSubheader>
-                <SidebarItem key={1} name="Exponential Transformation" path="/dashboard/feature-engineering/exponential-transformation" ItemIcon={InboxIcon} open={open} />
-                <SidebarItem key={2} name="Logarithmic Transformation" path="/dashboard/feature-engineering/logarithmic-transformation" ItemIcon={MailIcon} open={open} />
+                <SidebarItem itemKey={1} name="Exponential Transformation" path="/dashboard/feature-engineering/exponential-transformation" ItemIcon={InboxIcon} open={open} />
+                <SidebarItem itemKey={2} name="Logarithmic Transformation" path="/dashboard/feature-engineering/logarithmic-transformation" ItemIcon={MailIcon} open={open} />
             </List>
         </Drawer >
     )
