@@ -28,8 +28,9 @@ const ProfileMenu = () => {
                 id="demo-positioned-button"
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
+                sx={{p:0}}
             >
-                <AccountCircle />
+                <AccountCircle fontSize="large"  />
             </IconButton>
             <Menu
                 id="demo-positioned-menu"

@@ -8,8 +8,10 @@ import Typography from '@mui/material/Typography';
 import { toggleSidebar } from "/store/globalStateSlice";
 import { useSelector, useDispatch } from 'react-redux';
 import Box from '@mui/material/Box';
+import AdbIcon from '@mui/icons-material/Adb';
 
 import ProfileMenu from "./profileMenu/ProfileMenu";
+import DatasetSelectDropdown from './datasetSelectDropdown/DatasetSelectDropdown';
 
 const Navbar = () => {
 
@@ -34,12 +36,14 @@ const Navbar = () => {
                     <IconButton color="inherit" aria-label="open drawer" onClick={() => { dispatch(toggleSidebar()) }} edge="start" sx={{ marginRight: 5 }} >
                         <MenuIcon />
                     </IconButton>
+                    <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                     <Typography variant="h6" noWrap component="div">
                         Dashboard
                     </Typography>
                     <Box sx={{ flexGrow: 1 }} />
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <ProfileMenu />
+                    <Box sx={{ display: { xs: 'none', md: 'flex' },mr:3}}>
+                        < DatasetSelectDropdown />
+                        < ProfileMenu />
                     </Box>
                 </Toolbar>
             </AppBar>
