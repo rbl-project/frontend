@@ -11,7 +11,7 @@ import Box from '@mui/material/Box';
 import AdbIcon from '@mui/icons-material/Adb';
 
 import ProfileMenu from "./profileMenu/ProfileMenu";
-import DatasetSelectDropdown from './datasetSelectDropdown/DatasetSelectDropdown';
+import DatasetSelectButton from './datasetSelectDropdown/DatasetSelectButton';
 
 const Navbar = () => {
 
@@ -30,7 +30,6 @@ const Navbar = () => {
     }));
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
             <AppBar position="fixed" open={open} sx={{ bgcolor: "white", color: "black", zIndex: (theme) => theme.zIndex.drawer + 1 }} elevation={1} >
                 <Toolbar variant='dense'>
                     <IconButton color="inherit" aria-label="open drawer" onClick={() => { dispatch(toggleSidebar()) }} edge="start" sx={{ marginRight: 5 }} >
@@ -42,12 +41,11 @@ const Navbar = () => {
                     </Typography>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' },mr:3}}>
-                        < DatasetSelectDropdown />
+                        < DatasetSelectButton />
                         < ProfileMenu />
                     </Box>
                 </Toolbar>
             </AppBar>
-        </Box>
     )
 }
 
