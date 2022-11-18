@@ -3,11 +3,10 @@ import { styled, useTheme } from '@mui/material/styles';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import MuiDrawer from '@mui/material/Drawer';
-import Typography from '@mui/material/Typography';
-import ListSubheader from '@mui/material/ListSubheader';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import SidebarItem from './sidebarItem/SidebarItem';
+import SidebarSubheader from './sidebarSubheader/SidebarSubheader';
 import { useSelector } from 'react-redux';
 
 const drawerWidth = 300;
@@ -66,34 +65,22 @@ const Sidebar = () => {
     );
 
     return (
-        <Drawer variant="permanent" open={open} PaperProps={{ sx: { backgroundColor: "rgba(30,41,59,1)", color: "white",px:1 } }} >
+        <Drawer variant="permanent" open={open} PaperProps={{ sx: { backgroundColor: "rgba(30,41,59,1)", color: "white", px: 1 } }} >
             <DrawerHeader></DrawerHeader>
-            <List sx={{ mt:0 }} >
-                <ListSubheader color="inherit" sx={{ backgroundColor: "inherit" }} inset={!open} >
-                    <Typography variant="overline" component="div" >
-                        Exploratory Data Analysis
-                    </Typography>
-                </ListSubheader>
+            <List sx={{ mt: 0 }} >
+                <SidebarSubheader title="Exploratory Data Analysis" open={open}></SidebarSubheader>
                 <SidebarItem itemKey={1} name="Data Overview" path="/dashboard/exploratory-data-analysis/data-overview" ItemIcon={InboxIcon} open={open} />
                 <SidebarItem itemKey={2} name="Data Visualization" path="/dashboard/exploratory-data-analysis/data-visualization" ItemIcon={MailIcon} open={open} />
             </List >
-            {open && (<Divider light color="white" sx={{ borderColor: "rgba(0,0,0,0.5)" }} variant="middle" />)}
-            <List sx={{ mt:0}} >
-                <ListSubheader color="inherit" sx={{ backgroundColor: "inherit" }} inset={!open} >
-                    <Typography variant="overline" noWrap component="div">
-                        Data Preprocessing
-                    </Typography>
-                </ListSubheader>
+            {/* {open && (<Divider light color="white" sx={{ borderColor: "rgba(0,0,0,0.5)" }} variant="middle" />)} */}
+            <List sx={{ mt: 0 }} >
+                <SidebarSubheader title="Data Preprocessing" open={open}></SidebarSubheader>
                 <SidebarItem itemKey={1} name="Missing Value Imputation" path="/dashboard/data-preprocessing/missing-value-imputation" ItemIcon={InboxIcon} open={open} />
                 <SidebarItem itemKey={2} name="Numerical Encoding" path="/dashboard/data-preprocessing/numerical-encoding" ItemIcon={MailIcon} open={open} />
             </List>
-            {open && (<Divider light color="white" sx={{ borderColor: "rgba(0,0,0,0.5)" }} variant="middle" />)}
-            <List sx={{ mt:0 }}>
-                <ListSubheader color="inherit" sx={{ backgroundColor: "inherit" }} inset={!open} >
-                    <Typography variant="overline" noWrap component="div">
-                        Feature Engineering
-                    </Typography>
-                </ListSubheader>
+            {/* {open && (<Divider light color="white" sx={{ borderColor: "rgba(0,0,0,0.5)" }} variant="middle" />)} */}
+            <List sx={{ mt: 0 }}>
+                <SidebarSubheader title="Feature Engineering" open={open}></SidebarSubheader>
                 <SidebarItem itemKey={1} name="Exponential Transformation" path="/dashboard/feature-engineering/exponential-transformation" ItemIcon={InboxIcon} open={open} />
                 <SidebarItem itemKey={2} name="Logarithmic Transformation" path="/dashboard/feature-engineering/logarithmic-transformation" ItemIcon={MailIcon} open={open} />
             </List>
