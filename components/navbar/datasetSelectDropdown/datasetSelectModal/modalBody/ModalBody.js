@@ -6,6 +6,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 
 import AvailableDatasetTab from './availableDatasetTab/AvailableDatasetTab';
+import UploadDatasetTab from "./uploadDatasetTab/UploadDatasetTab"
 
 
 const TabPanel = ({ children, value, index, ...other }) => {
@@ -54,7 +55,7 @@ const ModalBody = () => {
                     < AvailableDatasetTab />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    Upload New Dataset
+                    < UploadDatasetTab />
                 </TabPanel>
             </Box>
         </DialogContent>
