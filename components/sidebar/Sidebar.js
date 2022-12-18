@@ -5,8 +5,9 @@ import List from '@mui/material/List';
 import MuiDrawer from '@mui/material/Drawer';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import SidebarItem from './sidebarItem/SidebarItem';
-import SidebarSubheader from './sidebarSubheader/SidebarSubheader';
+
+import SidebarItem from './SidebarItem';
+import SidebarSubheader from './SidebarSubheader';
 import { useSelector } from 'react-redux';
 
 const drawerWidth = 300;

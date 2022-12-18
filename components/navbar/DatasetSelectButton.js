@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
-import DatasetSelectModal from './datasetSelectModal/DatasetSelectModal';
+import DatasetSelectModal from './DatasetSelectModal';
 
 const ColorButton = styled(Button)(({ theme }) => ({
     '&:hover': {

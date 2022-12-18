@@ -5,8 +5,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 
-import AvailableDatasetTab from './availableDatasetTab/AvailableDatasetTab';
-import UploadDatasetTab from "./uploadDatasetTab/UploadDatasetTab"
+import AvailableDatasetTab from './AvailableDatasetTab';
+import UploadDatasetTab from "./UploadDatasetTab"
 
 
 const TabPanel = ({ children, value, index, ...other }) => {

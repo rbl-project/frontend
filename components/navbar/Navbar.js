@@ -10,8 +10,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import Box from '@mui/material/Box';
 import AdbIcon from '@mui/icons-material/Adb';
 
-import ProfileMenu from "./profileMenu/ProfileMenu";
-import DatasetSelectButton from './datasetSelectDropdown/DatasetSelectButton';
+import ProfileMenu from "./ProfileMenu";
+import DatasetSelectButton from './DatasetSelectButton';
 
 const Navbar = () => {
 
