@@ -133,7 +133,7 @@ export const FormFooter = styled.div`
 
 `;
 
-export const FormFooterElement = styled.div`
+export const FormFooterElement = styled.a`
     display: inline-flex;
     color: white;
     font-size: 0.9rem;

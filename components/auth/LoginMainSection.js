@@ -86,7 +86,7 @@ const LoginMainSection = () => {
                         <FormFooterElement>
                             Forget Password?
                         </FormFooterElement>
-                        <FormFooterElement>
+                        <FormFooterElement href='/auth/register'>
                             Create new account
                         </FormFooterElement>
                     </FormFooter>

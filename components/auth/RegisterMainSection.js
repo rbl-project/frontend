@@ -87,7 +87,7 @@ const LoginMainSection = () => {
                 </Box>
                 <Box sx = {{width: "100%"}}>
                     <FormFooter style={{justifyContent: "center"}}>
-                        <FormFooterElement >
+                        <FormFooterElement href='/auth/login' >
                             Already have an account?
                         </FormFooterElement>
                     </FormFooter>
