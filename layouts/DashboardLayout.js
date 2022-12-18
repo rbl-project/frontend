@@ -8,7 +8,12 @@ import Sidebar from '../components/sidebar/Sidebar';
 const DashboardLayout = ({ children }) => {
 
     return (
-        <Box sx={{ display: 'flex', bgcolor: "rgba(218, 223, 230,1)", color: "black", minHeight: "100vh" }}>
+        <Box sx={{ 
+            display: 'flex', 
+            bgcolor: "rgba(218, 223, 230,1)", 
+            color: "black", 
+            minHeight: "100vh" 
+        }}>
             < Navbar />
             < Sidebar />
             <Box sx={{mt:6}}>
