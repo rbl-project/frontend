@@ -1,8 +1,7 @@
 import React from 'react'
 import { 
     Container,
-    Box,
-    FormControl
+    Box
 } from '@mui/material';
 
 // icons
@@ -44,10 +43,10 @@ const LoginMainSection = () => {
                     <FormHeader>
                         <SocialButtonWrapper>
                             <SocialLoginBUtton>
-                                <GoogleIcon fontSize='small' />Google
+                                <GoogleIcon fontSize='small' sx={{marginRight: "0.5rem"}} /> Google
                             </SocialLoginBUtton>
                             <SocialLoginBUtton>
-                                <GitHubIcon fontSize='small'/>GitHub
+                                <GitHubIcon fontSize='small' sx={{marginRight: "0.5rem"}}/>GitHub
                             </SocialLoginBUtton>
                         </SocialButtonWrapper>
 
@@ -83,7 +82,7 @@ const LoginMainSection = () => {
                 </Box>
                 <Box sx = {{width: "70%"}}>
                     <FormFooter>
-                        <FormFooterElement>
+                        <FormFooterElement href="/auth/forget-password">
                             Forget Password?
                         </FormFooterElement>
                         <FormFooterElement href='/auth/register'>

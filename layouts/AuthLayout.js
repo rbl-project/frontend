@@ -3,11 +3,12 @@ import Box from '@mui/material/Box';
 
 // Import components
 import AuthNavbar from '../components/navbar/AuthNavbar/AuthNavbar';
+import NoSSRWrapper from "../components/no-ssr-wrapper";
 
 const AuthLayout = ({ children }) => {
 
     return (
-        <>
+        <NoSSRWrapper>
             <Box sx = {{
                 display: "flow-root",
                 bgcolor: "rgba(30,41,59,1);",
@@ -19,7 +20,7 @@ const AuthLayout = ({ children }) => {
                 <AuthNavbar />
                 {children}
             </Box>
-        </>
+        </NoSSRWrapper>
     )
 }
 

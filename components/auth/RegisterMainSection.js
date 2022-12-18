@@ -1,8 +1,7 @@
 import React from 'react'
 import { 
     Container,
-    Box,
-    FormControl
+    Box
 } from '@mui/material';
 
 // icons
@@ -26,7 +25,7 @@ import {
 
 } from "./AuthStyles";
 
-const LoginMainSection = () => {
+const RegisterMainSection = () => {
     return (
         <Section >
            <Container maxWidth="sm" sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
@@ -97,6 +96,6 @@ const LoginMainSection = () => {
     )
 }
 
-export default LoginMainSection;
+export default RegisterMainSection;
 
 

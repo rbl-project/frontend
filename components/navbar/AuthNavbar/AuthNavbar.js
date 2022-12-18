@@ -33,7 +33,7 @@ const AuthNavbar = () => {
                             <ListOption> <TwitterIcon/> </ListOption>
                             <ListOption> <GitHubIcon/> </ListOption>
                             <ListOption>
-                                <HomeButton>
+                                <HomeButton href="/home">
                                     Home
                                 </HomeButton>
                             </ListOption>
