@@ -1,34 +1,27 @@
-import React from 'react'
-import Dropzone from 'react-dropzone'
+import React from 'react';
+import { useDropzone } from 'react-dropzone';
 
-const UploadDatasetTab = () => {
-    const getUploadParams = ({ meta }) => {
-      const url = 'https://httpbin.org/post'
-      return { url, meta: { fileUrl: `${url}/${encodeURIComponent(meta.name)}` } }
-    }
-  
-    const handleChangeStatus = ({ meta }, status) => {
-      console.log(status, meta)
-    }
-  
-    const handleSubmit = (files, allFiles) => {
-      console.log(files.map(f => f.meta))
-      allFiles.forEach(f => f.remove())
-    }
-  
-    return (
-      <Dropzone
-        getUploadParams={getUploadParams}
-        onChangeStatus={handleChangeStatus}
-        onSubmit={handleSubmit}
-        accept=".csv"
-        inputContent={(files, extra) => (extra.reject ? 'Image, audio and video files only' : 'Drag Files')}
-        styles={{
-          dropzoneReject: { borderColor: 'red', backgroundColor: '#DAA' },
-          inputLabel: (files, extra) => (extra.reject ? { color: 'red' } : {}),
-        }}
-      />
-    )
-  }
+const UploadDatasetTab = (props) => {
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+
+  const files = acceptedFiles.map(file => (
+    <li key={file.path}>
+      {file.path} - {file.size} bytes
+    </li>
+  ));
+
+  return (
+    <section className="container">
+      <div {...getRootProps({ className: 'dropzone' })}>
+        <input {...getInputProps()} />
+        <p>Drag 'n' drop some files here, or click to select files</p>
+      </div>
+      <aside>
+        <h4>Files</h4>
+        <ul>{files}</ul>
+      </aside>
+    </section>
+  );
+}
 
 export default UploadDatasetTab;

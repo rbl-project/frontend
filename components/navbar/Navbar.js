@@ -11,7 +11,7 @@ import Box from '@mui/material/Box';
 import AdbIcon from '@mui/icons-material/Adb';
 
 import ProfileMenu from "./ProfileMenu";
-import DatasetSelectButton from './DatasetSelectButton';
+import SelectDatasetDropdown from './SelectDatasetDropdown';
 
 const Navbar = () => {
 
@@ -41,7 +41,7 @@ const Navbar = () => {
                     </Typography>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' },mr:3}}>
-                        < DatasetSelectButton />
+                        < SelectDatasetDropdown />
                         < ProfileMenu />
                     </Box>
                 </Toolbar>

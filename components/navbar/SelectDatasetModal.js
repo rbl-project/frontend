@@ -5,8 +5,8 @@ import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
 
 
-import ModalTitle from './ModalTitle';
-import ModalBody from './ModalBody';
+import ModalTitle from './SelectDatasetModalTitle';
+import ModalBody from './SelectDatasetModalBody';
 
 const ModalContainer = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
