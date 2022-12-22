@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { increment,decrement } from '../store/stateSlice';
 import { fetchPosts } from '../store/stateSlice2';
 import { useEffect } from 'react';
+import { welcome } from "../store/authSlice";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ export default function Home() {
       <button className="btn" onClick={() => { dispatch(increment(1)) }}>increment</button>
       <button className="btn" onClick={() => { dispatch(decrement(1)) }}>decrement</button>
       <button className="btn" onClick={() => { dispatch(fetchPosts()) }}>get_posts</button>
+      <button className="btn" onClick={() => { dispatch(welcome()) }}>Welcome</button>
     </div>
   )
 }

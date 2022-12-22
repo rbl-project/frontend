@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
 import { 
     Container,
-    Box
+    Box,
+    CircularProgress
 } from '@mui/material';
 
 // icons
@@ -25,7 +28,41 @@ import {
 
 } from "./AuthStyles";
 
+// actions
+import { register } from '../../store/authSlice';
+
+// constants
+import { REQUEST_STATUS_FAILED, REQUEST_STATUS_LOADING, REQUEST_STATUS_SUCCEEDED } from '../../constants/Constants';
+
 const RegisterMainSection = () => {
+
+    const initialLoginFormData = {
+        name: "",
+        email: "",
+        password: ""
+    };
+    const [formRegisterData, setFormRegisterData] = useState(initialLoginFormData);
+
+    const dispatch = useDispatch();
+    const router = useRouter();
+    const authState = useSelector((state) => state.auth);
+    
+    useEffect(() => {
+        if(authState.registrationStatus === REQUEST_STATUS_SUCCEEDED){
+           router.replace('/auth/login');
+        } 
+    }, [authState.registrationStatus])
+
+    
+    const handleRegisterChange = (e) => {
+        setFormRegisterData({ ...formRegisterData, [e.target.name]: e.target.value });
+    }
+
+    const handleRegister = (e) => {
+        e.preventDefault();
+        dispatch(register(formRegisterData));
+    }
+
     return (
         <Section >
            <Container maxWidth="sm" sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
@@ -61,16 +98,16 @@ const RegisterMainSection = () => {
                     <form>
                         <CustomFormField>
                             <CustomLable>Name</CustomLable>
-                            <CustomInputField placeholder='Name' type="name"/>
+                            <CustomInputField placeholder='Name' type="name" name='name' onChange={handleRegisterChange} value={formRegisterData['name']}/>
                         </CustomFormField>
                         <CustomFormField>
                             <CustomLable>Email</CustomLable>
-                            <CustomInputField placeholder='Email' type="email"/>
+                            <CustomInputField placeholder='Email' type="email" name='email' onChange={handleRegisterChange} value={formRegisterData['email']}/>
                         </CustomFormField>
 
                         <CustomFormField>
                             <CustomLable>Password</CustomLable>
-                            <CustomInputField placeholder='Password' type="password"/>
+                            <CustomInputField placeholder='Password' type="password" name='password' onChange={handleRegisterChange} value={formRegisterData['password']}/>
                         </CustomFormField>
 
                         <CustomFormField>
@@ -78,9 +115,22 @@ const RegisterMainSection = () => {
                             <CustomLable>I agree with <a style={{color: "blue"}}>Privacy Policy</a> </CustomLable>
                         </CustomFormField>
 
+                        {
+                            authState.errorMessage ?
+                            <CustomFormField>
+                                <CustomLable style={{color: "red"}}>{authState.errorMessage}</CustomLable>
+                            </CustomFormField>
+                            : null
+                        }
 
                         <CustomFormField style={{marginTop: "2rem"}}>
-                            <SunmitButton type="submit">Create Account</SunmitButton>
+                            <SunmitButton type="submit" onClick={handleRegister}>
+                                {
+                                    authState.registrationStatus === REQUEST_STATUS_LOADING
+                                    ? <CircularProgress size="1rem" color="inherit" />
+                                    : "Create Account"
+                                }
+                            </SunmitButton>
                         </CustomFormField>
                     </form>
                 </Box>

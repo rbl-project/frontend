@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
 import { 
     Container,
-    Box
+    Box,
+    CircularProgress
 } from '@mui/material';
+import decode from "jwt-decode";
 
 // icons
 import GoogleIcon from '@mui/icons-material/Google';
@@ -25,7 +29,43 @@ import {
 
 } from "./AuthStyles";
 
+// actions
+import { login } from "../../store/authSlice"
+import { REQUEST_STATUS_FAILED, REQUEST_STATUS_LOADING, REQUEST_STATUS_SUCCEEDED } from '../../constants/Constants';
+
 const LoginMainSection = () => {
+
+    const initialLoginFormData = {
+        email: "",
+        password: ""
+    };
+    const [formLoginData, setFormLoginData] = useState(initialLoginFormData);
+
+    const dispatch = useDispatch();
+    const router = useRouter();
+    const authState = useSelector((state) => state.auth);
+
+    useEffect(() => {
+        const current_user = JSON.parse(localStorage.getItem('profile'));
+        const token = current_user?.access_token;
+        if (token) {
+            const decodedToken = decode(token);
+            if (decodedToken.exp * 1000 > new Date().getTime()){
+                router.replace('/dashboard');
+            } 
+        } 
+    }, [authState.authenticationStatus])
+
+    
+    const handleLoginChange = (e) => {
+        setFormLoginData({ ...formLoginData, [e.target.name]: e.target.value });
+    }
+
+    const handleLogin = (e) => {
+        e.preventDefault();
+        dispatch(login(formLoginData));
+    }
+
     return (
         <Section >
            <Container maxWidth="sm" sx={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
@@ -61,12 +101,12 @@ const LoginMainSection = () => {
                     <form>
                         <CustomFormField>
                             <CustomLable>Email</CustomLable>
-                            <CustomInputField placeholder='Email' type="email"/>
+                            <CustomInputField placeholder='Email' name='email' type="email" onChange={handleLoginChange} value={formLoginData['email']}/>
                         </CustomFormField>
 
                         <CustomFormField>
                             <CustomLable>Password</CustomLable>
-                            <CustomInputField placeholder='Password' type="password"/>
+                            <CustomInputField placeholder='Password' name='password' type="password" onChange={handleLoginChange} value={formLoginData['password']}/>
                         </CustomFormField>
 
                         <CustomFormField>
@@ -74,9 +114,23 @@ const LoginMainSection = () => {
                             <CustomLable>Remember Me</CustomLable>
                         </CustomFormField>
 
+                        {
+                            authState.errorMessage ?
+                            <CustomFormField>
+                                <CustomLable style={{color: "red"}}>{authState.errorMessage}</CustomLable>
+                            </CustomFormField>
+                            : null
+                        }
+
 
                         <CustomFormField style={{marginTop: "2rem"}}>
-                            <SunmitButton type="submit">Login</SunmitButton>
+                            <SunmitButton type="submit" onClick={handleLogin}>
+                                {
+                                    authState.authenticationStatus === REQUEST_STATUS_LOADING
+                                    ? <CircularProgress size="1rem" color="inherit" />
+                                    : "Login"
+                                }
+                            </SunmitButton>
                         </CustomFormField>
                     </form>
                 </Box>
