@@ -30,13 +30,13 @@ const AuthNavbar = (props) => {
                     <AuthNavbarRight>
                         <List>
                             <ListOption> 
-                                <a href="https://github.com/rbl-project" target="_blank"> <GitHubIcon/> </a>
+                                <a href="https://github.com/rbl-project" target="_blank" rel="noopener noreferrer"> <GitHubIcon/> </a>
                             </ListOption>
                             <ListOption> 
-                                <a href="https://twitter.com" target="_blank"> <TwitterIcon/> </a>
+                                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"> <TwitterIcon/> </a>
                             </ListOption>
                             <ListOption>
-                                <a href="https://facebook.com" target="_blank"> <FacebookIcon/> </a>
+                                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"> <FacebookIcon/> </a>
                             </ListOption>
                             <ListOption>
                                 {
