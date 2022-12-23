@@ -29,9 +29,15 @@ const AuthNavbar = () => {
 
                     <AuthNavbarRight>
                         <List>
-                            <ListOption> <FacebookIcon/> </ListOption>
-                            <ListOption> <TwitterIcon/> </ListOption>
-                            <ListOption> <GitHubIcon/> </ListOption>
+                            <ListOption> 
+                                <a href="https://github.com/rbl-project" target="_blank"> <GitHubIcon/> </a>
+                            </ListOption>
+                            <ListOption> 
+                                <a href="https://twitter.com" target="_blank"> <TwitterIcon/> </a>
+                            </ListOption>
+                            <ListOption>
+                                <a href="https://facebook.com" target="_blank"> <FacebookIcon/> </a>
+                            </ListOption>
                             <ListOption>
                                 <HomeButton href="/home">
                                     Home
