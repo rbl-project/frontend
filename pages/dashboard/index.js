@@ -25,42 +25,42 @@ const Dashboard = () => {
         <DashboardLayout>
             <Box component="main" sx={{ flexGrow: 1, p: 3 }} >
                 <Grid container spacing={3}>
-                    <Grid xs={8}>
+                    <Grid item xs={8}>
                         <Item>
                             <Image src="/images/graph.png" height={300} width={300} />
                         </Item>
                     </Grid>
-                    <Grid xs={4}>
+                    <Grid item xs={4}>
                         <Item>
                             <Image src="/images/graph.png" height={300} width={300} />
                         </Item>
                     </Grid>
-                    <Grid xs={6}>
+                    <Grid item xs={6}>
                         <Item>
                             <Image src="/images/graph.png" height={300} width={300} />
                         </Item>
                     </Grid>
-                    <Grid xs={6}>
+                    <Grid item xs={6}>
                         <Item>
                             <Image src="/images/graph.png" height={300} width={300} />
                         </Item>
                     </Grid>
-                    <Grid xs={4}>
+                    <Grid item xs={4}>
                         <Item>
                             <Image src="/images/graph.png" height={300} width={300} />
                         </Item>
                     </Grid>
-                    <Grid xs={4}>
+                    <Grid item xs={4}>
                         <Item>
                             <Image src="/images/graph.png" height={300} width={300} />
                         </Item>
                     </Grid>
-                    <Grid xs={4}>
+                    <Grid item xs={4}>
                         <Item>
                             <Image src="/images/graph.png" height={300} width={300} />
                         </Item>
                     </Grid>
-                    <Grid xs={12}>
+                    <Grid item xs={12}>
                         <Item>
                             <Image src="/images/graph.png" height={300} width={300} />
                         </Item>

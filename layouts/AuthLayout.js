@@ -16,6 +16,7 @@ const AuthLayout = ({ children }) => {
                 backgroundImage: "url('/images/auth_bg.png')",
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "100%",
+                height: "100vh"
             }}>
                 <AuthNavbar page="auth" />
                 {children}

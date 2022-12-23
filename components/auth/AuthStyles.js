@@ -1,8 +1,7 @@
 import styled from "styled-components";
 
 export const Section = styled.section`
-    height: 100vh;
-    padding: 3rem 0rem;
+    padding-top: 3rem;
 `
 
 export const FormHeader = styled.div`

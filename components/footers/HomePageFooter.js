@@ -12,10 +12,10 @@ const HomePageFooter = () => {
             <Divider />
             <Container>
                 <Grid container spacing={2} sx={{ marginTop: "1rem" }}>
-                    <Grid xs={6} md={6} sx={{ textAlign: "left" }}>
+                    <Grid item xs={6} md={6} sx={{ textAlign: "left" }}>
                         Copyright © DataX 2022
                     </Grid>
-                    <Grid xs={6} md={6} sx={{ textAlign: "right" }}>
+                    <Grid item xs={6} md={6} sx={{ textAlign: "right" }}>
                         About | Contact Us | Terms of Service | Privacy Policy
                     </Grid>
                 </Grid>
