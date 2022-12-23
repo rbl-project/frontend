@@ -17,7 +17,7 @@ const AuthLayout = ({ children }) => {
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "100%",
             }}>
-                <AuthNavbar />
+                <AuthNavbar page="auth" />
                 {children}
             </Box>
         </NoSSRWrapper>

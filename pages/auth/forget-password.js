@@ -8,7 +8,7 @@ const ForgetPassword = () => {
     return (
         <>
             <Head>
-                <title>Forget Password | DataEngineering</title>
+                <title>Forget Password | DataX</title>
             </Head>
             <AuthLayout>
                 <ForgetPasswordMainSection />

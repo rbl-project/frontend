@@ -16,11 +16,11 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import GitHubIcon from '@mui/icons-material/GitHub';
 
-const AuthNavbar = () => {
+const AuthNavbar = (props) => {
 
     return (
         <>
-            <AuthNavbarWrapper>
+            <AuthNavbarWrapper page = {props.page} >
                 <AuthNavbarDiv>
 
                     <AuthNavbarLeft>
@@ -39,9 +39,16 @@ const AuthNavbar = () => {
                                 <a href="https://facebook.com" target="_blank"> <FacebookIcon/> </a>
                             </ListOption>
                             <ListOption>
-                                <HomeButton href="/home">
-                                    Home
-                                </HomeButton>
+                                {
+                                    props.page === "home" ?
+                                    <HomeButton href="/auth/login" page="home">
+                                        Login
+                                    </HomeButton>
+                                    :
+                                    <HomeButton href="/home" page="auth">
+                                        Home
+                                    </HomeButton>
+                                }
                             </ListOption>
                         </List>
                     </AuthNavbarRight>

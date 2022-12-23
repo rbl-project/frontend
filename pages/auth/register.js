@@ -8,7 +8,7 @@ const Register = () => {
     return (
         <>
             <Head>
-                <title>Register | DataEngineering</title>
+                <title>Register | DataX</title>
             </Head>
             <AuthLayout>
                 <RegisterMainSection />

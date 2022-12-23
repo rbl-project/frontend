@@ -86,7 +86,7 @@ const ProfileMenu = () => {
                     {
                         authState.authenticationStatus === REQUEST_STATUS_LOADING ?
                         (    <div>
-                            <img src="/loadingdots2.gif" style={{width: "50px", height: "30px"}}/>
+                            <img src="/images/loadingdots2.gif" style={{width: "50px", height: "30px"}}/>
                         </div>)
                         : "Logout"
                     }

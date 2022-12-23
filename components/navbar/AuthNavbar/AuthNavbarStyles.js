@@ -11,6 +11,7 @@ export const AuthNavbarWrapper = styled.div`
     padding-bottom: 0.75rem;
     position: absolute;
     flex-wrap: wrap; */
+    box-shadow: ${props => props.page === 'home' ? "1px -3px 8px #9e9e9e" : "none" } ;
 
 `;
 
@@ -54,7 +55,8 @@ export const ListOption = styled.li`
 export const HomeButton = styled.a`
 
     text-transform: uppercase;
-    color: rgba(51,65,85,1);
+    color: ${props => props.page === 'home' ? "white" : "rgba(51,65,85,1)"};
+    background-color: ${props => props.page === 'home' ? "rgba(51,65,85,1)" : "white"};
     padding-left: 1rem;
     padding-right: 1rem;
     padding-top: 0.5rem;
@@ -65,7 +67,6 @@ export const HomeButton = styled.a`
     line-height: 1rem;
     font-weight: 700;
     border-radius: 0.25rem;
-    background-color: rgba(255,255,255,1);
     text-decoration: inherit;
     transition-timing-function: linear;
     transition-property: all;
