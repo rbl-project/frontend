@@ -8,10 +8,10 @@ import { useRouter } from 'next/router';
 import decode from "jwt-decode";
 
 //constants
-import { REQUEST_STATUS_LOADING, REQUEST_STATUS_SUCCEEDED } from '../../../constants/Constants';
+import { REQUEST_STATUS_LOADING, REQUEST_STATUS_SUCCEEDED } from '/constants/Constants';
 
 //actions
-import { logout } from "../../../store/authSlice";
+import { logout } from "/store/authSlice";
 
 
 const ProfileMenu = () => {
