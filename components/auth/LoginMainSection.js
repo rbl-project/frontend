@@ -30,7 +30,7 @@ import {
 } from "./AuthStyles";
 
 // actions
-import { login } from "../../store/authSlice"
+import { login } from "/store/authSlice"
 import { REQUEST_STATUS_FAILED, REQUEST_STATUS_LOADING, REQUEST_STATUS_SUCCEEDED } from '../../constants/Constants';
 
 const LoginMainSection = () => {

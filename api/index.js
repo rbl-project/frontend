@@ -27,3 +27,7 @@ export const welcome = () => API.get("/");
 export const signIn = (formData) => API.post("/login",formData);
 export const signOut = () => API.get("/logout");
 export const signUp = (formData) => API.post("/register",formData);
+
+// Dataset I/O APIs
+export const uploadDataset = (formData) => API.post("/upload-dataset",formData,{ headers:{ "Content-Type": "multipart/form-data" }});
+

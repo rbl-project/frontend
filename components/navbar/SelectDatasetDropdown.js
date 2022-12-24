@@ -31,7 +31,7 @@ const DatasetSelectButton = () => {
                 Dataset1
             </ColorButton>
 
-            < DatasetSelectModal open={open} handleClose={handleClose} />
+            < DatasetSelectModal open={open} handleModalClose={handleClose} />
         </>
     )
 }
