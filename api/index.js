@@ -2,11 +2,11 @@ import axios from "axios";
 
 const env = {
     "local" : "http://127.0.0.1:8000/api",
-    "prod" : "https://rbl-backend.herokuapp.com/api"
+    "prod" : "https://rbl-project.onrender.com/api"
 }
 
 const API = axios.create({
-    baseURL: env["local"]
+    baseURL: env[process.env.NEXT_PUBLIC_CURRENT_ENV]
 });
 
 // //* Adding Authorization Token in req.headers
