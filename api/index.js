@@ -1,8 +1,10 @@
 import axios from "axios";
 
+import { updateProgress } from "/components/navbar/ProgressBarToaster";
+
 const env = {
-    "local" : "http://127.0.0.1:8000/api",
-    "prod" : "https://rbl-project.onrender.com/api"
+    "local": "http://127.0.0.1:8000/api",
+    "prod": "https://rbl-project.onrender.com/api"
 }
 
 const API = axios.create({
@@ -10,9 +12,9 @@ const API = axios.create({
 });
 
 // //* Adding Authorization Token in req.headers
-API.interceptors.request.use((req)=>{
+API.interceptors.request.use((req) => {
     // if Profile Exists
-    if(localStorage.getItem("profile")){
+    if (localStorage.getItem("profile")) {
         const token = JSON.parse(localStorage.getItem("profile")).access_token;
         req.headers.authorization = `Bearer ${token}`;
     }
@@ -24,10 +26,13 @@ API.interceptors.request.use((req)=>{
 export const welcome = () => API.get("/");
 
 // Authentication APIs
-export const signIn = (formData) => API.post("/login",formData);
+export const signIn = (formData) => API.post("/login", formData);
 export const signOut = () => API.get("/logout");
-export const signUp = (formData) => API.post("/register",formData);
+export const signUp = (formData) => API.post("/register", formData);
 
 // Dataset I/O APIs
-export const uploadDataset = (formData) => API.post("/upload-dataset",formData,{ headers:{ "Content-Type": "multipart/form-data" }});
+export const uploadDataset = ({dataset,updateProgress}) => API.post("/upload-dataset", {dataset:dataset}, {
+    headers: { "Content-Type": "multipart/form-data" }, 
+    onUploadProgress: updateProgress
+});
 

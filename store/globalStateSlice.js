@@ -1,23 +1,23 @@
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     openSidebar: false,
-    openMenuItem:"", 
+    openMenuItem: "",
 }
 
 const stateSlice = createSlice({
-    name:"global",
-    initialState:initialState,
-    reducers:{
-        toggleSidebar:(state) => {
+    name: "global",
+    initialState: initialState,
+    reducers: {
+        toggleSidebar: (state) => {
             state.openSidebar = !state.openSidebar;
         },
-        setOpenMenuItem:(state,action) => {
+        setOpenMenuItem: (state, action) => {
             state.openMenuItem = action.payload;
         }
     }
 });
 
-export const {toggleSidebar,setOpenMenuItem} = stateSlice.actions;
+export const { toggleSidebar, setOpenMenuItem } = stateSlice.actions;
 
 export default stateSlice.reducer;

@@ -53,7 +53,8 @@ const LoginMainSection = () => {
             if (decodedToken.exp * 1000 > new Date().getTime()){
                 router.replace('/dashboard');
             } 
-        } 
+        }
+        // console.log(authState); 
     }, [authState.authenticationStatus])
 
     
