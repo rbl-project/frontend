@@ -16,7 +16,7 @@ const UploadDatasetTab = ({ handleModalClose }) => {
 
   const files = acceptedFiles.map(file => (
     <li key={file.path}>
-      {file.path} - {file.size} bytes
+      {file.path} - {(file.size/(1024*1024)).toFixed(2)} MB
     </li>
   ));
 
@@ -40,22 +40,14 @@ const UploadDatasetTab = ({ handleModalClose }) => {
         closeOnClick: false,
         pauseOnHover: false,
         draggable: false,
-        progress: Math.min(progress, 1 - Number.MIN_VALUE),
+        progress: Math.min(progress, 0.99),
         // progress: progress,
         theme: "dark",
       });
     } else {
-
       toast.update(toastId.current, {
-        position: "bottom-right",
-        autoClose: false,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: false,
-        draggable: false,
-        progress: Math.min(progress, 1 - Number.MIN_VALUE),
-        // progress: progress,
-        theme: "dark",
+        render: "Uploading : " + Math.round(Math.min(progress, 0.99)*100) + "%",
+        progress: Math.min(progress, 0.99),
       });
     }
   }
@@ -66,16 +58,18 @@ const UploadDatasetTab = ({ handleModalClose }) => {
     if (datasetState.datasetStatus === REQUEST_STATUS_SUCCEEDED) {
       console.log("Success");
       toast.update(toastId.current,{
-        render:"Dataset Uploaded Successfully !!",
+        render:"Dataset Uploaded Successfully",
         type: toast.TYPE.SUCCESS,
         transition: Flip,
+        hideProgressBar: true
       });
 
     } else if (datasetState.datasetStatus === REQUEST_STATUS_FAILED) {
       toast.update(toastId.current,{
-        render: "Something went Wrong !! Please Upload File Again",
+        render: datasetState.errorMessage,
         type: toast.TYPE.ERROR,
         transition: Flip,
+        hideProgressBar: true
       });
     }
   }, [datasetState.datasetStatus])
