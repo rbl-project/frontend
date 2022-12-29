@@ -3,7 +3,7 @@ import { Typography, Button, Box } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
 import { DropzoneArea } from './uploadDatasetStyles';
-import { toast, Rotate } from 'react-toastify';
+import { toast, Flip } from 'react-toastify';
 
 import { uploadDataset } from '/store/datasetSlice';
 import { REQUEST_STATUS_FAILED, REQUEST_STATUS_SUCCEEDED } from '/constants/Constants';
@@ -25,58 +25,23 @@ const UploadDatasetTab = ({ handleModalClose }) => {
   const clickHandler = (e) => {
     e.preventDefault();
     dispatch(uploadDataset({ dataset: acceptedFiles[0], updateProgress: updateProgress }));
-    handleModalClose();
+    // handleModalClose();
   }
-
-
-  useEffect(() => {
-    console.log("In useeffcet", datasetState);
-    if (datasetState.datasetStatus === REQUEST_STATUS_SUCCEEDED) {
-      console.log("Success");
-      toast.update(toastId.current, "Upload Successful", {
-        type: toast.TYPE.SUCCESS,
-        transition: Rotate,
-        position: "bottom-right",
-        autoClose: false,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: false,
-        progress: undefined,
-        theme: "dark",
-      });
-
-    } else if (datasetState.datasetStatus === REQUEST_STATUS_FAILED) {
-      toast.update(toastId.current, "Upload Unsuccessful", {
-        type: toast.TYPE.ERROR,
-        transition: Rotate,
-        position: "bottom-right",
-        autoClose: false,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: false,
-        progress: undefined,
-        theme: "dark",
-      });
-    }
-  }, [datasetState.datasetStatus])
-
 
   const updateProgress = (data) => {
     const progress = data.loaded / data.total;
 
     // check if we already displayed a toast
     if (toastId.current === null) {
-      toastId.current = toast.info('Upload in Progress', {
+      toastId.current = toast.info('Progress', {
         position: "bottom-right",
         autoClose: false,
         hideProgressBar: false,
         closeOnClick: false,
         pauseOnHover: false,
         draggable: false,
-        // progress: Math.min(progress, 1 - Number.MIN_VALUE),
-        progress: progress,
+        progress: Math.min(progress, 1 - Number.MIN_VALUE),
+        // progress: progress,
         theme: "dark",
       });
     } else {
@@ -88,12 +53,32 @@ const UploadDatasetTab = ({ handleModalClose }) => {
         closeOnClick: false,
         pauseOnHover: false,
         draggable: false,
-        // progress: Math.min(progress, 1 - Number.MIN_VALUE),
-        progress: progress,
+        progress: Math.min(progress, 1 - Number.MIN_VALUE),
+        // progress: progress,
         theme: "dark",
       });
     }
   }
+
+  // Update Toast On Success or Failure of Dataset Upload
+  useEffect(() => {
+    console.log("In useeffcet", datasetState);
+    if (datasetState.datasetStatus === REQUEST_STATUS_SUCCEEDED) {
+      console.log("Success");
+      toast.update(toastId.current,{
+        render:"Dataset Uploaded Successfully !!",
+        type: toast.TYPE.SUCCESS,
+        transition: Flip,
+      });
+
+    } else if (datasetState.datasetStatus === REQUEST_STATUS_FAILED) {
+      toast.update(toastId.current,{
+        render: "Something went Wrong !! Please Upload File Again",
+        type: toast.TYPE.ERROR,
+        transition: Flip,
+      });
+    }
+  }, [datasetState.datasetStatus])
 
   return (
     <section className="container"  >
