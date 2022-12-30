@@ -48,10 +48,10 @@ const RegisterMainSection = () => {
     const authState = useSelector((state) => state.auth);
     
     useEffect(() => {
-        if(authState.registrationStatus === REQUEST_STATUS_SUCCEEDED){
+        if(authState.requestStatus === REQUEST_STATUS_SUCCEEDED){
            router.replace('/auth/login');
         } 
-    }, [authState.registrationStatus])
+    }, [authState.requestStatus])
 
     
     const handleRegisterChange = (e) => {
@@ -126,7 +126,7 @@ const RegisterMainSection = () => {
                         <CustomFormField style={{marginTop: "2rem"}}>
                             <SunmitButton type="submit" onClick={handleRegister}>
                                 {
-                                    authState.registrationStatus === REQUEST_STATUS_LOADING
+                                    authState.requestStatus === REQUEST_STATUS_LOADING
                                     ? <CircularProgress size="1rem" color="inherit" />
                                     : "Create Account"
                                 }

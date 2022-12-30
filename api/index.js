@@ -35,4 +35,4 @@ export const uploadDataset = ({dataset,updateProgress}) => API.post("/upload-dat
     headers: { "Content-Type": "multipart/form-data" }, 
     onUploadProgress: updateProgress
 });
-
+export const getAllDatasets = () => API.get("/get-datasets");

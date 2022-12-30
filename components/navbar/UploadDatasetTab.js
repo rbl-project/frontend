@@ -55,7 +55,7 @@ const UploadDatasetTab = ({ handleModalClose }) => {
   // Update Toast On Success or Failure of Dataset Upload
   useEffect(() => {
     console.log("In useeffcet", datasetState);
-    if (datasetState.datasetStatus === REQUEST_STATUS_SUCCEEDED) {
+    if (datasetState.datasetUploadStatus === REQUEST_STATUS_SUCCEEDED) {
       console.log("Success");
       toast.update(toastId.current,{
         render:"Dataset Uploaded Successfully",
@@ -64,7 +64,7 @@ const UploadDatasetTab = ({ handleModalClose }) => {
         hideProgressBar: true
       });
 
-    } else if (datasetState.datasetStatus === REQUEST_STATUS_FAILED) {
+    } else if (datasetState.datasetUploadStatus === REQUEST_STATUS_FAILED) {
       toast.update(toastId.current,{
         render: datasetState.errorMessage,
         type: toast.TYPE.ERROR,
@@ -72,7 +72,7 @@ const UploadDatasetTab = ({ handleModalClose }) => {
         hideProgressBar: true
       });
     }
-  }, [datasetState.datasetStatus])
+  }, [datasetState.datasetUploadStatus])
 
   return (
     <section className="container"  >

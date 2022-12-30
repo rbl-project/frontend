@@ -38,7 +38,7 @@ const ProfileMenu = () => {
             router.replace('/auth/login');
         }
         setUser(current_user);
-    }, [authState.authenticationStatus])
+    }, [authState.requestStatus])
 
 
     const open = Boolean(anchorEl);
@@ -84,7 +84,7 @@ const ProfileMenu = () => {
                 <MenuItem onClick={handleClose}>My account</MenuItem>
                 <MenuItem onClick={() => { dispatch(logout()) }}>
                     {
-                        authState.authenticationStatus === REQUEST_STATUS_LOADING ?
+                        authState.requestStatus === REQUEST_STATUS_LOADING ?
                         (    <div>
                             <img src="/images/loadingdots2.gif" style={{width: "50px", height: "30px"}}/>
                         </div>)

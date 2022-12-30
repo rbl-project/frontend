@@ -55,7 +55,7 @@ const LoginMainSection = () => {
             } 
         }
         // console.log(authState); 
-    }, [authState.authenticationStatus])
+    }, [authState.requestStatus])
 
     
     const handleLoginChange = (e) => {
@@ -127,7 +127,7 @@ const LoginMainSection = () => {
                         <CustomFormField style={{marginTop: "2rem"}}>
                             <SunmitButton type="submit" onClick={handleLogin}>
                                 {
-                                    authState.authenticationStatus === REQUEST_STATUS_LOADING
+                                    authState.requestStatus === REQUEST_STATUS_LOADING
                                     ? <CircularProgress size="1rem" color="inherit" />
                                     : "Login"
                                 }
