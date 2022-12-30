@@ -36,3 +36,5 @@ export const uploadDataset = ({dataset,updateProgress}) => API.post("/upload-dat
     onUploadProgress: updateProgress
 });
 export const getAllDatasets = () => API.get("/get-datasets");
+export const exportDataset = (formData) => API.post("/export-dataset",formData);
+

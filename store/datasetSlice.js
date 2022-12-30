@@ -18,7 +18,7 @@ const initialState = {
     errorMessage: null
 }
 
-export const uploadDataset = createAsyncThunk('/dataset-upload', async ({ dataset, updateProgress }) => {
+export const uploadDataset = createAsyncThunk('/upload-dataset', async ({ dataset, updateProgress }) => {
     const response = await API.uploadDataset({ dataset, updateProgress });
     return response.data; // response.data is your entire object that is seen in postman as the response
 });
@@ -28,10 +28,18 @@ export const getAllDatasets = createAsyncThunk('/get-all-datasets', async () => 
     return response.data; // response.data is your entire object that is seen in postman as the response
 });
 
+export const exportDataset = createAsyncThunk('/export-upload', async (formData) => {
+    const response = await API.exportDataset(formData);
+    return response.data ; // response.data is your entire object that is seen in postman as the response
+});
+
 const datasetSlice = createSlice({
     name: "dataset",
     initialState: initialState,
     reducers: {
+        updateSelectedDataset:(state,action) => {
+            state.selectedDataset = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -54,18 +62,17 @@ const datasetSlice = createSlice({
                 state.errorMessage = CUSTOM_ERROR_MESSAGE; // unknow error in request
             })
 
-            // Get All Dataset
+            // Get All Datasets
             .addCase(getAllDatasets.pending, (state, action) => {
                 state.requestStatus = REQUEST_STATUS_LOADING;
             })
             .addCase(getAllDatasets.fulfilled, (state, action) => { // action.payload is the response.data
-                console.log(action.payload)
                 if (action.payload.status) {
                     state.requestStatus = REQUEST_STATUS_SUCCEEDED;
                     state.availableDatasets = action.payload.data.datasets;
                     state.datasetCount = action.payload.data.db_count;
-                    if (action.payload.data.db_count > 0) {
-                        state.selectedDataset = action.payload.data.datasets[0];
+                    if (action.payload.data.db_count > 0 && state.selectedDataset === null) {
+                        state.selectedDataset = action.payload.data.datasets[0].name;
                     }
                 } else {
                     state.requestStatus = REQUEST_STATUS_FAILED;
@@ -77,8 +84,29 @@ const datasetSlice = createSlice({
                 state.errorMessage = CUSTOM_ERROR_MESSAGE; // unknow error in request
             })
 
+            // Export Dataset
+            .addCase(exportDataset.pending, (state, action) => {
+                state.requestStatus = REQUEST_STATUS_LOADING;
+            })
+            .addCase(exportDataset.fulfilled, (state, action) => { // action.payload is the response.data
+                if (action.payload.status) {
+                    state.requestStatus = REQUEST_STATUS_SUCCEEDED;
+                } else {
+                    console.log(action);
+                    state.requestStatus = REQUEST_STATUS_FAILED;
+                    state.errorMessage = action.payload.error; // error sent by us from our backend
+                }
+            })
+            .addCase(exportDataset.rejected, (state, action) => {
+                console.log(action.payload);
+                state.requestStatus = REQUEST_STATUS_FAILED;
+                state.errorMessage = CUSTOM_ERROR_MESSAGE; // unknow error in request
+            })
+
     }
 
 });
+
+export const {updateSelectedDataset} = datasetSlice.actions;
 
 export default datasetSlice.reducer;
