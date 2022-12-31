@@ -28,6 +28,9 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
     const datasetState = useSelector((state) => state.dataset);
     const dispatch = useDispatch();
 
+    // temp state for export dataset
+    const [exportDatasetLoader, setExportDatasetLoader] = useState(false);
+
     // Local state for choosing dataset from available datasets
     const [selectedDataset, setSelectedDataset] = useState(null);
 
@@ -135,16 +138,19 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
 
     const handleExportDataset = async (dataset_name) => {
         setRequestCreatorId({ type: "export", name: dataset_name });
-<<<<<<< HEAD
-        API.exportDataset(dataset_name).then((res) => {
+        setExportDatasetLoader(true);
+        API.exportDataset({"dataset_name" : dataset_name}).then((res) => {
+            console.log(res);
             const url = window.URL.createObjectURL(new Blob([res.data], { type: "text/csv" }));
             const a = document.createElement('a');
             a.download = dataset_name + ".csv";
             a.href = url;
             a.click();
             a.remove();
+            setExportDatasetLoader(false);
         }).catch((err) => {
             console.log(err);
+            setExportDatasetLoader(false);
         })
         // ====================== Using Redux Toolkit ======================
         // const res = await dispatch(exportDataset({ dataset_name: dataset_name }));
@@ -157,18 +163,6 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
         //     a.href = url;
         //     a.click();
         //     a.remove();
-=======
-        const res = await dispatch(exportDataset({ dataset_name: dataset_name }));
-
-        // if (datasetState.requestStatus === REQUEST_STATUS_SUCCEEDED) {
-        // Download Dataset at User End
-        const url = window.URL.createObjectURL(new Blob([res.payload], { type: "text/csv" }));
-        const a = document.createElement('a');
-        a.download = dataset_name + ".csv";
-        a.href = url;
-        a.click();
-        a.remove();
->>>>>>> 697435984a49ac835e79011f4243d637b0020c6b
 
         // }
     }
@@ -182,17 +176,10 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
     }, [datasetState.selectedDataset])
 
     // Show Alert Messages
-<<<<<<< HEAD
-    useEffect(()=>{
-        // console.log(datasetState,requestCreatorId);
-        if(datasetState.requestStatus === REQUEST_STATUS_FAILED){
-            toast.error(datasetState.message !== undefined || datasetState.message !== null ? datasetState.message : CUSTOM_ERROR_MESSAGE, {
-=======
     useEffect(() => {
         // console.log(datasetState,requestCreatorId);
         if (datasetState.requestStatus === REQUEST_STATUS_FAILED) {
             toast.error(datasetState.message !== undefined && datasetState.message !== null ? datasetState.message : CUSTOM_ERROR_MESSAGE, {
->>>>>>> 697435984a49ac835e79011f4243d637b0020c6b
                 position: "bottom-right",
                 autoClose: false,
                 hideProgressBar: true,
@@ -310,7 +297,7 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
                                     }
                                     <IconButton aria-label="export" onClick={() => { handleExportDataset(dataset.name) }} >
                                         {
-                                            datasetState.requestStatus === REQUEST_STATUS_LOADING && requestCreatorId?.type === "export" && requestCreatorId?.name === dataset.name
+                                            (exportDatasetLoader && requestCreatorId?.name === dataset.name) || (datasetState.requestStatus === REQUEST_STATUS_LOADING && requestCreatorId?.type === "export" && requestCreatorId?.name === dataset.name)
                                                 ? (<CircularProgress size="1rem" color="inherit" />)
                                                 : (
                                                     <Tooltip title="Export" placement="right-start">
