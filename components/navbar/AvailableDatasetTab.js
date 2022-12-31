@@ -19,9 +19,13 @@ import ConfirmIcon from '@mui/icons-material/DoneOutlined';
 import { toast } from 'react-toastify';
 
 import { getAllDatasets, updateSelectedDataset, exportDataset, deleteDataset, renameDataset, resetRequestStatus } from "/store/datasetSlice";
-import { REQUEST_STATUS_FAILED, REQUEST_STATUS_SUCCEEDED, REQUEST_STATUS_LOADING, CUSTOM_ERROR_MESSAGE, CUSTOM_SUCCESS_MESSAGE } from '../../constants/Constants';
+import { REQUEST_STATUS_FAILED, REQUEST_STATUS_SUCCEEDED, REQUEST_STATUS_LOADING, CUSTOM_ERROR_MESSAGE, CUSTOM_SUCCESS_MESSAGE, SMALLEST_VALID_STRING_LENGTH, LARGEST_VALID_STRING_LENGTH } from '../../constants/Constants';
 
 const AvailableDatasetTab = ({ handleModalClose }) => {
+
+    // Dataset State from Redux Store
+    const datasetState = useSelector((state) => state.dataset);
+    const dispatch = useDispatch();
 
     // Local state for choosing dataset from available datasets
     const [selectedDataset, setSelectedDataset] = useState(null);
@@ -33,9 +37,67 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
     const [isRenameActive, setIsRenameActive] = useState(false);
     const [newDatasetName, setNewDatasetName] = useState(null);
 
+    //LocalState for checking whether new dataset name is valid or not
+    const [isValidName, setIsValidName] = useState(true);
+    const [validationErrorMessage, setValidationErrorMessage] = useState(null);
 
-    const datasetState = useSelector((state) => state.dataset);
-    const dispatch = useDispatch();
+    //Validation Functions
+    const isDuplicate = (dataset_name,new_dataset_name) => {
+        let flag = false;
+        datasetState.availableDatasets.map((dataset) => {
+            if(dataset.name.toLowerCase() !== dataset_name.toLowerCase() && dataset.name.toLowerCase() === new_dataset_name.toLowerCase()) {   
+                flag = true;
+            }
+        })
+        return flag;
+    }
+
+    const isAlphaNumeric = (new_dataset_name) => {
+        const reg = new RegExp(/^\w[ \w-]*[\w]$/g);
+        return reg.test(new_dataset_name);
+    }
+
+    const isLengthTooSmall = (new_dataset_name) => {
+        return new_dataset_name.length < SMALLEST_VALID_STRING_LENGTH;
+    }
+
+    const isLengthTooLarge = (new_dataset_name) => {
+        return new_dataset_name.length > LARGEST_VALID_STRING_LENGTH;
+    }
+
+    const validateString = (dataset_name,new_dataset_name) => {
+        
+        // Check for Duplicate Name
+        if(isDuplicate(dataset_name,new_dataset_name)){
+            setIsValidName(false);
+            setValidationErrorMessage("Duplicate Name not Allowed");
+        }
+
+         //Check if Length is not Too Small 
+         else if(isLengthTooSmall(new_dataset_name)){
+            setIsValidName(false);
+            setValidationErrorMessage("Atleast 2 Characters are Required");
+        }
+
+        //Check if it is Alphanemric
+        else if(!isAlphaNumeric(new_dataset_name)){
+            setIsValidName(false);
+            setValidationErrorMessage("Only Alphabets(a-z & A-Z), Digits(0-9) and Some Special Characters(_, ,-) are allowed.");
+        }
+
+        //Check if Length is not Too Small 
+        else if(isLengthTooLarge(new_dataset_name)){
+            setIsValidName(false);
+            setValidationErrorMessage("Maximum 30 Characters are Allowed");
+        }
+
+        // Valid Dataset Name
+        else {
+            setIsValidName(true);
+            setValidationErrorMessage(null);
+        }
+
+    }
 
     const handleClick = (event) => {
         setSelectedDataset(event.target.value);
@@ -67,13 +129,14 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
 
     const handleRenameInputChange = (event) => {
         setNewDatasetName(event.target.value);
+        validateString(requestCreatorId.name,event.target.value);
     }
 
     const handleExportDataset = async (dataset_name) => {
         setRequestCreatorId({ type: "export", name: dataset_name });
         const res = await dispatch(exportDataset({ dataset_name: dataset_name }));
 
-        if (datasetState.requestStatus === REQUEST_STATUS_SUCCEEDED) {
+        // if (datasetState.requestStatus === REQUEST_STATUS_SUCCEEDED) {
             // Download Dataset at User End
             const url = window.URL.createObjectURL(new Blob([res.payload], { type: "text/csv" }));
             const a = document.createElement('a');
@@ -82,7 +145,7 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
             a.click();
             a.remove();
 
-        }
+        // }
     }
 
     useEffect(() => {
@@ -95,9 +158,9 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
 
     // Show Alert Messages
     useEffect(()=>{
-        console.log(datasetState,requestCreatorId);
+        // console.log(datasetState,requestCreatorId);
         if(datasetState.requestStatus === REQUEST_STATUS_FAILED){
-            toast.error(datasetState.message !== undefined || datasetState.message !== null ? datasetState.message : CUSTOM_ERROR_MESSAGE, {
+            toast.error(datasetState.message !== undefined && datasetState.message !== null ? datasetState.message : CUSTOM_ERROR_MESSAGE, {
                 position: "bottom-right",
                 autoClose: false,
                 hideProgressBar: true,
@@ -168,9 +231,11 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
                                                 id="rename-field"
                                                 variant="outlined"
                                                 size="small"
-                                                inputProps={{ style: { fontSize: "0.875rem" }, pattern:"[ a-zA-Z0-9_-]*" }}
+                                                inputProps={{ style: { fontSize: "0.875rem" }}}
                                                 value={newDatasetName}
                                                 onChange={handleRenameInputChange}
+                                                error={!isValidName}
+                                                helperText={validationErrorMessage}
                                             />)
                                             : (dataset.name)
                                     }
@@ -185,7 +250,7 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
                                     {
                                         isRenameActive && requestCreatorId?.type === "rename" && requestCreatorId?.name === dataset.name ?
                                             (
-                                                <IconButton aria-label="confirm" onClick={() => { handleConfirmRenameDataset(dataset.name) }} >
+                                                <IconButton disabled={!isValidName} aria-label="confirm" onClick={() => { handleConfirmRenameDataset(dataset.name) }} >
                                                     {
                                                         datasetState.requestStatus === REQUEST_STATUS_LOADING && requestCreatorId?.type === "confirm-rename" && requestCreatorId?.name === dataset.name
                                                             ? (<CircularProgress size="1rem" color="inherit" />)
