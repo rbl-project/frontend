@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Box, Button, } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -42,10 +42,10 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
     const [validationErrorMessage, setValidationErrorMessage] = useState(null);
 
     //Validation Functions
-    const isDuplicate = (dataset_name,new_dataset_name) => {
+    const isDuplicate = (dataset_name, new_dataset_name) => {
         let flag = false;
         datasetState.availableDatasets.map((dataset) => {
-            if(dataset.name.toLowerCase() !== dataset_name.toLowerCase() && dataset.name.toLowerCase() === new_dataset_name.toLowerCase()) {   
+            if (dataset.name.toLowerCase() !== dataset_name.toLowerCase() && dataset.name.toLowerCase() === new_dataset_name.toLowerCase()) {
                 flag = true;
             }
         })
@@ -65,28 +65,28 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
         return new_dataset_name.length > LARGEST_VALID_STRING_LENGTH;
     }
 
-    const validateString = (dataset_name,new_dataset_name) => {
-        
+    const validateString = (dataset_name, new_dataset_name) => {
+
         // Check for Duplicate Name
-        if(isDuplicate(dataset_name,new_dataset_name)){
+        if (isDuplicate(dataset_name, new_dataset_name)) {
             setIsValidName(false);
             setValidationErrorMessage("Duplicate Name not Allowed");
         }
 
-         //Check if Length is not Too Small 
-         else if(isLengthTooSmall(new_dataset_name)){
+        //Check if Length is not Too Small 
+        else if (isLengthTooSmall(new_dataset_name)) {
             setIsValidName(false);
             setValidationErrorMessage("Atleast 2 Characters are Required");
         }
 
         //Check if it is Alphanemric
-        else if(!isAlphaNumeric(new_dataset_name)){
+        else if (!isAlphaNumeric(new_dataset_name)) {
             setIsValidName(false);
             setValidationErrorMessage("Only Alphabets(a-z & A-Z), Digits(0-9) and Some Special Characters(_, ,-) are allowed.");
         }
 
         //Check if Length is not Too Small 
-        else if(isLengthTooLarge(new_dataset_name)){
+        else if (isLengthTooLarge(new_dataset_name)) {
             setIsValidName(false);
             setValidationErrorMessage("Maximum 30 Characters are Allowed");
         }
@@ -108,9 +108,9 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
         handleModalClose();
     }
 
-    const handleDeleteDataset = async(dataset_name) => {
+    const handleDeleteDataset = async (dataset_name) => {
         setRequestCreatorId({ type: "delete", name: dataset_name });
-        await dispatch(deleteDataset({dataset_name:dataset_name}));
+        await dispatch(deleteDataset({ dataset_name: dataset_name }));
         dispatch(getAllDatasets());
     }
 
@@ -122,14 +122,14 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
 
     const handleConfirmRenameDataset = async (dataset_name) => {
         setRequestCreatorId({ type: "confirm-rename", name: dataset_name });
-        await dispatch(renameDataset({dataset_name:dataset_name,new_dataset_name:newDatasetName}))
+        await dispatch(renameDataset({ dataset_name: dataset_name, new_dataset_name: newDatasetName }))
         setIsRenameActive(false);
         dispatch(getAllDatasets());
     }
 
     const handleRenameInputChange = (event) => {
         setNewDatasetName(event.target.value);
-        validateString(requestCreatorId.name,event.target.value);
+        validateString(requestCreatorId.name, event.target.value);
     }
 
     const handleExportDataset = async (dataset_name) => {
@@ -137,13 +137,13 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
         const res = await dispatch(exportDataset({ dataset_name: dataset_name }));
 
         // if (datasetState.requestStatus === REQUEST_STATUS_SUCCEEDED) {
-            // Download Dataset at User End
-            const url = window.URL.createObjectURL(new Blob([res.payload], { type: "text/csv" }));
-            const a = document.createElement('a');
-            a.download = dataset_name + ".csv";
-            a.href = url;
-            a.click();
-            a.remove();
+        // Download Dataset at User End
+        const url = window.URL.createObjectURL(new Blob([res.payload], { type: "text/csv" }));
+        const a = document.createElement('a');
+        a.download = dataset_name + ".csv";
+        a.href = url;
+        a.click();
+        a.remove();
 
         // }
     }
@@ -157,9 +157,9 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
     }, [datasetState.selectedDataset])
 
     // Show Alert Messages
-    useEffect(()=>{
+    useEffect(() => {
         // console.log(datasetState,requestCreatorId);
-        if(datasetState.requestStatus === REQUEST_STATUS_FAILED){
+        if (datasetState.requestStatus === REQUEST_STATUS_FAILED) {
             toast.error(datasetState.message !== undefined && datasetState.message !== null ? datasetState.message : CUSTOM_ERROR_MESSAGE, {
                 position: "bottom-right",
                 autoClose: false,
@@ -172,9 +172,9 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
             dispatch(resetRequestStatus());
             setRequestCreatorId(null);
         }
-        else if(datasetState.requestStatus === REQUEST_STATUS_SUCCEEDED){
-            if( datasetState.message !== null){
-                toast.success( datasetState.message !== undefined ? datasetState.message : CUSTOM_SUCCESS_MESSAGE, {
+        else if (datasetState.requestStatus === REQUEST_STATUS_SUCCEEDED) {
+            if (datasetState.message !== null) {
+                toast.success(datasetState.message !== undefined ? datasetState.message : CUSTOM_SUCCESS_MESSAGE, {
                     position: "bottom-right",
                     autoClose: false,
                     hideProgressBar: true,
@@ -187,12 +187,12 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
             dispatch(resetRequestStatus());
             setRequestCreatorId(null);
         }
-    },[datasetState.requestStatus])
+    }, [datasetState.requestStatus])
 
 
     return (
         <Box sx={{ height: "100%" }}>
-            <TableContainer sx={{ height: "40vh" }}>
+            <TableContainer sx={{ height: datasetState.availableDatasets.length > 0 ? "40vh" : "inherit" }}>
                 <Table sx={{ width: "100%" }} size="small" >
                     <TableHead>
                         <TableRow>
@@ -231,7 +231,7 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
                                                 id="rename-field"
                                                 variant="outlined"
                                                 size="small"
-                                                inputProps={{ style: { fontSize: "0.875rem" }}}
+                                                inputProps={{ style: { fontSize: "0.875rem" } }}
                                                 value={newDatasetName}
                                                 onChange={handleRenameInputChange}
                                                 error={!isValidName}
@@ -305,9 +305,19 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Box sx={{ display: "flex", justifyContent: "flex-end" }}  >
-                <Button onClick={handleSelectDataset} variant="contained" >Submit</Button>
-            </Box>
+
+            {datasetState.availableDatasets.length > 0 && (
+                <Box sx={{ display: "flex", justifyContent: "flex-end" }}  >
+                    <Button onClick={handleSelectDataset} variant="contained" >Submit</Button>
+                </Box>
+            )}
+
+            {datasetState.availableDatasets.length === 0 && (
+                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "Center", height: "40vh" }}>
+                    <Typography variant="h6" >No Dataset Available</Typography>
+                </Box>
+            )}
+
         </Box>
     );
 }
