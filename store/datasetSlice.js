@@ -50,6 +50,11 @@ const datasetSlice = createSlice({
         updateSelectedDataset:(state,action) => {
             state.selectedDataset = action.payload;
         },
+        resetRequestStatus:(state,action) => {
+            state.requestStatus = REQUEST_STATUS_IDLE;
+            state.datasetUploadStatus = REQUEST_STATUS_IDLE;
+            state.message = null;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -153,6 +158,6 @@ const datasetSlice = createSlice({
 
 });
 
-export const {updateSelectedDataset} = datasetSlice.actions;
+export const {updateSelectedDataset, resetRequestStatus} = datasetSlice.actions;
 
 export default datasetSlice.reducer;

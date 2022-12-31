@@ -5,7 +5,7 @@ import { useDropzone } from 'react-dropzone';
 import { DropzoneArea } from './uploadDatasetStyles';
 import { toast, Flip } from 'react-toastify';
 
-import { uploadDataset } from '/store/datasetSlice';
+import { uploadDataset , resetRequestStatus} from '/store/datasetSlice';
 import { REQUEST_STATUS_FAILED, REQUEST_STATUS_SUCCEEDED } from '/constants/Constants';
 
 const UploadDatasetTab = ({ handleModalClose }) => {
@@ -53,7 +53,7 @@ const UploadDatasetTab = ({ handleModalClose }) => {
 
   // Update Toast On Success or Failure of Dataset Upload
   useEffect(() => {
-    console.log("In useeffcet", datasetState);
+    console.log(datasetState);
     if (datasetState.datasetUploadStatus === REQUEST_STATUS_SUCCEEDED) {
       toast.update(toastId.current,{
         render:datasetState.message,
@@ -61,7 +61,7 @@ const UploadDatasetTab = ({ handleModalClose }) => {
         transition: Flip,
         hideProgressBar: true
       });
-
+      dispatch(resetRequestStatus());
     } else if (datasetState.datasetUploadStatus === REQUEST_STATUS_FAILED) {
       toast.update(toastId.current,{
         render: datasetState.message,
@@ -69,8 +69,10 @@ const UploadDatasetTab = ({ handleModalClose }) => {
         transition: Flip,
         hideProgressBar: true
       });
+      dispatch(resetRequestStatus());
     }
   }, [datasetState.datasetUploadStatus])
+
 
   return (
     <section className="container"  >

@@ -32,7 +32,6 @@ const SidebarItem = ({ itemKey, path, name, open, isSelect, ItemIcon }) => {
 
     const clickHandler = () => {
         dispatch(setOpenMenuItem(name));
-        console.log(selectedMenuItem);
     }
 
     return (

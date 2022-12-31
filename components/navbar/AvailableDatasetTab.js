@@ -18,7 +18,7 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import ConfirmIcon from '@mui/icons-material/DoneOutlined';
 import { toast } from 'react-toastify';
 
-import { getAllDatasets, updateSelectedDataset, exportDataset, deleteDataset, renameDataset } from "/store/datasetSlice";
+import { getAllDatasets, updateSelectedDataset, exportDataset, deleteDataset, renameDataset, resetRequestStatus } from "/store/datasetSlice";
 import { REQUEST_STATUS_FAILED, REQUEST_STATUS_SUCCEEDED, REQUEST_STATUS_LOADING, CUSTOM_ERROR_MESSAGE, CUSTOM_SUCCESS_MESSAGE } from '../../constants/Constants';
 
 const AvailableDatasetTab = ({ handleModalClose }) => {
@@ -93,7 +93,9 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
         setSelectedDataset(datasetState.selectedDataset);
     }, [datasetState.selectedDataset])
 
+    // Show Alert Messages
     useEffect(()=>{
+        console.log(datasetState,requestCreatorId);
         if(datasetState.requestStatus === REQUEST_STATUS_FAILED){
             toast.error(datasetState.message !== undefined || datasetState.message !== null ? datasetState.message : CUSTOM_ERROR_MESSAGE, {
                 position: "bottom-right",
@@ -104,17 +106,23 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
                 draggable: false,
                 theme: "dark",
             });
+            dispatch(resetRequestStatus());
+            setRequestCreatorId(null);
         }
-        else if(datasetState.requestStatus === REQUEST_STATUS_SUCCEEDED && datasetState.message !== null){
-            toast.success( datasetState.message !== undefined ? datasetState.message : CUSTOM_SUCCESS_MESSAGE, {
-                position: "bottom-right",
-                autoClose: false,
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                theme: "dark",
-            });
+        else if(datasetState.requestStatus === REQUEST_STATUS_SUCCEEDED){
+            if( datasetState.message !== null){
+                toast.success( datasetState.message !== undefined ? datasetState.message : CUSTOM_SUCCESS_MESSAGE, {
+                    position: "bottom-right",
+                    autoClose: false,
+                    hideProgressBar: true,
+                    closeOnClick: false,
+                    pauseOnHover: false,
+                    draggable: false,
+                    theme: "dark",
+                });
+            }
+            dispatch(resetRequestStatus());
+            setRequestCreatorId(null);
         }
     },[datasetState.requestStatus])
 
