@@ -17,6 +17,7 @@ import RenameIcon from '@mui/icons-material/ModeEditOutlined';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import ConfirmIcon from '@mui/icons-material/DoneOutlined';
 import { toast } from 'react-toastify';
+import * as API from "/api";
 
 import { getAllDatasets, updateSelectedDataset, exportDataset, deleteDataset, renameDataset, resetRequestStatus } from "/store/datasetSlice";
 import { REQUEST_STATUS_FAILED, REQUEST_STATUS_SUCCEEDED, REQUEST_STATUS_LOADING, CUSTOM_ERROR_MESSAGE, CUSTOM_SUCCESS_MESSAGE } from '../../constants/Constants';
@@ -71,18 +72,29 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
 
     const handleExportDataset = async (dataset_name) => {
         setRequestCreatorId({ type: "export", name: dataset_name });
-        const res = await dispatch(exportDataset({ dataset_name: dataset_name }));
-
-        if (datasetState.requestStatus === REQUEST_STATUS_SUCCEEDED) {
-            // Download Dataset at User End
-            const url = window.URL.createObjectURL(new Blob([res.payload], { type: "text/csv" }));
+        API.exportDataset(dataset_name).then((res) => {
+            const url = window.URL.createObjectURL(new Blob([res.data], { type: "text/csv" }));
             const a = document.createElement('a');
             a.download = dataset_name + ".csv";
             a.href = url;
             a.click();
             a.remove();
+        }).catch((err) => {
+            console.log(err);
+        })
+        // ====================== Using Redux Toolkit ======================
+        // const res = await dispatch(exportDataset({ dataset_name: dataset_name }));
+        // console.log(datasetState.requestStatus);
+        // if (datasetState.requestStatus === REQUEST_STATUS_SUCCEEDED) {
+        //     // Download Dataset at User End
+        //     const url = window.URL.createObjectURL(new Blob([res.payload], { type: "text/csv" }));
+        //     const a = document.createElement('a');
+        //     a.download = dataset_name + ".csv";
+        //     a.href = url;
+        //     a.click();
+        //     a.remove();
 
-        }
+        // }
     }
 
     useEffect(() => {
@@ -95,7 +107,7 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
 
     // Show Alert Messages
     useEffect(()=>{
-        console.log(datasetState,requestCreatorId);
+        // console.log(datasetState,requestCreatorId);
         if(datasetState.requestStatus === REQUEST_STATUS_FAILED){
             toast.error(datasetState.message !== undefined || datasetState.message !== null ? datasetState.message : CUSTOM_ERROR_MESSAGE, {
                 position: "bottom-right",
