@@ -4,3 +4,4 @@ export const REQUEST_STATUS_FAILED = "failed";
 export const REQUEST_STATUS_IDLE = "idle";
 
 export const CUSTOM_ERROR_MESSAGE = "Something Went Wrong";
+export const CUSTOM_SUCCESS_MESSAGE = "Successful";

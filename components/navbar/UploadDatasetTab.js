@@ -41,7 +41,6 @@ const UploadDatasetTab = ({ handleModalClose }) => {
         pauseOnHover: false,
         draggable: false,
         progress: Math.min(progress, 0.99),
-        // progress: progress,
         theme: "dark",
       });
     } else {
@@ -56,9 +55,8 @@ const UploadDatasetTab = ({ handleModalClose }) => {
   useEffect(() => {
     console.log("In useeffcet", datasetState);
     if (datasetState.datasetUploadStatus === REQUEST_STATUS_SUCCEEDED) {
-      console.log("Success");
       toast.update(toastId.current,{
-        render:"Dataset Uploaded Successfully",
+        render:datasetState.message,
         type: toast.TYPE.SUCCESS,
         transition: Flip,
         hideProgressBar: true
@@ -66,7 +64,7 @@ const UploadDatasetTab = ({ handleModalClose }) => {
 
     } else if (datasetState.datasetUploadStatus === REQUEST_STATUS_FAILED) {
       toast.update(toastId.current,{
-        render: datasetState.errorMessage,
+        render: datasetState.message,
         type: toast.TYPE.ERROR,
         transition: Flip,
         hideProgressBar: true

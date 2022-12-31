@@ -116,9 +116,9 @@ const LoginMainSection = () => {
                         </CustomFormField>
 
                         {
-                            authState.errorMessage ?
+                            authState.message ?
                             <CustomFormField>
-                                <CustomLable style={{color: "red"}}>{authState.errorMessage}</CustomLable>
+                                <CustomLable style={{color: "red"}}>{authState.message}</CustomLable>
                             </CustomFormField>
                             : null
                         }

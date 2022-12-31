@@ -11,7 +11,7 @@ import * as API from "../api";
 
 const initialState = {
     requestStatus: REQUEST_STATUS_IDLE,
-    errorMessage: null
+    message: null
 }
 
 export const login = createAsyncThunk('auth/login', async (formData) => {
@@ -51,17 +51,17 @@ const authSlice = createSlice({
             if (action.payload.status) {
 
                 state.requestStatus = REQUEST_STATUS_SUCCEEDED;
-                state.errorMessage = null;
+                state.message = null;
 
                 localStorage.setItem("profile", JSON.stringify({ ...action.payload.data }));
             } else {
                 state.requestStatus = REQUEST_STATUS_FAILED;
-                state.errorMessage = action.payload.error; // error sent by us from our backend
+                state.message = action.payload.error; // error sent by us from our backend
             }
         })
         .addCase( login.rejected, (state, action) => {
             state.requestStatus = REQUEST_STATUS_FAILED;
-            state.errorMessage = CUSTOM_ERROR_MESSAGE; // unknow error in request
+            state.message = CUSTOM_ERROR_MESSAGE; // unknow error in request
         })
 
         // Logout
@@ -72,17 +72,17 @@ const authSlice = createSlice({
             if (action.payload.status) {
 
                 state.requestStatus = REQUEST_STATUS_IDLE;
-                state.errorMessage = null;
+                state.message = null;
 
                 localStorage.clear();
             } else {
                 state.requestStatus = REQUEST_STATUS_FAILED;
-                state.errorMessage = action.payload.error;
+                state.message = action.payload.error;
             }
         })
         .addCase( logout.rejected, (state, action) => {
             state.requestStatus = REQUEST_STATUS_FAILED;
-            state.errorMessage = CUSTOM_ERROR_MESSAGE;
+            state.message = CUSTOM_ERROR_MESSAGE;
         })
 
         // Register
@@ -93,15 +93,15 @@ const authSlice = createSlice({
             if (action.payload.status) {
 
                 state.requestStatus = REQUEST_STATUS_SUCCEEDED;
-                state.errorMessage = null;
+                state.message = null;
             } else {
                 state.requestStatus = REQUEST_STATUS_FAILED;
-                state.errorMessage = action.payload.error;
+                state.message = action.payload.error;
             }
         })
         .addCase( register.rejected, (state, action) => {
             state.requestStatus = REQUEST_STATUS_FAILED;
-            state.errorMessage = CUSTOM_ERROR_MESSAGE;
+            state.message = CUSTOM_ERROR_MESSAGE;
         })
     }
 
