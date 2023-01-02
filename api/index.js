@@ -1,7 +1,5 @@
 import axios from "axios";
 
-import { updateProgress } from "/components/navbar/ProgressBarToaster";
-
 const env = {
     "local": "http://127.0.0.1:8000/api",
     "prod": "https://rbl-project.onrender.com/api"

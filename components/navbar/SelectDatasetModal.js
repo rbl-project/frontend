@@ -1,8 +1,6 @@
 import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import { styled } from '@mui/material/styles';
-import Button from '@mui/material/Button';
-import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import DialogTitle from '@mui/material/DialogTitle';

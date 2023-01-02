@@ -5,7 +5,7 @@ import { useDropzone } from 'react-dropzone';
 import { DropzoneArea } from './uploadDatasetStyles';
 import { toast, Flip } from 'react-toastify';
 
-import { uploadDataset, resetRequestStatus } from '/store/datasetSlice';
+import { uploadDataset, resetRequestStatus,getAllDatasets } from '/store/datasetSlice';
 import { REQUEST_STATUS_FAILED, REQUEST_STATUS_SUCCEEDED } from '/constants/Constants';
 import { MAXIMUM_ALLOWED_DATASETS_PER_USER } from '../../constants/Constants';
 
@@ -23,9 +23,10 @@ const UploadDatasetTab = ({ handleModalClose }) => {
 
   const toastId = React.useRef(null);
 
-  const clickHandler = (e) => {
+  const clickHandler = async(e) => {
     e.preventDefault();
-    dispatch(uploadDataset({ dataset: acceptedFiles[0], updateProgress: updateProgress }));
+    await dispatch(uploadDataset({ dataset: acceptedFiles[0], updateProgress: updateProgress }));
+    dispatch(getAllDatasets());
     // handleModalClose();
   }
 

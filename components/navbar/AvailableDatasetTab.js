@@ -19,8 +19,8 @@ import ConfirmIcon from '@mui/icons-material/DoneOutlined';
 import { toast } from 'react-toastify';
 import * as API from "/api";
 
-import { getAllDatasets, updateSelectedDataset, exportDataset, deleteDataset, renameDataset, resetRequestStatus } from "/store/datasetSlice";
-import { REQUEST_STATUS_FAILED, REQUEST_STATUS_SUCCEEDED, REQUEST_STATUS_LOADING, CUSTOM_ERROR_MESSAGE, CUSTOM_SUCCESS_MESSAGE, SMALLEST_VALID_STRING_LENGTH, LARGEST_VALID_STRING_LENGTH } from '../../constants/Constants';
+import { getAllDatasets, updateSelectedDataset, deleteDataset, renameDataset, resetRequestStatus, setRequestStatus } from "/store/datasetSlice";
+import { REQUEST_STATUS_FAILED, REQUEST_STATUS_SUCCEEDED, REQUEST_STATUS_LOADING, CUSTOM_ERROR_MESSAGE, CUSTOM_SUCCESS_MESSAGE, SMALLEST_VALID_STRING_LENGTH, LARGEST_VALID_STRING_LENGTH, REQUEST_STATUS_IDLE } from '../../constants/Constants';
 
 const AvailableDatasetTab = ({ handleModalClose }) => {
 
@@ -138,8 +138,9 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
 
     const handleExportDataset = async (dataset_name) => {
         setRequestCreatorId({ type: "export", name: dataset_name });
-        setExportDatasetLoader(true);
-        API.exportDataset({"dataset_name" : dataset_name}).then((res) => {
+        // setExportDatasetLoader(true);
+        dispatch(setRequestStatus({ requestStatus: REQUEST_STATUS_LOADING }));
+        API.exportDataset({ "dataset_name": dataset_name }).then((res) => {
             console.log(res);
             const url = window.URL.createObjectURL(new Blob([res.data], { type: "text/csv" }));
             const a = document.createElement('a');
@@ -148,9 +149,21 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
             a.click();
             a.remove();
             setExportDatasetLoader(false);
+            dispatch(setRequestStatus({ requestStatus: REQUEST_STATUS_IDLE }));
+            setRequestCreatorId(null);
         }).catch((err) => {
             console.log(err);
-            setExportDatasetLoader(false);
+            toast.error(err, {
+                position: "bottom-right",
+                autoClose: false,
+                hideProgressBar: true,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "dark",
+            });
+            dispatch(setRequestStatus({ requestStatus: REQUEST_STATUS_IDLE }));
+            setRequestCreatorId(null);
         })
         // ====================== Using Redux Toolkit ======================
         // const res = await dispatch(exportDataset({ dataset_name: dataset_name }));
@@ -167,9 +180,9 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
         // }
     }
 
-    useEffect(() => {
-        dispatch(getAllDatasets());
-    }, [])
+    // useEffect(() => {
+    //     dispatch(getAllDatasets());
+    // }, [])
 
     useEffect(() => {
         setSelectedDataset(datasetState.selectedDataset);
@@ -223,117 +236,128 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {datasetState.availableDatasets.map((dataset) => (
-                            <TableRow
-                                hover
-                                role="checkbox"
-                                aria-checked={dataset.name === selectedDataset}
-                                tabIndex={-1}
-                                key={dataset.name}
-                            >
-                                <TableCell padding="checkbox" onClick={handleClick}>
-                                    <Checkbox
-                                        color="primary"
-                                        checked={dataset.name === selectedDataset}
-                                        inputProps={{
-                                            'aria-labelledby': dataset.name,
-                                        }}
-                                        value={dataset.name}
-                                    />
-                                </TableCell>
-                                <TableCell width="40%" >
-                                    {
-                                        isRenameActive && requestCreatorId?.type === "rename" && requestCreatorId?.name === dataset.name ?
-                                            (<TextField
-                                                hiddenLabel
-                                                fullWidth
-                                                id="rename-field"
-                                                variant="outlined"
-                                                size="small"
-                                                inputProps={{ style: { fontSize: "0.875rem" } }}
-                                                value={newDatasetName}
-                                                onChange={handleRenameInputChange}
-                                                error={!isValidName}
-                                                helperText={validationErrorMessage}
-                                            />)
-                                            : (dataset.name)
-                                    }
-                                </TableCell>
-                                <TableCell align="right" >
-                                    {dataset.size} KB
-                                </TableCell>
-                                <TableCell >
-                                    {dataset.modified}
-                                </TableCell>
-                                <TableCell >
-                                    {
-                                        isRenameActive && requestCreatorId?.type === "rename" && requestCreatorId?.name === dataset.name ?
-                                            (
-                                                <IconButton disabled={!isValidName} aria-label="confirm" onClick={() => { handleConfirmRenameDataset(dataset.name) }} >
-                                                    {
-                                                        datasetState.requestStatus === REQUEST_STATUS_LOADING && requestCreatorId?.type === "confirm-rename" && requestCreatorId?.name === dataset.name
-                                                            ? (<CircularProgress size="1rem" color="inherit" />)
-                                                            : (
-                                                                <Tooltip title="Confirm" placement="right-start">
-                                                                    <ConfirmIcon />
-                                                                </Tooltip>
-                                                            )
-                                                    }
-                                                </IconButton>
-                                            ) : (
-                                                <IconButton aria-label="rename" onClick={() => { handleRenameDataset(dataset.name) }} >
-                                                    {
-                                                        datasetState.requestStatus === REQUEST_STATUS_LOADING && requestCreatorId?.type === "rename" && requestCreatorId?.name === dataset.name
-                                                            ? (<CircularProgress size="1rem" color="inherit" />)
-                                                            : (
-                                                                <Tooltip title="Rename" placement="right-start">
-                                                                    <RenameIcon />
-                                                                </Tooltip>
-                                                            )
-                                                    }
-                                                </IconButton>
+                        {datasetState.requestStatus === REQUEST_STATUS_LOADING && requestCreatorId === null ?
 
-                                            )
-                                    }
-                                    <IconButton aria-label="export" onClick={() => { handleExportDataset(dataset.name) }} >
+                            (
+                                <TableRow>
+                                    <TableCell colSpan={5} >
+                                        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "Center",height:"30vh" }}>
+                                            <CircularProgress size="1rem" color="inherit" />
+                                        </Box>
+                                    </TableCell>
+                                </TableRow>
+                            ) :
+                            datasetState.availableDatasets.map((dataset) => (
+                                <TableRow
+                                    hover
+                                    role="checkbox"
+                                    aria-checked={dataset.name === selectedDataset}
+                                    tabIndex={-1}
+                                    key={dataset.name}
+                                >
+                                    <TableCell padding="checkbox" onClick={handleClick}>
+                                        <Checkbox
+                                            color="primary"
+                                            checked={dataset.name === selectedDataset}
+                                            inputProps={{
+                                                'aria-labelledby': dataset.name,
+                                            }}
+                                            value={dataset.name}
+                                        />
+                                    </TableCell>
+                                    <TableCell width="40%" >
                                         {
-                                            (exportDatasetLoader && requestCreatorId?.name === dataset.name) || (datasetState.requestStatus === REQUEST_STATUS_LOADING && requestCreatorId?.type === "export" && requestCreatorId?.name === dataset.name)
-                                                ? (<CircularProgress size="1rem" color="inherit" />)
-                                                : (
-                                                    <Tooltip title="Export" placement="right-start">
-                                                        <ExportIcon />
-                                                    </Tooltip>
+                                            isRenameActive && requestCreatorId?.type === "rename" && requestCreatorId?.name === dataset.name ?
+                                                (<TextField
+                                                    hiddenLabel
+                                                    fullWidth
+                                                    id="rename-field"
+                                                    variant="outlined"
+                                                    size="small"
+                                                    inputProps={{ style: { fontSize: "0.875rem" } }}
+                                                    value={newDatasetName}
+                                                    onChange={handleRenameInputChange}
+                                                    error={!isValidName}
+                                                    helperText={validationErrorMessage}
+                                                />)
+                                                : (dataset.name)
+                                        }
+                                    </TableCell>
+                                    <TableCell align="right" >
+                                        {dataset.size} KB
+                                    </TableCell>
+                                    <TableCell >
+                                        {dataset.modified}
+                                    </TableCell>
+                                    <TableCell >
+                                        {
+                                            isRenameActive && requestCreatorId?.type === "rename" && requestCreatorId?.name === dataset.name ?
+                                                (
+                                                    <IconButton disabled={!isValidName} aria-label="confirm" onClick={() => { handleConfirmRenameDataset(dataset.name) }} >
+                                                        {
+                                                            datasetState.requestStatus === REQUEST_STATUS_LOADING && requestCreatorId?.type === "confirm-rename" && requestCreatorId?.name === dataset.name
+                                                                ? (<CircularProgress size="1rem" color="inherit" />)
+                                                                : (
+                                                                    <Tooltip title="Confirm" placement="right-start">
+                                                                        <ConfirmIcon />
+                                                                    </Tooltip>
+                                                                )
+                                                        }
+                                                    </IconButton>
+                                                ) : (
+                                                    <IconButton aria-label="rename" onClick={() => { handleRenameDataset(dataset.name) }} >
+                                                        {
+                                                            datasetState.requestStatus === REQUEST_STATUS_LOADING && requestCreatorId?.type === "rename" && requestCreatorId?.name === dataset.name
+                                                                ? (<CircularProgress size="1rem" color="inherit" />)
+                                                                : (
+                                                                    <Tooltip title="Rename" placement="right-start">
+                                                                        <RenameIcon />
+                                                                    </Tooltip>
+                                                                )
+                                                        }
+                                                    </IconButton>
+
                                                 )
                                         }
-                                    </IconButton>
-                                    <IconButton aria-label="delete" onClick={() => { handleDeleteDataset(dataset.name) }} >
-                                        {
-                                            datasetState.requestStatus === REQUEST_STATUS_LOADING && requestCreatorId?.type === "delete" && requestCreatorId?.name === dataset.name
-                                                ? (<CircularProgress size="1rem" color="inherit" />)
-                                                : (
-                                                    <Tooltip title="Delete" placement="right-start">
-                                                        <DeleteIcon />
-                                                    </Tooltip>
-                                                )
-                                        }
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                                        <IconButton aria-label="export" onClick={() => { handleExportDataset(dataset.name) }} >
+                                            {
+                                                (exportDatasetLoader && requestCreatorId?.name === dataset.name) || (datasetState.requestStatus === REQUEST_STATUS_LOADING && requestCreatorId?.type === "export" && requestCreatorId?.name === dataset.name)
+                                                    ? (<CircularProgress size="1rem" color="inherit" />)
+                                                    : (
+                                                        <Tooltip title="Export" placement="right-start">
+                                                            <ExportIcon />
+                                                        </Tooltip>
+                                                    )
+                                            }
+                                        </IconButton>
+                                        <IconButton aria-label="delete" onClick={() => { handleDeleteDataset(dataset.name) }} >
+                                            {
+                                                datasetState.requestStatus === REQUEST_STATUS_LOADING && requestCreatorId?.type === "delete" && requestCreatorId?.name === dataset.name
+                                                    ? (<CircularProgress size="1rem" color="inherit" />)
+                                                    : (
+                                                        <Tooltip title="Delete" placement="right-start">
+                                                            <DeleteIcon />
+                                                        </Tooltip>
+                                                    )
+                                            }
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
 
                     </TableBody>
                 </Table>
             </TableContainer>
 
-            {datasetState.availableDatasets.length > 0 && (
-                <Box sx={{ display: "flex", justifyContent: "flex-end" }}  >
-                    <Button onClick={handleSelectDataset} variant="contained" >Submit</Button>
+            {datasetState.availableDatasets.length === 0 && datasetState.requestStatus !== REQUEST_STATUS_LOADING && (
+                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "Center", height: "40vh" }}>
+                    <Typography variant="h6" >No Dataset Available</Typography>
                 </Box>
             )}
 
-            {datasetState.availableDatasets.length === 0 && (
-                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "Center", height: "40vh" }}>
-                    <Typography variant="h6" >No Dataset Available</Typography>
+            {datasetState.availableDatasets.length > 0 && (
+                <Box sx={{ display: "flex", justifyContent: "flex-end" }}  >
+                    <Button onClick={handleSelectDataset} variant="contained" disabled={datasetState.requestStatus === REQUEST_STATUS_LOADING} >Submit</Button>
                 </Box>
             )}
 

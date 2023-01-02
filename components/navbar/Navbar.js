@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { styled, useTheme, alpha } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import MuiAppBar from '@mui/material/AppBar';
@@ -11,6 +11,7 @@ import Box from '@mui/material/Box';
 import AdbIcon from '@mui/icons-material/Adb';
 
 
+import { getAllDatasets } from '/store/datasetSlice';
 import ProfileMenu from "./ProfileMenu";
 import SelectDatasetDropdown from './SelectDatasetDropdown';
 
@@ -29,6 +30,11 @@ const Navbar = () => {
             duration: theme.transitions.duration.leavingScreen,
         })
     }));
+
+    useEffect(() => {
+        dispatch(getAllDatasets());
+    }, [])
+
 
     return (
         <AppBar position="fixed" open={open} sx={{ bgcolor: "white", color: "black", zIndex: (theme) => theme.zIndex.drawer + 1 }} elevation={1} >
