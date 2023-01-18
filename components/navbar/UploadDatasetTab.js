@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Typography, Button, Box } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
-import { DropzoneArea } from './uploadDatasetStyles';
+import { DropzoneArea } from './UploadDatasetStyles';
 import { toast, Flip } from 'react-toastify';
 
 import { uploadDataset, resetRequestStatus,getAllDatasets } from '/store/datasetSlice';

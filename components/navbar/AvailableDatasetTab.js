@@ -18,6 +18,7 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import ConfirmIcon from '@mui/icons-material/DoneOutlined';
 import { toast } from 'react-toastify';
 import * as API from "/api";
+import {saveAs} from "file-saver";
 
 import { getAllDatasets, updateSelectedDataset, deleteDataset, renameDataset, resetRequestStatus, setRequestStatus } from "/store/datasetSlice";
 import { REQUEST_STATUS_FAILED, REQUEST_STATUS_SUCCEEDED, REQUEST_STATUS_LOADING, CUSTOM_ERROR_MESSAGE, CUSTOM_SUCCESS_MESSAGE, SMALLEST_VALID_STRING_LENGTH, LARGEST_VALID_STRING_LENGTH, REQUEST_STATUS_IDLE } from '../../constants/Constants';
@@ -141,13 +142,18 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
         // setExportDatasetLoader(true);
         dispatch(setRequestStatus({ requestStatus: REQUEST_STATUS_LOADING }));
         API.exportDataset({ "dataset_name": dataset_name }).then((res) => {
-            console.log(res);
-            const url = window.URL.createObjectURL(new Blob([res.data], { type: "text/csv" }));
-            const a = document.createElement('a');
-            a.download = dataset_name + ".csv";
-            a.href = url;
-            a.click();
-            a.remove();
+            
+            // ============================= Download File Traditional Method ========================= 
+            // console.log(res);
+            // const url = window.URL.createObjectURL(new Blob([res.data], { type: "text/csv" }));
+            // const a = document.createElement('a');
+            // a.download = dataset_name + ".csv";
+            // a.href = url;
+            // a.click();
+            // a.remove();
+
+            saveAs(new Blob([res.data], { type: "text/csv" }),dataset_name+".csv");
+
             setExportDatasetLoader(false);
             dispatch(setRequestStatus({ requestStatus: REQUEST_STATUS_IDLE }));
             setRequestCreatorId(null);
