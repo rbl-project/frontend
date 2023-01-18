@@ -3,15 +3,15 @@ import {
     REQUEST_STATUS_LOADING,
     REQUEST_STATUS_SUCCEEDED,
     REQUEST_STATUS_FAILED,
-    REQUEST_STATUS_IDLE
+    REQUEST_STATUS_IDLE,
+    CUSTOM_ERROR_MESSAGE
 } from "../constants/Constants";
 
 import * as API from "../api";
 
 const initialState = {
-    authenticationStatus: REQUEST_STATUS_IDLE,
-    registrationStatus: REQUEST_STATUS_IDLE,
-    errorMessage: null
+    requestStatus: REQUEST_STATUS_IDLE,
+    message: null
 }
 
 export const login = createAsyncThunk('auth/login', async (formData) => {
@@ -45,63 +45,63 @@ const authSlice = createSlice({
 
         // Login
         .addCase( login.pending, (state, action) => {
-            state.authenticationStatus = REQUEST_STATUS_LOADING;
+            state.requestStatus = REQUEST_STATUS_LOADING;
         })
         .addCase( login.fulfilled, (state, action) => { // action.payload is the response.data
             if (action.payload.status) {
 
-                state.authenticationStatus = REQUEST_STATUS_SUCCEEDED;
-                state.errorMessage = null;
+                state.requestStatus = REQUEST_STATUS_SUCCEEDED;
+                state.message = null;
 
                 localStorage.setItem("profile", JSON.stringify({ ...action.payload.data }));
             } else {
-                state.authenticationStatus = REQUEST_STATUS_FAILED;
-                state.errorMessage = action.payload.error; // error sent by us from our backend
+                state.requestStatus = REQUEST_STATUS_FAILED;
+                state.message = action.payload.error; // error sent by us from our backend
             }
         })
         .addCase( login.rejected, (state, action) => {
-            state.authenticationStatus = REQUEST_STATUS_FAILED;
-            state.errorMessage = action.error.message; // unknow error in request
+            state.requestStatus = REQUEST_STATUS_FAILED;
+            state.message = CUSTOM_ERROR_MESSAGE; // unknow error in request
         })
 
         // Logout
         .addCase( logout.pending, (state, action) => {
-            state.authenticationStatus = REQUEST_STATUS_LOADING;
+            state.requestStatus = REQUEST_STATUS_LOADING;
         })
         .addCase( logout.fulfilled, (state, action) => { 
             if (action.payload.status) {
 
-                state.authenticationStatus = REQUEST_STATUS_IDLE;
-                state.errorMessage = null;
+                state.requestStatus = REQUEST_STATUS_IDLE;
+                state.message = null;
 
                 localStorage.clear();
             } else {
-                state.authenticationStatus = REQUEST_STATUS_FAILED;
-                state.errorMessage = action.payload.error;
+                state.requestStatus = REQUEST_STATUS_FAILED;
+                state.message = action.payload.error;
             }
         })
         .addCase( logout.rejected, (state, action) => {
-            state.authenticationStatus = REQUEST_STATUS_FAILED;
-            state.errorMessage = action.error.message;
+            state.requestStatus = REQUEST_STATUS_FAILED;
+            state.message = CUSTOM_ERROR_MESSAGE;
         })
 
         // Register
         .addCase( register.pending, (state, action) => {
-            state.registrationStatus = REQUEST_STATUS_LOADING;
+            state.requestStatus = REQUEST_STATUS_LOADING;
         })
         .addCase( register.fulfilled, (state, action) => {
             if (action.payload.status) {
 
-                state.registrationStatus = REQUEST_STATUS_SUCCEEDED;
-                state.errorMessage = null;
+                state.requestStatus = REQUEST_STATUS_SUCCEEDED;
+                state.message = null;
             } else {
-                state.registrationStatus = REQUEST_STATUS_FAILED;
-                state.errorMessage = action.payload.error;
+                state.requestStatus = REQUEST_STATUS_FAILED;
+                state.message = action.payload.error;
             }
         })
         .addCase( register.rejected, (state, action) => {
-            state.registrationStatus = REQUEST_STATUS_FAILED;
-            state.errorMessage = action.error.message;
+            state.requestStatus = REQUEST_STATUS_FAILED;
+            state.message = CUSTOM_ERROR_MESSAGE;
         })
     }
 

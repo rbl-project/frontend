@@ -1,9 +1,10 @@
 import React from 'react'
 import { styled } from '@mui/material/styles';
+import { useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
-import DatasetSelectModal from './datasetSelectModal/DatasetSelectModal';
+import DatasetSelectModal from './SelectDatasetModal';
 
 const ColorButton = styled(Button)(({ theme }) => ({
     '&:hover': {
@@ -14,6 +15,7 @@ const ColorButton = styled(Button)(({ theme }) => ({
 
 const DatasetSelectButton = () => {
 
+    const datasetState = useSelector((state) => state.dataset);
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -28,10 +30,10 @@ const DatasetSelectButton = () => {
             <ColorButton variant="outlined" size="large" align="left" onClick={handleClickOpen} disableElevation={true} fullWidth={true} endIcon={<KeyboardArrowDownIcon fontSize='large' />} sx={{
                 mr: 2, textTransform: "none", height: 30, my: "auto", minWidth: 120, justifyContent: "space-between", px: 1
             }}>
-                Dataset1
+                {datasetState.selectedDataset === null ? "No Detaset Selected" : datasetState.selectedDataset}
             </ColorButton>
 
-            < DatasetSelectModal open={open} handleClose={handleClose} />
+            < DatasetSelectModal open={open} handleModalClose={handleClose} />
         </>
     )
 }
