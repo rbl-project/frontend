@@ -1,8 +1,8 @@
 import React from "react";
 import Head from 'next/head'
 
-import AuthLayout from "../../layouts/AuthLayout";
-import RegisterMainSection from "../../components/auth/RegisterMainSection";
+import AuthLayout from "/layouts/AuthLayout";
+import RegisterMainSection from "/components/auth/RegisterMainSection";
 
 const Register = () => {
     return (
