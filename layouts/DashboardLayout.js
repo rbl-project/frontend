@@ -17,7 +17,7 @@ const DashboardLayout = ({ children }) => {
         }}>
             < Navbar />
             < Sidebar />
-            <Box sx={{ mt: 8,width:"100%",px:2 }}>
+            <Box sx={{ mt: 8,mb:2,width:"100%",px:2 }}>
                 {children}
             </Box>
          
