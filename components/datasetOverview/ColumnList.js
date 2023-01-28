@@ -50,7 +50,7 @@ const rows = [
 const ColumnList = () => {
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 464, height:464 }}>
+      <TableContainer sx={{ maxHeight: 468, height:468 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -68,7 +68,7 @@ const ColumnList = () => {
           <TableBody>
             {rows.map((row) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.column_name}>
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (

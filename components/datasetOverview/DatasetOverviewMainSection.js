@@ -1,4 +1,4 @@
-import { Box, Grid, Paper, Typography } from '@mui/material';
+import { Box, Grid, Paper, Typography, Tabs, Tab } from '@mui/material';
 import React from 'react';
 
 import NumericalVsCategoricalPieChart from "./NumericalVsCategoricalPieChart";
@@ -7,7 +7,32 @@ import DescribeCategoricalColumnsTable from "./DescribeCategoricalColumnsTable";
 import CoulmnList from './ColumnList';
 import DescribeNumericalColumnsTable from './DescribeNumericalColumnsTable';
 
+const TabPanel = ({ children, value, index, ...other }) => {
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+      height="100%"
+    >
+      {value === index && (
+        <Box sx={{ pt: 1, height: "100%" }}>
+          {children}
+        </Box>
+      )}
+    </div>
+  );
+}
+
 const DatasetOverviewMainSection = () => {
+
+  const [value, setValue] = React.useState('one');
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   return (
     <Box sx={{ flexGrow: 1, width: "100%" }}>
       <Grid container spacing={2}>
@@ -48,34 +73,38 @@ const DatasetOverviewMainSection = () => {
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <Paper elevation={0} sx={{ pt: 1 }}>
-                <Box height={340} width={550}>
-                <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2, mt: 1, color: "#0164a9" }} > Numerical vs Categorical Distribution </Typography>
+                <Box height={340}>
+                  <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2, mt: 1, color: "#0164a9" }} > Numerical vs Categorical Distribution </Typography>
                   < NumericalVsCategoricalPieChart />
                 </Box>
               </Paper>
             </Grid>
             <Grid item xs={6}>
               <Paper elevation={0} sx={{ pt: 1 }}>
-                <Box height={340}  width={550}>
-                <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2, mt: 1, color: "#0164a9" }} > Null vs Non-Null Distribution </Typography>
+                <Box height={340}>
+                  <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2, mt: 1, color: "#0164a9" }} > Null vs Non-Null Distribution </Typography>
                   < NullVsNonNullPieChart />
                 </Box>
               </Paper>
             </Grid>
             <Grid item xs={12}>
-              <Paper elevation={0} sx={{ pt: 1 }}>
-                <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2, my: 1, color: "#0164a9" }} > Describe Categorical Columns </Typography>
-                <DescribeNumericalColumnsTable />
+              <Paper elevation={0} sx={{ }}>
+                <Box >
+                  <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" TabIndicatorProps={{sx: {backgroundColor:'#0164a9'}}} >
+                    <Tab label={<Typography variant="body1" sx={{fontSize:19 ,fontWeight: "bold",textTransform:"none",color:"#0164a9" }} > Describe Numerical Columns</Typography>} value="one" />
+                    <Tab label={<Typography variant="body1" sx={{ fontSize:19 ,fontWeight: "bold",textTransform:"none",color:"#0164a9" }} > Describe Categorical Columns</Typography>} value="two" />
+                  </Tabs>
+                </Box>
+                <TabPanel value={value} index="one" >
+                  <DescribeNumericalColumnsTable />
+                </TabPanel>
+                <TabPanel value={value} index="two" >
+                  <DescribeCategoricalColumnsTable />
+                </TabPanel>
               </Paper>
             </Grid>
           </Grid>
         </Grid>
-        {/* <Grid item xs={12}>
-          <Paper elevation={0} sx={{ pt: 1 }}>
-            <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2, my: 1, color: "#0164a9" }} > Describe Numerical Columns </Typography>
-            <DescribeNumericalColumnsTable />
-          </Paper>
-        </Grid> */}
       </Grid>
     </Box>
 

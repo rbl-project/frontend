@@ -1,6 +1,5 @@
 import React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
-import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import MuiDrawer from '@mui/material/Drawer';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
@@ -17,7 +16,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
     ...theme.mixins.toolbar,
 }));
 

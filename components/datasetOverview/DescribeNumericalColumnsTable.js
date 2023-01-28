@@ -115,7 +115,7 @@ const DescribeNumericalColumnsTable = () => {
           <TableBody>
             {rows.map((row) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.name}>
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
