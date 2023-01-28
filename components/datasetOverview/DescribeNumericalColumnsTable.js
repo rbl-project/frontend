@@ -97,7 +97,7 @@ const rows = [
 const DescribeNumericalColumnsTable = () => {
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 460, height:460 }}>
+      <TableContainer sx={{ maxHeight: 374, height:374 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>

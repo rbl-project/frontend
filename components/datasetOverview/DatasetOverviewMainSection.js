@@ -2,6 +2,7 @@ import { Box, Grid, Paper, Typography } from '@mui/material';
 import React from 'react';
 
 import NumericalVsCategoricalPieChart from "./NumericalVsCategoricalPieChart";
+import NullVsNonNullPieChart from "./NullVsNonNullPieChart";
 import DescribeCategoricalColumnsTable from "./DescribeCategoricalColumnsTable";
 import CoulmnList from './ColumnList';
 import DescribeNumericalColumnsTable from './DescribeNumericalColumnsTable';
@@ -45,15 +46,9 @@ const DatasetOverviewMainSection = () => {
         </Grid>
         <Grid item xs={9}>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Paper elevation={0} sx={{ pt: 1 }}>
-                <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2, my: 1, color: "#0164a9" }} > Describe Categorical Columns </Typography>
-                <DescribeCategoricalColumnsTable />
-              </Paper>
-            </Grid>
             <Grid item xs={6}>
               <Paper elevation={0} sx={{ pt: 1 }}>
-                <Box height={340}>
+                <Box height={340} width={550}>
                 <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2, mt: 1, color: "#0164a9" }} > Numerical vs Categorical Distribution </Typography>
                   < NumericalVsCategoricalPieChart />
                 </Box>
@@ -61,20 +56,26 @@ const DatasetOverviewMainSection = () => {
             </Grid>
             <Grid item xs={6}>
               <Paper elevation={0} sx={{ pt: 1 }}>
-                <Box height={340}>
+                <Box height={340}  width={550}>
                 <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2, mt: 1, color: "#0164a9" }} > Null vs Non-Null Distribution </Typography>
-                  < NumericalVsCategoricalPieChart />
+                  < NullVsNonNullPieChart />
                 </Box>
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper elevation={0} sx={{ pt: 1 }}>
+                <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2, my: 1, color: "#0164a9" }} > Describe Categorical Columns </Typography>
+                <DescribeNumericalColumnsTable />
               </Paper>
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <Paper elevation={0} sx={{ pt: 1 }}>
             <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2, my: 1, color: "#0164a9" }} > Describe Numerical Columns </Typography>
             <DescribeNumericalColumnsTable />
           </Paper>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Box>
 

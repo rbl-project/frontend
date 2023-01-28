@@ -2,20 +2,20 @@ import { ResponsivePie } from '@nivo/pie'
 
 const data = [
   {
-    "id": "Categorical Columns",
-    "label": "Categorical Columns",
-    "value": 96,
+    "id": "Non Null Values",
+    "label": "Non Null Values",
+    "value": 75,
     "color": "hsl(220, 70%, 50%)"
   },
   {
-    "id": "Numerical Columns",
-    "label": "Numerical Columns",
-    "value": 4,
+    "id": "Null Values",
+    "label": "Null Values",
+    "value": 10,
     "color": "hsl(200, 70%, 50%)"
   },
 ]
 
-const NumericalVsCategoricalPieChart = ({ /* see data tab */ }) => (
+const NullVsNonNullPieChart = ({ /* see data tab */ }) => (
   <ResponsivePie
     data={data}
     margin={{ top: 40, right: 80, bottom: 90, left: 80 }}
@@ -45,7 +45,7 @@ const NumericalVsCategoricalPieChart = ({ /* see data tab */ }) => (
     arcLinkLabelsColor={{ from: 'color', modifiers: [] }}
     arcLabelsSkipAngle={10}
     arcLabelsTextColor="#ffffff"
-    theme={{fontSize: 15}}
+    theme={{ fontSize: 15 }}
     defs={[
       {
         id: 'dots',
@@ -69,13 +69,13 @@ const NumericalVsCategoricalPieChart = ({ /* see data tab */ }) => (
     fill={[
       {
         match: {
-          id: 'Categorical Columns'
+          id: 'Non Null Values'
         },
         id: 'dots'
       },
       {
         match: {
-          id: 'Numerical Columns'
+          id: 'Null Values'
         },
         id: 'lines'
       },
@@ -108,4 +108,4 @@ const NumericalVsCategoricalPieChart = ({ /* see data tab */ }) => (
   />
 )
 
-export default NumericalVsCategoricalPieChart;
+export default NullVsNonNullPieChart;
