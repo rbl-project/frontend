@@ -51,7 +51,7 @@ const LoginMainSection = () => {
         if (token) {
             const decodedToken = decode(token);
             if (decodedToken.exp * 1000 > new Date().getTime()) {
-                router.replace('/dashboard');
+                router.replace('/dashboard/exploratory-data-analysis/dataset-overview');
             }
         }
     }, [authState.requestStatus])

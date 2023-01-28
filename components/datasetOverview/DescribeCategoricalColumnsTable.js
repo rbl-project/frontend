@@ -69,7 +69,7 @@ const rows = [
 const DescribeCategoricalColumnsTable = () => {
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 380, height:380 }}>
+      <TableContainer sx={{ maxHeight: 374, height:374 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -77,7 +77,7 @@ const DescribeCategoricalColumnsTable = () => {
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  style={{ minWidth: column.minWidth, fontWeight: 'bold' }}
                 >
                   {column.label}
                 </TableCell>
