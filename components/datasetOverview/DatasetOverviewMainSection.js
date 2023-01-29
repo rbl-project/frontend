@@ -108,8 +108,8 @@ const DatasetOverviewMainSection = () => {
                     (
                       <>
                         <Box sx={{ display: "flex", alignItems: "baseline", justifyContent: "center", }}>
-                          <Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e", fontSize: 50 }} >{formatNumber(datasetOverviewState.n_rows).value}</Typography>
-                          {datasetOverviewState.n_rows >= 1000 && (<Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e", fontSize: 25 }} >{formatNumber(datasetOverviewState.n_rows).prefix}</Typography>)}
+                          <Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e",fontSize:"3.2rem" }} >{formatNumber(100000).value}</Typography>
+                          {datasetOverviewState.n_rows >= 1000 && (<Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e", fontSize: 25 }} >{formatNumber(100000).prefix}</Typography>)}
                         </Box>
                         <Typography variant="body1" align="center" sx={{ fontWeight: "bold", color: "#0066ad" }} > No of Rows </Typography>
                       </>
@@ -129,7 +129,7 @@ const DatasetOverviewMainSection = () => {
                   ) : (
                     <>
                       <Box sx={{ display: "flex", alignItems: "baseline", justifyContent: "center", }}>
-                        <Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e", fontSize: 50 }} >{formatNumber(datasetOverviewState.n_columns).value}</Typography>
+                        <Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e",fontSize:"3.2rem"}} >{formatNumber(datasetOverviewState.n_columns).value}</Typography>
                         {datasetOverviewState.n_columns >= 1000 && (<Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e", fontSize: 25 }} >{formatNumber(datasetOverviewState.n_columns).prefix}</Typography>)}
                       </Box>
                       <Typography variant="body1" align="center" sx={{ fontWeight: "bold", color: "#0066ad" }} > No of Columns </Typography>

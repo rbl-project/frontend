@@ -10,7 +10,7 @@ const NumericalVsCategoricalPieChart = ({ data }) => (
     padAngle={0.7}
     cornerRadius={3}
     activeOuterRadiusOffset={8}
-    colors={{ scheme: 'category10' }}
+    colors={{ scheme: 'dark2' }}
     borderWidth={1}
     borderColor={{
       from: 'color',

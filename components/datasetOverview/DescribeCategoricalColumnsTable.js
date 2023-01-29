@@ -26,7 +26,7 @@ const DescribeCategoricalColumnsTable = ({rows}) => {
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth, fontWeight: 'bold' }}
+                  sx={{ minWidth: column.minWidth,fontWeight: 'bolder'}}
                 >
                   {column.label}
                 </TableCell>
@@ -40,7 +40,7 @@ const DescribeCategoricalColumnsTable = ({rows}) => {
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
-                        <TableCell key={column.id} align={column.align}>
+                        <TableCell key={column.id} align={column.align} sx={{fontWeight:column.id ==="name"&& 500}}>
                           {column.format && typeof value === 'number'
                             ? column.format(value)
                             : value}
