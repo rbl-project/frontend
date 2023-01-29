@@ -38,3 +38,8 @@ export const exportDataset = (formData) => API.post("/export-dataset",formData);
 export const deleteDataset = (formData) => API.post("/delete-dataset",formData);
 export const renameDataset = (formData) => API.post("/rename-dataset",formData);
 
+// Datset Overview APIs
+export const getBasicInformation = (formData) => API.post("/basic-information",formData);
+export const getDescribeNumericalData = (formData) => API.post("/describe-numerical-data",formData);
+export const getDescribeCategoricalData = (formData) => API.post("/describe-categorical-data",formData);
+export const getGraphicalRepresentation = (formData) => API.post("/graphical-representation",formData);

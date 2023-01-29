@@ -9,64 +9,13 @@ import TableRow from '@mui/material/TableRow';
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'mode_count',label: 'Count',minWidth: 100,},
+  { id: 'count',label: 'Count',minWidth: 100,},
   { id: 'mode',label: 'Mode',minWidth: 170},
-  { id: 'freq', label: 'Mode Count', minWidth: 100 },
-  { id: 'unique',label: 'Unique Count',minWidth: 100},
+  { id: 'mode_count', label: 'Mode Count', minWidth: 100 },
+  { id: 'unique_count',label: 'Unique Count',minWidth: 100},
 ];
 
-const rows = [
-  {
-      "data_type": "object",
-      "freq": 1,
-      "mode": "2009-06-15 17:26:21.0000001",
-      "mode_count": 1019925,
-      "name": "key",
-      "unique": 1019925
-  },
-  {
-      "data_type": "object",
-      "freq": 9,
-      "mode": "2010-02-13 19:28:00 UTC",
-      "mode_count": 1019925,
-      "name": "pickup_datetime",
-      "unique": 876701
-  },
-  {
-      "data_type": "object",
-      "freq": 1,
-      "mode": "2009-06-15 17:26:21.0000001",
-      "mode_count": 1019925,
-      "name": "key",
-      "unique": 1019925
-  },
-  {
-      "data_type": "object",
-      "freq": 9,
-      "mode": "2010-02-13 19:28:00 UTC",
-      "mode_count": 1019925,
-      "name": "pickup_datetime",
-      "unique": 876701
-  },
-  {
-      "data_type": "object",
-      "freq": 1,
-      "mode": "2009-06-15 17:26:21.0000001",
-      "mode_count": 1019925,
-      "name": "key",
-      "unique": 1019925
-  },
-  {
-      "data_type": "object",
-      "freq": 9,
-      "mode": "2010-02-13 19:28:00 UTC",
-      "mode_count": 1019925,
-      "name": "pickup_datetime",
-      "unique": 876701
-  }
-]
-
-const DescribeCategoricalColumnsTable = () => {
+const DescribeCategoricalColumnsTable = ({rows}) => {
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight: 374, height:374 }}>

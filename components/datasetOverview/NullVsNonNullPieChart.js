@@ -1,21 +1,6 @@
 import { ResponsivePie } from '@nivo/pie'
 
-const data = [
-  {
-    "id": "Non Null Values",
-    "label": "Non Null Values",
-    "value": 75,
-    "color": "hsl(220, 70%, 50%)"
-  },
-  {
-    "id": "Null Values",
-    "label": "Null Values",
-    "value": 10,
-    "color": "hsl(200, 70%, 50%)"
-  },
-]
-
-const NullVsNonNullPieChart = ({ /* see data tab */ }) => (
+const NullVsNonNullPieChart = ({ data }) => (
   <ResponsivePie
     data={data}
     margin={{ top: 40, right: 80, bottom: 90, left: 80 }}
@@ -71,13 +56,13 @@ const NullVsNonNullPieChart = ({ /* see data tab */ }) => (
         match: {
           id: 'Non Null Values'
         },
-        id: 'dots'
+        id: 'lines'
       },
       {
         match: {
           id: 'Null Values'
         },
-        id: 'lines'
+        id: 'dots'
       },
     ]}
     legends={[

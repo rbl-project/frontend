@@ -1,21 +1,6 @@
 import { ResponsivePie } from '@nivo/pie'
 
-const data = [
-  {
-    "id": "Categorical Columns",
-    "label": "Categorical Columns",
-    "value": 96,
-    "color": "hsl(220, 70%, 50%)"
-  },
-  {
-    "id": "Numerical Columns",
-    "label": "Numerical Columns",
-    "value": 4,
-    "color": "hsl(200, 70%, 50%)"
-  },
-]
-
-const NumericalVsCategoricalPieChart = ({ /* see data tab */ }) => (
+const NumericalVsCategoricalPieChart = ({ data }) => (
   <ResponsivePie
     data={data}
     margin={{ top: 40, right: 80, bottom: 90, left: 80 }}

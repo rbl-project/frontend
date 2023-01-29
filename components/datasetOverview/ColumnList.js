@@ -12,42 +12,7 @@ const columns = [
   { id: 'data_type',label: 'Data Type',minWidth: 100,},
 ];
 
-const rows = [
-    {
-        "column_name": "key",
-        "data_type": "object"
-    },
-    {
-        "column_name": "fare_amount",
-        "data_type": "float64"
-    },
-    {
-        "column_name": "pickup_datetime",
-        "data_type": "object"
-    },
-    {
-        "column_name": "pickup_longitude",
-        "data_type": "float64"
-    },
-    {
-        "column_name": "pickup_latitude",
-        "data_type": "float64"
-    },
-    {
-        "column_name": "dropoff_longitude",
-        "data_type": "float64"
-    },
-    {
-        "column_name": "dropoff_latitude",
-        "data_type": "float64"
-    },
-    {
-        "column_name": "passenger_count",
-        "data_type": "int64"
-    }
-]
-
-const ColumnList = () => {
+const ColumnList = ({rows}) => {
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight: 468, height:468 }}>
