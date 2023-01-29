@@ -52,6 +52,12 @@ const DatasetOverviewMainSection = () => {
     dispatch(getDescribeCategoricalData(selectedDataset));
   }, [selectedDataset]);
 
+  useEffect(() => {
+    if (datasetOverviewState.n_numerical_columns === 0) {
+      setValue("two");
+    }
+  }, [datasetOverviewState.n_categorical_columns, datasetOverviewState.n_numerical_columns]);
+
 
   const formatNumber = (num) => {
 
@@ -185,28 +191,32 @@ const DatasetOverviewMainSection = () => {
               <Paper elevation={0} sx={{}}>
                 <Box >
                   <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" TabIndicatorProps={{ sx: { backgroundColor: '#0164a9' } }} >
-                    <Tab label={<Typography variant="body1" sx={{ fontSize: 19, fontWeight: "bold", textTransform: "none", color: "#0164a9" }} > Describe Numerical Columns</Typography>} value="one" />
-                    <Tab label={<Typography variant="body1" sx={{ fontSize: 19, fontWeight: "bold", textTransform: "none", color: "#0164a9" }} > Describe Categorical Columns</Typography>} value="two" />
+                    {datasetOverviewState.n_numerical_columns !== 0 && (<Tab label={<Typography variant="body1" sx={{ fontSize: 19, fontWeight: "bold", textTransform: "none", color: "#0164a9" }} > Describe Numerical Columns</Typography>} value="one" />)}
+                    {datasetOverviewState.n_categorical_columns !== 0 && (<Tab label={<Typography variant="body1" sx={{ fontSize: 19, fontWeight: "bold", textTransform: "none", color: "#0164a9" }} > Describe Categorical Columns</Typography>} value="two" />)}
                   </Tabs>
                 </Box>
-                <TabPanel value={value} index="one" >
-                  {datasetOverviewState.desc_num_cols_req_status === REQUEST_STATUS_LOADING ? (
-                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: 374 }}>
-                      <CircularProgress size="1rem" color="inherit" />
-                    </Box>
-                  ) : (
-                    <DescribeNumericalColumnsTable rows={datasetOverviewState.describe_numerical_data} />
+                {datasetOverviewState.n_numerical_columns !== 0 &&
+                  (<TabPanel value={value} index="one" >
+                    {datasetOverviewState.desc_num_cols_req_status === REQUEST_STATUS_LOADING ? (
+                      <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: 374 }}>
+                        <CircularProgress size="1rem" color="inherit" />
+                      </Box>
+                    ) : (
+                      <DescribeNumericalColumnsTable rows={datasetOverviewState.describe_numerical_data} />
+                    )}
+                  </TabPanel>
                   )}
-                </TabPanel>
-                <TabPanel value={value} index="two" >
-                  {datasetOverviewState.desc_cat_cols_req_status === REQUEST_STATUS_LOADING ? (
-                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: 374 }}>
-                      <CircularProgress size="1rem" color="inherit" />
-                    </Box>
-                  ) : (
-                    <DescribeCategoricalColumnsTable rows={datasetOverviewState.describe_categorical_data} />
+                {datasetOverviewState.n_categorical_columns !== 0 &&
+                  (<TabPanel value={value} index="two" >
+                    {datasetOverviewState.desc_cat_cols_req_status === REQUEST_STATUS_LOADING ? (
+                      <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: 374 }}>
+                        <CircularProgress size="1rem" color="inherit" />
+                      </Box>
+                    ) : (
+                      <DescribeCategoricalColumnsTable rows={datasetOverviewState.describe_categorical_data} />
+                    )}
+                  </TabPanel>
                   )}
-                </TabPanel>
               </Paper>
             </Grid>
           </Grid>
