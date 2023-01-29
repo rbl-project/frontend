@@ -68,12 +68,12 @@ const datasetOverviewSlice = createSlice({
             })
             .addCase(getBasicInformation.fulfilled, (state, action) => { // action.payload is the response.data
                 if (action.payload.status) {
-                    state.basic_info_req_status = REQUEST_STATUS_SUCCEEDED;
                     state.dataset_name = action.payload.data.dataset_name;
                     state.n_columns = action.payload.data.n_columns;
                     state.n_rows = action.payload.data.n_rows;
                     state.columns = action.payload.data.columns;
                     state.head = action.payload.data.head;
+                    state.basic_info_req_status = REQUEST_STATUS_SUCCEEDED;
                 } else {
                     state.basic_info_req_status = REQUEST_STATUS_FAILED;
                     state.message = action.payload.error; // error sent by us from our backend
@@ -90,10 +90,10 @@ const datasetOverviewSlice = createSlice({
             })
             .addCase(getDescribeNumericalData.fulfilled, (state, action) => { // action.payload is the response.data
                 if (action.payload.status) {
-                    state.desc_num_cols_req_status = REQUEST_STATUS_SUCCEEDED;
                     state.describe_numerical_data = action.payload.data.columns;
                     state.n_numerical_columns = action.payload.data.n_numerical_columns;
                     state.n_categorical_columns = action.payload.data.n_categorical_columns;
+                    state.desc_num_cols_req_status = REQUEST_STATUS_SUCCEEDED;
                 } else {
                     state.desc_num_cols_req_status = REQUEST_STATUS_FAILED;
                     state.message = action.payload.error; // error sent by us from our backend
@@ -110,10 +110,10 @@ const datasetOverviewSlice = createSlice({
             })
             .addCase(getDescribeCategoricalData.fulfilled, (state, action) => { // action.payload is the response.data
                 if (action.payload.status) {
-                    state.desc_cat_cols_req_status = REQUEST_STATUS_SUCCEEDED;
                     state.describe_categorical_data = action.payload.data.columns;
                     state.n_numerical_columns = action.payload.data.n_numerical_columns;
                     state.n_categorical_columns = action.payload.data.n_categorical_columns;
+                    state.desc_cat_cols_req_status = REQUEST_STATUS_SUCCEEDED;
                 }
                 else {
                     state.desc_cat_cols_req_status = REQUEST_STATUS_FAILED;
@@ -131,7 +131,6 @@ const datasetOverviewSlice = createSlice({
             })
             .addCase(getGraphicalRepresentation.fulfilled, (state, action) => { // action.payload is the response.data
                 if (action.payload.status) {
-                    state.graph_rep_req_status = REQUEST_STATUS_SUCCEEDED;
                     state.n_values = action.payload.data.n_values;
                     state.n_null_values = action.payload.data.n_null_values;
                     state.n_non_null_values = action.payload.data.n_non_null_values;
@@ -144,6 +143,7 @@ const datasetOverviewSlice = createSlice({
                     state.percent_categorical_columns = action.payload.data.percent_categorical_columns;
                     state.percent_numerical_columns = action.payload.data.percent_numerical_columns;
                     state.numerical_vs_categorical_pie_chart = action.payload.data.numerical_vs_categorical_pie_chart;
+                    state.graph_rep_req_status = REQUEST_STATUS_SUCCEEDED;
                 }
                 else {
                     state.graph_rep_req_status = REQUEST_STATUS_FAILED;

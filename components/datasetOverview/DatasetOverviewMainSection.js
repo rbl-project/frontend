@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Grid, Paper, Typography, Tabs, Tab } from '@mui/material';
+import { Box, Grid, Paper, Typography, Tabs, Tab, CircularProgress } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
 import NumericalVsCategoricalPieChart from "./NumericalVsCategoricalPieChart";
@@ -8,7 +8,8 @@ import DescribeCategoricalColumnsTable from "./DescribeCategoricalColumnsTable";
 import CoulmnList from './ColumnList';
 import DescribeNumericalColumnsTable from './DescribeNumericalColumnsTable';
 
-import { getBasicInformation,getGraphicalRepresentation, getDescribeNumericalData, getDescribeCategoricalData } from "/store/datasetOverviewSlice";
+import { getBasicInformation, getGraphicalRepresentation, getDescribeNumericalData, getDescribeCategoricalData } from "/store/datasetOverviewSlice";
+import { REQUEST_STATUS_LOADING } from '../../constants/Constants';
 
 const TabPanel = ({ children, value, index, ...other }) => {
   return (
@@ -79,36 +80,69 @@ const DatasetOverviewMainSection = () => {
             <Grid item xs={12}>
               <Paper elevation={0} >
                 <Box height={50} sx={{ display: "flex", alignItems: "center", ml: 2 }} >
-                  <Typography variant="h5" sx={{ fontWeight: "bold", color: "#0164a9" }} >{datasetOverviewState.dataset_name}</Typography>
+                  {datasetOverviewState.basic_info_req_status === REQUEST_STATUS_LOADING ? (
+                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "Center", width: "100%" }}>
+                      <CircularProgress size="1rem" color="inherit" />
+                    </Box>
+                  ) : (
+                    <Typography variant="h5" sx={{ fontWeight: "bold", color: "#0164a9" }} >{datasetOverviewState.dataset_name}</Typography>
+                  )}
                 </Box>
               </Paper>
             </Grid>
             <Grid item xs={6}>
               <Paper elevation={0}>
                 <Box height={200} sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
-                  <Box sx={{ display: "flex", alignItems:"baseline", justifyContent: "center", }}>
-                    <Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e", fontSize: 50 }} >{formatNumber(datasetOverviewState.n_rows).value}</Typography>
-                    { datasetOverviewState.n_rows >= 1000 && (<Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e", fontSize: 25 }} >{formatNumber(datasetOverviewState.n_rows).prefix}</Typography>) }
-                  </Box>
-                  <Typography variant="body1" align="center" sx={{ fontWeight: "bold", color: "#0066ad" }} > No of Rows </Typography>
+
+                  {datasetOverviewState.basic_info_req_status === REQUEST_STATUS_LOADING ? (
+                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "Center", width: "100%" }}>
+                      <CircularProgress size="1rem" color="inherit" />
+                    </Box>
+                  ) :
+                    (
+                      <>
+                        <Box sx={{ display: "flex", alignItems: "baseline", justifyContent: "center", }}>
+                          <Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e", fontSize: 50 }} >{formatNumber(datasetOverviewState.n_rows).value}</Typography>
+                          {datasetOverviewState.n_rows >= 1000 && (<Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e", fontSize: 25 }} >{formatNumber(datasetOverviewState.n_rows).prefix}</Typography>)}
+                        </Box>
+                        <Typography variant="body1" align="center" sx={{ fontWeight: "bold", color: "#0066ad" }} > No of Rows </Typography>
+                      </>
+                    )}
+
                 </Box>
               </Paper>
             </Grid>
             <Grid item xs={6}>
               <Paper elevation={0}>
                 <Box height={200} sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
-                <Box sx={{ display: "flex", alignItems:"baseline", justifyContent: "center", }}>
-                    <Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e", fontSize: 50 }} >{formatNumber(datasetOverviewState.n_columns).value}</Typography>
-                    { datasetOverviewState.n_columns >= 1000 && (<Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e", fontSize: 25 }} >{formatNumber(datasetOverviewState.n_columns).prefix}</Typography>) }
-                  </Box>
-                  <Typography variant="body1" align="center" sx={{ fontWeight: "bold", color: "#0066ad" }} > No of Columns </Typography>
+
+                  {datasetOverviewState.basic_info_req_status === REQUEST_STATUS_LOADING ? (
+                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "Center", width: "100%" }}>
+                      <CircularProgress size="1rem" color="inherit" />
+                    </Box>
+                  ) : (
+                    <>
+                      <Box sx={{ display: "flex", alignItems: "baseline", justifyContent: "center", }}>
+                        <Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e", fontSize: 50 }} >{formatNumber(datasetOverviewState.n_columns).value}</Typography>
+                        {datasetOverviewState.n_columns >= 1000 && (<Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e", fontSize: 25 }} >{formatNumber(datasetOverviewState.n_columns).prefix}</Typography>)}
+                      </Box>
+                      <Typography variant="body1" align="center" sx={{ fontWeight: "bold", color: "#0066ad" }} > No of Columns </Typography>
+                    </>
+                  )}
+
                 </Box>
               </Paper>
             </Grid>
             <Grid item xs={12}>
               <Paper elevation={0} sx={{ pt: 1 }}>
                 <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2, my: 1, color: "#0164a9" }} > Column List </Typography>
-                <CoulmnList rows={datasetOverviewState.columns} />
+                {datasetOverviewState.basic_info_req_status === REQUEST_STATUS_LOADING ? (
+                  <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: 468 }}>
+                    <CircularProgress size="1rem" color="inherit" />
+                  </Box>
+                ) : (
+                  <CoulmnList rows={datasetOverviewState.columns} />
+                )}
               </Paper>
             </Grid>
           </Grid>
@@ -119,7 +153,15 @@ const DatasetOverviewMainSection = () => {
               <Paper elevation={0} sx={{ pt: 1 }}>
                 <Box height={340}>
                   <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2, mt: 1, color: "#0164a9" }} > Numerical vs Categorical Distribution </Typography>
-                  < NumericalVsCategoricalPieChart data={datasetOverviewState.numerical_vs_categorical_pie_chart}/>
+
+                  {datasetOverviewState.graph_rep_req_status === REQUEST_STATUS_LOADING ? (
+                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+                      <CircularProgress size="1rem" color="inherit" />
+                    </Box>
+                  ) : (
+                    < NumericalVsCategoricalPieChart data={datasetOverviewState.numerical_vs_categorical_pie_chart} />
+                  )}
+
                 </Box>
               </Paper>
             </Grid>
@@ -127,7 +169,15 @@ const DatasetOverviewMainSection = () => {
               <Paper elevation={0} sx={{ pt: 1 }}>
                 <Box height={340}>
                   <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2, mt: 1, color: "#0164a9" }} > Null vs Non-Null Distribution </Typography>
-                  < NullVsNonNullPieChart data={datasetOverviewState.non_null_vs_null_pie_chart} />
+
+                  {datasetOverviewState.graph_rep_req_status === REQUEST_STATUS_LOADING ? (
+                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100%" }}>
+                      <CircularProgress size="1rem" color="inherit" />
+                    </Box>
+                  ) : (
+                    < NullVsNonNullPieChart data={datasetOverviewState.non_null_vs_null_pie_chart} />
+                  )}
+
                 </Box>
               </Paper>
             </Grid>
@@ -140,10 +190,22 @@ const DatasetOverviewMainSection = () => {
                   </Tabs>
                 </Box>
                 <TabPanel value={value} index="one" >
-                  <DescribeNumericalColumnsTable rows={datasetOverviewState.describe_numerical_data} />
+                  {datasetOverviewState.desc_num_cols_req_status === REQUEST_STATUS_LOADING ? (
+                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: 374 }}>
+                      <CircularProgress size="1rem" color="inherit" />
+                    </Box>
+                  ) : (
+                    <DescribeNumericalColumnsTable rows={datasetOverviewState.describe_numerical_data} />
+                  )}
                 </TabPanel>
                 <TabPanel value={value} index="two" >
-                  <DescribeCategoricalColumnsTable rows={datasetOverviewState.describe_categorical_data} />
+                  {datasetOverviewState.desc_cat_cols_req_status === REQUEST_STATUS_LOADING ? (
+                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: 374 }}>
+                      <CircularProgress size="1rem" color="inherit" />
+                    </Box>
+                  ) : (
+                    <DescribeCategoricalColumnsTable rows={datasetOverviewState.describe_categorical_data} />
+                  )}
                 </TabPanel>
               </Paper>
             </Grid>
