@@ -1,8 +1,8 @@
 import React from "react";
 import Head from 'next/head'
 
-import AuthLayout from "../../layouts/AuthLayout";
-import ForgetPasswordMainSection from "../../components/auth/ForgetPasswordMainSection";
+import AuthLayout from "/layouts/AuthLayout";
+import ForgetPasswordMainSection from "/components/auth/ForgetPasswordMainSection";
 
 const ForgetPassword = () => {
     return (

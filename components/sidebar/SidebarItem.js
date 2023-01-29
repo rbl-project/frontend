@@ -16,8 +16,8 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                     '&.Mui-selected': {
-                        backgroundColor: 'dodgerblue',
-                        // backgroundColor: 'mediumblue'
+                        backgroundColor: "#3d4a6b",
+                        color: "#f5f5f5"
                     },
                 },
             },
@@ -36,9 +36,9 @@ const SidebarItem = ({ itemKey, path, name, open, isSelect, ItemIcon }) => {
 
     return (
         <ThemeProvider theme={theme}>
-            <ListItem key={itemKey} disablePadding sx={{ display: 'block',borderRadius:3, }} selected={selectedMenuItem === name} onClick={clickHandler} >
+            <ListItem key={itemKey} disablePadding sx={{ display: 'block',borderRadius:3, }} selected={selectedMenuItem === name}  onClick={clickHandler} >
                 <Link href={path} >
-                    <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: "auto" }} >
+                    <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: "auto" }}  >
                         <Tooltip title={name} placement="right" TransitionComponent={Zoom} >
                             <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center', color: "white" }} >
                                 <ItemIcon />

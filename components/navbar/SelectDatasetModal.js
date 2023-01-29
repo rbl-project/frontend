@@ -34,7 +34,7 @@ const TabPanel = ({ children, value, index, ...other }) => {
         >
             {value === index && (
                 <Box sx={{ pt:3, px: 1,height:"100%" }}>
-                    <Typography>{children}</Typography>
+                    {children}
                 </Box>
             )}
         </div>

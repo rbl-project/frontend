@@ -1,6 +1,5 @@
 import React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
-import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import MuiDrawer from '@mui/material/Drawer';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
@@ -17,7 +16,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
     ...theme.mixins.toolbar,
 }));
 
@@ -70,7 +68,7 @@ const Sidebar = () => {
             <DrawerHeader></DrawerHeader>
             <List sx={{ mt: 0 }} >
                 <SidebarSubheader title="Exploratory Data Analysis" open={open}></SidebarSubheader>
-                <SidebarItem itemKey={1} name="Data Overview" path="/dashboard/exploratory-data-analysis/data-overview" ItemIcon={InboxIcon} open={open} />
+                <SidebarItem itemKey={1} name="Dataset Overview" path="/dashboard/exploratory-data-analysis/dataset-overview" ItemIcon={InboxIcon} open={open} />
                 <SidebarItem itemKey={2} name="Data Visualization" path="/dashboard/exploratory-data-analysis/data-visualization" ItemIcon={MailIcon} open={open} />
             </List >
             {/* {open && (<Divider light color="white" sx={{ borderColor: "rgba(0,0,0,0.5)" }} variant="middle" />)} */}

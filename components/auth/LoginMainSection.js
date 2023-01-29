@@ -30,8 +30,10 @@ import {
 } from "./AuthStyles";
 
 // actions
-import { login } from "/store/authSlice"
+import { login } from "/store/authSlice";
+import {setOpenMenuItem} from "/store/globalStateSlice";
 import { REQUEST_STATUS_LOADING } from '../../constants/Constants';
+
 
 const LoginMainSection = () => {
 
@@ -51,7 +53,8 @@ const LoginMainSection = () => {
         if (token) {
             const decodedToken = decode(token);
             if (decodedToken.exp * 1000 > new Date().getTime()) {
-                router.replace('/dashboard');
+                router.replace('/dashboard/exploratory-data-analysis/dataset-overview');
+                dispatch(setOpenMenuItem("Dataset Overview"));
             }
         }
     }, [authState.requestStatus])

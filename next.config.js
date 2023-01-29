@@ -8,10 +8,20 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/',
-        destination: '/home',
+        source: "/",
+        destination: "/home",
         permanent: true,
       },
+      {
+        source:"/dashboard",
+        destination:"/dashboard/exploratory-data-analysis/dataset-overview",
+        permanent:true,
+      },
+      {
+        source:"/dashboard/exploratory-data-analysis",
+        destination:"/dashboard/exploratory-data-analysis/dataset-overview",
+        permanent:true,
+      }
     ]
   },
 }
