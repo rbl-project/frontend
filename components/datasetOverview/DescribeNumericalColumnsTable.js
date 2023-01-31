@@ -45,9 +45,7 @@ const DescribeNumericalColumnsTable = ({rows}) => {
                       const value = row[column.id];
                       return (
                         <TableCell key={column.id} align={column.align} sx={{fontWeight:column.id ==="name"&& 500}}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
+                          {column.format && typeof value === 'number' ? column.format(value): value === null ? "null": value}
                         </TableCell>
                       );
                     })}
