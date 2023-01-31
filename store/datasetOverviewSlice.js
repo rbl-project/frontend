@@ -58,6 +58,13 @@ const datasetOverviewSlice = createSlice({
     name: "datasetOverview",
     initialState: initialState,
     reducers: {
+        resetRequestStatus:(state,action) => {
+            state.basic_info_req_status = REQUEST_STATUS_IDLE;
+            state.desc_num_cols_req_status = REQUEST_STATUS_IDLE;
+            state.desc_cat_cols_req_status = REQUEST_STATUS_IDLE;
+            state.graph_rep_req_status = REQUEST_STATUS_IDLE;
+            state.message = null;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -159,5 +166,6 @@ const datasetOverviewSlice = createSlice({
     }
 });
 
+export const {resetRequestStatus } = datasetOverviewSlice.actions;
 
 export default datasetOverviewSlice.reducer;

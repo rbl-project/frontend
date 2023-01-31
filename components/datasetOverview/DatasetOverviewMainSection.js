@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Box, Grid, Paper, Typography, Tabs, Tab, CircularProgress } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import NumericalVsCategoricalPieChart from "./NumericalVsCategoricalPieChart";
 import NullVsNonNullPieChart from "./NullVsNonNullPieChart";
@@ -8,8 +9,8 @@ import DescribeCategoricalColumnsTable from "./DescribeCategoricalColumnsTable";
 import CoulmnList from './ColumnList';
 import DescribeNumericalColumnsTable from './DescribeNumericalColumnsTable';
 
-import { getBasicInformation, getGraphicalRepresentation, getDescribeNumericalData, getDescribeCategoricalData } from "/store/datasetOverviewSlice";
-import { REQUEST_STATUS_LOADING } from '../../constants/Constants';
+import { getBasicInformation, getGraphicalRepresentation, getDescribeNumericalData, getDescribeCategoricalData, resetRequestStatus } from "/store/datasetOverviewSlice";
+import { REQUEST_STATUS_LOADING,REQUEST_STATUS_FAILED } from '../../constants/Constants';
 
 const TabPanel = ({ children, value, index, ...other }) => {
   return (
@@ -47,7 +48,7 @@ const DatasetOverviewMainSection = () => {
   useEffect(() => {
     if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
       console.log("selectedDataset", selectedDataset);
-      dispatch(getBasicInformation(selectedDataset));
+      dispatch(getBasicInformation());
       dispatch(getGraphicalRepresentation(selectedDataset));
       dispatch(getDescribeNumericalData(selectedDataset));
       dispatch(getDescribeCategoricalData(selectedDataset));
@@ -59,6 +60,28 @@ const DatasetOverviewMainSection = () => {
       setValue("two");
     }
   }, [datasetOverviewState.n_categorical_columns, datasetOverviewState.n_numerical_columns]);
+
+  useEffect(() => {
+    // Error Message
+    if (
+      datasetOverviewState.basic_info_req_status === REQUEST_STATUS_FAILED ||
+      datasetOverviewState.desc_num_cols_req_status === REQUEST_STATUS_FAILED ||
+      datasetOverviewState.desc_cat_cols_req_status === REQUEST_STATUS_FAILED ||
+      datasetOverviewState.graph_rep_req_status === REQUEST_STATUS_FAILED
+    ) {
+      toast.error([undefined, null, ""].includes(datasetOverviewState.message) ? CUSTOM_ERROR_MESSAGE : datasetOverviewState.message + ". Please Refresh", {
+        position: "bottom-right",
+        autoClose: false,
+        hideProgressBar: true,
+        closeOnClick: false,
+        pauseOnHover: false,
+        draggable: false,
+        theme: "dark",
+      });
+      dispatch(resetRequestStatus());
+    }
+  }, [datasetOverviewState.basic_info_req_status, datasetOverviewState.desc_num_cols_req_status, datasetOverviewState.desc_cat_cols_req_status, datasetOverviewState.graph_rep_req_status])
+
 
 
   const formatNumber = (num) => {
@@ -116,7 +139,7 @@ const DatasetOverviewMainSection = () => {
                     (
                       <>
                         <Box sx={{ display: "flex", alignItems: "baseline", justifyContent: "center", }}>
-                          <Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e",fontSize:"3.2rem" }} >{formatNumber(datasetOverviewState.n_rows).value}</Typography>
+                          <Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e", fontSize: "3.2rem" }} >{formatNumber(datasetOverviewState.n_rows).value}</Typography>
                           {datasetOverviewState.n_rows >= 1000 && (<Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e", fontSize: 25 }} >{formatNumber(datasetOverviewState.n_rows).prefix}</Typography>)}
                         </Box>
                         <Typography variant="body1" align="center" sx={{ fontWeight: "bold", color: "#0066ad" }} > No of Rows </Typography>
@@ -137,7 +160,7 @@ const DatasetOverviewMainSection = () => {
                   ) : (
                     <>
                       <Box sx={{ display: "flex", alignItems: "baseline", justifyContent: "center", }}>
-                        <Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e",fontSize:"3.2rem"}} >{formatNumber(datasetOverviewState.n_columns).value}</Typography>
+                        <Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e", fontSize: "3.2rem" }} >{formatNumber(datasetOverviewState.n_columns).value}</Typography>
                         {datasetOverviewState.n_columns >= 1000 && (<Typography variant="h2" align="center" sx={{ fontWeight: "bold", color: "#ff7f0e", fontSize: 25 }} >{formatNumber(datasetOverviewState.n_columns).prefix}</Typography>)}
                       </Box>
                       <Typography variant="body1" align="center" sx={{ fontWeight: "bold", color: "#0066ad" }} > No of Columns </Typography>

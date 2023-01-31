@@ -198,7 +198,7 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
     useEffect(() => {
         // console.log(datasetState,requestCreatorId);
         if (datasetState.requestStatus === REQUEST_STATUS_FAILED) {
-            toast.error(datasetState.message !== undefined && datasetState.message !== null ? datasetState.message : CUSTOM_ERROR_MESSAGE, {
+            toast.error([undefined,null,""].includes(datasetState.message) ? CUSTOM_ERROR_MESSAGE: datasetState.message, {
                 position: "bottom-right",
                 autoClose: false,
                 hideProgressBar: true,
