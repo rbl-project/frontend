@@ -158,7 +158,7 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
             dispatch(setRequestStatus({ requestStatus: REQUEST_STATUS_IDLE }));
             setRequestCreatorId(null);
         }).catch((err) => {
-            console.log(err);
+            // console.log(err);
             toast.error(err, {
                 position: "bottom-right",
                 autoClose: false,

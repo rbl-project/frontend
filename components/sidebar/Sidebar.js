@@ -69,7 +69,8 @@ const Sidebar = () => {
             <List sx={{ mt: 0 }} >
                 <SidebarSubheader title="Exploratory Data Analysis" open={open}></SidebarSubheader>
                 <SidebarItem itemKey={1} name="Dataset Overview" path="/dashboard/exploratory-data-analysis/dataset-overview" ItemIcon={InboxIcon} open={open} />
-                <SidebarItem itemKey={2} name="Data Visualization" path="/dashboard/exploratory-data-analysis/data-visualization" ItemIcon={MailIcon} open={open} />
+                <SidebarItem itemKey={2} name="Data Correlation" path="/dashboard/exploratory-data-analysis/data-correlation" ItemIcon={InboxIcon} open={open} />
+                <SidebarItem itemKey={3} name="Data Visualization" path="/dashboard/exploratory-data-analysis/data-visualization" ItemIcon={MailIcon} open={open} />
             </List >
             {/* {open && (<Divider light color="white" sx={{ borderColor: "rgba(0,0,0,0.5)" }} variant="middle" />)} */}
             <List sx={{ mt: 0 }} >

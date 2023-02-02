@@ -22,7 +22,7 @@ const columns = [
 const DescribeNumericalColumnsTable = ({rows}) => {
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 374, height:374 }}>
+      <TableContainer sx={{ height:"44vh",overflow:"auto","&::-webkit-scrollbar": { width: "0.6rem",borderRadius:"2rem" }, "&::-webkit-scrollbar-track": { bgcolor:"#f1f1f1" }, "&::-webkit-scrollbar-thumb": { bgcolor:"#c1c1c1",borderRadius:"3rem" } }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>

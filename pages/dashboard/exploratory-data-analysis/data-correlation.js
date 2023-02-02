@@ -2,16 +2,16 @@ import React from 'react';
 import Head from 'next/head'
 
 import DashboardLayout from "/layouts/DashboardLayout";
-import DatasetOverviewMainSection from '/components/datasetOverview/DatasetOverviewMainSection';
+import DataCorrelationMainSection from '/components/dataCorrelation/DataCorrelationMainSection';
 
 const DatasetOverview = () => {
   return (
     <>
       <Head>
-        <title>Dataset Overview | DataX</title>
+        <title>Data Correlation | DataX</title>
       </Head>
       <DashboardLayout>
-        <DatasetOverviewMainSection/>
+        <DataCorrelationMainSection/>
       </DashboardLayout>
     </>
   )
