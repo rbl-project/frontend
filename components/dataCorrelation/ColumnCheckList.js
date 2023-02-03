@@ -6,21 +6,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import Divider from '@mui/material/Divider';
 
-const ColumnCheckList = () => {
-  const [checked, setChecked] = React.useState([]);
-
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
-  };
+const ColumnCheckList = ({checkedColumns,setCheckedColumns,handleCheckToggle}) => {
 
   const columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 
@@ -35,8 +21,8 @@ const ColumnCheckList = () => {
               secondaryAction={
                 <Checkbox
                   edge="end"
-                  onChange={handleToggle(value)}
-                  checked={checked.indexOf(value) !== -1}
+                  onChange={handleCheckToggle(value)}
+                  checked={checkedColumns.indexOf(value) !== -1}
                   inputProps={{ 'aria-labelledby': labelId }}
                 />
               }

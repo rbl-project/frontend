@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 
 import CoulmnCheckList from './ColumnCheckList';
 import CorrelationMatrix from './CorrelationMatrix';
+import GraphicalRepresentation from './GraphicalRepresentation';
+import HeatMap from './HeatMap';
 
 const TabPanel = ({ children, value, index, ...other }) => {
     return (
@@ -28,9 +30,25 @@ const TabPanel = ({ children, value, index, ...other }) => {
 
 const DataCorrelationMainSection = () => {
 
+    // Select Tab State
     const [value, setValue] = React.useState('one');
     const handleChange = (event, newValue) => {
         setValue(newValue);
+    };
+
+    // Column Check List State
+    const [checkedColumns, setCheckedColumns] = React.useState([]);
+    const handleCheckToggle = (value) => () => {
+        const currentIndex = checkedColumns.indexOf(value);
+        const newCheckedColumns = [...checkedColumns];
+
+        if (currentIndex === -1) {
+            newCheckedColumns.push(value);
+        } else {
+            newCheckedColumns.splice(currentIndex, 1);
+        }
+
+        setCheckedColumns(newCheckedColumns);
     };
 
     return (
@@ -46,8 +64,8 @@ const DataCorrelationMainSection = () => {
                                         <CircularProgress size="1rem" color="inherit" />
                                     </Box>
                                 ) : ( */}
-                                <CoulmnCheckList rows={[]} />
-                                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center",m:1,mt:2 }}>
+                                <CoulmnCheckList rows={[]} checkedColumns={checkedColumns} setCheckedColumns={setCheckedColumns} handleCheckToggle={handleCheckToggle} />
+                                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", m: 1, mt: 2 }}>
                                     <Button variant="contained" fullWidth>Submit</Button>
                                 </Box>
                                 {/* )} */}
@@ -64,7 +82,7 @@ const DataCorrelationMainSection = () => {
                                         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" TabIndicatorProps={{ sx: { backgroundColor: '#0164a9' } }} >
                                             <Tab label={<Typography variant="body1" sx={{ fontSize: "1.1rem", fontWeight: "bold", textTransform: "none", }} > Correlation Value </Typography>} value="one" />
                                             <Tab label={<Typography variant="body1" sx={{ fontSize: "1.1rem", fontWeight: "bold", textTransform: "none", }} > Graphical Representation </Typography>} value="two" />
-                                            <Tab label={<Typography variant="body1" sx={{ fontSize: "1.1rem", fontWeight: "bold", textTransform: "none", }} > Heatmap </Typography>} value="three" />
+                                            <Tab disabled={checkedColumns.length < 2} label={<Typography variant="body1" sx={{ fontSize: "1.1rem", fontWeight: "bold", textTransform: "none", }} > Heatmap </Typography>} value="three" />
                                         </Tabs>
                                     </Box>
                                     <TabPanel value={value} index="one" >
@@ -73,7 +91,7 @@ const DataCorrelationMainSection = () => {
                                                     <CircularProgress size="1rem" color="inherit" />
                                                 </Box>
                                             ) : ( */}
-                                        < CorrelationMatrix />
+                                        < CorrelationMatrix rows={[]} />
                                         {/* )} */}
                                     </TabPanel>
                                     <TabPanel value={value} index="two" >
@@ -82,7 +100,7 @@ const DataCorrelationMainSection = () => {
                                                     <CircularProgress size="1rem" color="inherit" />
                                                 </Box>
                                             ) : ( */}
-                                        Two
+                                        < GraphicalRepresentation />
                                         {/* )} */}
                                     </TabPanel>
                                     <TabPanel value={value} index="three" >
@@ -91,7 +109,7 @@ const DataCorrelationMainSection = () => {
                                                     <CircularProgress size="1rem" color="inherit" />
                                                 </Box>
                                             ) : ( */}
-                                        Three
+                                        < HeatMap />
                                         {/* )} */}
                                     </TabPanel>
                                 </Box>

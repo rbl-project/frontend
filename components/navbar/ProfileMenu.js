@@ -12,6 +12,7 @@ import { REQUEST_STATUS_LOADING, REQUEST_STATUS_SUCCEEDED } from '/constants/Con
 
 //actions
 import { logout } from "/store/authSlice";
+import Image from 'next/image';
 
 
 const ProfileMenu = () => {
@@ -86,7 +87,7 @@ const ProfileMenu = () => {
                     {
                         authState.requestStatus === REQUEST_STATUS_LOADING ?
                         (    <div>
-                            <img src="/images/loadingdots2.gif" style={{width: "50px", height: "30px"}}/>
+                            <Image src="/images/loadingdots2.gif" style={{width: "50px", height: "30px"}}/>
                         </div>)
                         : "Logout"
                     }

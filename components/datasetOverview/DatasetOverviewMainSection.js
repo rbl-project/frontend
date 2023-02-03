@@ -43,7 +43,7 @@ const DatasetOverviewMainSection = () => {
   const datasetOverviewState = useSelector((state) => state.datasetOverview);
 
 
-  // console.log("datasetOverviewState", datasetOverviewState);
+  console.log("datasetOverviewState", datasetOverviewState);
 
   useEffect(() => {
     if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
