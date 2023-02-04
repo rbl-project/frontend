@@ -6,9 +6,14 @@ import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import Divider from '@mui/material/Divider';
 
-const ColumnCheckList = ({checkedColumns,setCheckedColumns,handleCheckToggle}) => {
+import { useSelector } from 'react-redux';
 
-  const columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+
+
+const ColumnCheckList = ({checkedColumns,handleCheckToggle}) => {
+
+  const dataCorrelationState = useSelector((state) => state.dataCorrelation);
+  const columns = dataCorrelationState.numerical_columns;
 
   return (
     <List dense sx={{ width: '100%', height: "77vh", px:1,overflow: "auto", bgcolor: 'background.paper',"&::-webkit-scrollbar": { width: "0.6rem",borderRadius:"2rem" }, "&::-webkit-scrollbar-track": { bgcolor:"#f1f1f1" }, "&::-webkit-scrollbar-thumb": { bgcolor:"#c1c1c1",borderRadius:"3rem" } }}>
@@ -28,11 +33,11 @@ const ColumnCheckList = ({checkedColumns,setCheckedColumns,handleCheckToggle}) =
               }
               disablePadding
             >
-              <ListItemButton>
+              <ListItemButton key={`list-button-${value}`} >
                 <ListItemText id={labelId} primary={value} />
               </ListItemButton>
             </ListItem>
-            <Divider component="li" />
+            <Divider key={`divider-${value}`} component="li" />
           </>
         );
       })}

@@ -10,7 +10,7 @@ import CoulmnList from './ColumnList';
 import DescribeNumericalColumnsTable from './DescribeNumericalColumnsTable';
 
 import { getBasicInformation, getGraphicalRepresentation, getDescribeNumericalData, getDescribeCategoricalData, resetRequestStatus } from "/store/datasetOverviewSlice";
-import { REQUEST_STATUS_LOADING, REQUEST_STATUS_FAILED } from '../../constants/Constants';
+import { REQUEST_STATUS_LOADING, REQUEST_STATUS_FAILED } from '/constants/Constants';
 
 const TabPanel = ({ children, value, index, ...other }) => {
   return (
@@ -43,7 +43,7 @@ const DatasetOverviewMainSection = () => {
   const datasetOverviewState = useSelector((state) => state.datasetOverview);
 
 
-  console.log("datasetOverviewState", datasetOverviewState);
+  // console.log("datasetOverviewState", datasetOverviewState);
 
   useEffect(() => {
     if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {

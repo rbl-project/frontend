@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Grid, Paper, Typography, Tabs, Tab, CircularProgress, Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -7,6 +7,9 @@ import CoulmnCheckList from './ColumnCheckList';
 import CorrelationMatrix from './CorrelationMatrix';
 import GraphicalRepresentation from './GraphicalRepresentation';
 import HeatMap from './HeatMap';
+
+import { REQUEST_STATUS_LOADING, REQUEST_STATUS_SUCCESS, REQUEST_STATUS_ERROR } from '/constants/Constants';
+import { getNumericalColumns, getCorrelationMatrix, getCorrelationHeatmap, resetRequestStatus, setCheckedColumnsRedux} from '/store/dataCorrelationSlice';
 
 const TabPanel = ({ children, value, index, ...other }) => {
     return (
@@ -33,8 +36,17 @@ const DataCorrelationMainSection = () => {
     // Select Tab State
     const [value, setValue] = React.useState('one');
     const handleChange = (event, newValue) => {
+
         setValue(newValue);
+
+        // Call API When Tab Changes
+        if (newValue === "one" && dataCorrelationState.checked_columns.length > 1) {
+            dispatch(getCorrelationMatrix({ dataset_name: selectedDataset, column_list: dataCorrelationState.checked_columns }))
+        } else if (newValue === "three" && dataCorrelationState.checked_columns.length > 1) {
+            dispatch(getCorrelationHeatmap({ dataset_name: selectedDataset, column_list:dataCorrelationState.checked_columns }))
+        }
     };
+
 
     // Column Check List State
     const [checkedColumns, setCheckedColumns] = React.useState([]);
@@ -51,6 +63,29 @@ const DataCorrelationMainSection = () => {
         setCheckedColumns(newCheckedColumns);
     };
 
+    // Select Columns Submit Handle
+    const handleSubmit = () => {
+
+        dispatch(setCheckedColumnsRedux(checkedColumns));
+        
+        if (value === "one") {
+            dispatch(getCorrelationMatrix({ dataset_name: selectedDataset, column_list: checkedColumns }))
+        } else if (value === "three") {
+            dispatch(getCorrelationHeatmap({ dataset_name: selectedDataset, column_list: checkedColumns }))
+        }
+    }
+
+    //Redux State
+    const dispatch = useDispatch();
+    const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
+    const dataCorrelationState = useSelector((state) => state.dataCorrelation);
+
+    // Fetch Numerical Columns When Page Loads
+    useEffect(() => {
+        dispatch(getNumericalColumns({ dataset_name: selectedDataset }))
+    }, [selectedDataset])
+
+
     return (
         <Box sx={{ flexGrow: 1, width: "100%" }}>
             <Grid container spacing={2}>
@@ -59,16 +94,16 @@ const DataCorrelationMainSection = () => {
                         <Grid item xs={12}>
                             <Paper elevation={0} sx={{ py: "0.1rem" }}>
                                 <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2, my: 1 }} > Select Columns </Typography>
-                                {/* {datasetOverviewState.basic_info_req_status === REQUEST_STATUS_LOADING ? (
-                                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: 468 }}>
+                                {dataCorrelationState.num_cols_req_status === REQUEST_STATUS_LOADING ? (
+                                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "77vh" }}>
                                         <CircularProgress size="1rem" color="inherit" />
                                     </Box>
-                                ) : ( */}
-                                <CoulmnCheckList rows={[]} checkedColumns={checkedColumns} setCheckedColumns={setCheckedColumns} handleCheckToggle={handleCheckToggle} />
+                                ) : (
+                                    <CoulmnCheckList handleCheckToggle={handleCheckToggle} checkedColumns={checkedColumns} />
+                                )}
                                 <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", m: 1, mt: 2 }}>
-                                    <Button variant="contained" fullWidth>Submit</Button>
+                                    <Button variant="contained" onClick={handleSubmit} disabled={checkedColumns.length < 2} fullWidth>Submit</Button>
                                 </Box>
-                                {/* )} */}
                             </Paper>
                         </Grid>
                     </Grid>
@@ -82,7 +117,7 @@ const DataCorrelationMainSection = () => {
                                         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" TabIndicatorProps={{ sx: { backgroundColor: '#0164a9' } }} >
                                             <Tab label={<Typography variant="body1" sx={{ fontSize: "1.1rem", fontWeight: "bold", textTransform: "none", }} > Correlation Value </Typography>} value="one" />
                                             <Tab label={<Typography variant="body1" sx={{ fontSize: "1.1rem", fontWeight: "bold", textTransform: "none", }} > Graphical Representation </Typography>} value="two" />
-                                            <Tab disabled={checkedColumns.length < 2} label={<Typography variant="body1" sx={{ fontSize: "1.1rem", fontWeight: "bold", textTransform: "none", }} > Heatmap </Typography>} value="three" />
+                                            <Tab disabled={dataCorrelationState.checked_columns.length <= 2} label={<Typography variant="body1" sx={{ fontSize: "1.1rem", fontWeight: "bold", textTransform: "none", }} > Heatmap </Typography>} value="three" />
                                         </Tabs>
                                     </Box>
                                     <TabPanel value={value} index="one" >
