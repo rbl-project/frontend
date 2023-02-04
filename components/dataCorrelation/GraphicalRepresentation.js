@@ -42,7 +42,7 @@ const GraphicalRepresentation = () => {
     },[checkedColumns]);
 
     return (
-        <Box sx={{ height: "83vh", width: "100%", px: 2, py: 1 }} >
+        <Box sx={{ height: "83vh", width: "100%", px: 2, py: 2 }} >
             <Box sx={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <Box sx={{ width: "20vw", mr: 2 }}>
                     <FormControl fullWidth size="small">
@@ -88,8 +88,8 @@ const GraphicalRepresentation = () => {
                     <Button variant="contained" disabled={column1 === "" || column2 === ""} onClick={handleSubmit} >Submit</Button>
                 </Box>
             </Box>
-            <Box sx={{ height: "78vh", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <Box sx={{ height: "50vh", width: "40vw", position: "relative" }}>
+            <Box sx={{ height: "76vh", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Box sx={{ height: "65vh", width: "55vw", position: "relative" }}>
                     <Image layout="fill" src={dataCorrelationState.scatter_plot === null ? "/images/graph.png" : `data:image/png;base64,${dataCorrelationState.scatter_plot}`} />
                 </Box>
             </Box>

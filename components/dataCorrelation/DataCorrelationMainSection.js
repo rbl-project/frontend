@@ -83,6 +83,8 @@ const DataCorrelationMainSection = () => {
     // Fetch Numerical Columns When Page Loads
     useEffect(() => {
         dispatch(getNumericalColumns({ dataset_name: selectedDataset }))
+        dispatch(setCheckedColumnsRedux([]));
+        setCheckedColumns([]);
     }, [selectedDataset])
 
 
