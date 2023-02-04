@@ -3,12 +3,15 @@ import { Box, MenuItem, FormControl, Select, Button, InputLabel } from '@mui/mat
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 
+import {getScatterPlot} from "/store/dataCorrelationSlice";
+
 const GraphicalRepresentation = () => {
     
     // Redux State
     const dispatch = useDispatch();
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     const checkedColumns = useSelector((state) => state.dataCorrelation.checked_columns);
+    const dataCorrelationState = useSelector((state) => state.dataCorrelation);
 
     // State Variable for Scatter Plot Column1 Options and Column2 Options
     const [column1_options, set_column1_options] = useState([]);
@@ -86,8 +89,8 @@ const GraphicalRepresentation = () => {
                 </Box>
             </Box>
             <Box sx={{ height: "78vh", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <Box sx={{ height: "60vh", width: "70vw", position: "relative" }}>
-                    <Image layout="fill" src="/images/graph.png" />
+                <Box sx={{ height: "50vh", width: "40vw", position: "relative" }}>
+                    <Image layout="fill" src={dataCorrelationState.scatter_plot === null ? "/images/graph.png" : `data:image/png;base64,${dataCorrelationState.scatter_plot}`} />
                 </Box>
             </Box>
         </Box>

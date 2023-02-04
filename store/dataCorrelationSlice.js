@@ -81,6 +81,7 @@ const dataCorrelationSlice = createSlice({
                 state.message = CUSTOM_ERROR_MESSAGE; // unknow error in request
             })
 
+
             // Get Correlation Matrix
             .addCase(getCorrelationMatrix.pending, (state, action) => {
                 state.corr_matrix_req_status = REQUEST_STATUS_LOADING;
@@ -101,6 +102,7 @@ const dataCorrelationSlice = createSlice({
                 state.message = CUSTOM_ERROR_MESSAGE; // unknow error in request
             })
 
+            
             // Get Scatter Plot
             .addCase(getScatterPlot.pending, (state, action) => {
                 state.scatter_plot_req_status = REQUEST_STATUS_LOADING;
@@ -112,7 +114,7 @@ const dataCorrelationSlice = createSlice({
                 }
                 else {
                     state.scatter_plot_req_status = REQUEST_STATUS_FAILED;
-                    state.message = action.payload.error; // error sent by us from our backend
+                    state.message = action.payload.error // error sent by us from our backend
                 }
             })
             .addCase(getScatterPlot.rejected, (state, action) => {
@@ -120,6 +122,7 @@ const dataCorrelationSlice = createSlice({
                 state.message = CUSTOM_ERROR_MESSAGE; // unknow error in request
             })
 
+            
             // Get Correlation Heatmap
             .addCase(getCorrelationHeatmap.pending, (state, action) => {
                 state.heatmap_req_status = REQUEST_STATUS_LOADING;
