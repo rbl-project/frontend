@@ -59,7 +59,7 @@ const CorrelationMatrix = ({ }) => {
     return (
         <Box sx={{ height: "83vh", width: "100%", p: 3, display: "flex", alignItems: "center", justifyContent: "center" }}>
             <TableContainer  sx={{ height: "100%", overflow: "auto", borderRadius: "3px", "&::-webkit-scrollbar": { width: "0.6rem", height: "0.6rem", borderRadius: "2rem" }, "&::-webkit-scrollbar-track": { bgcolor: "#e1e1e1" }, "&::-webkit-scrollbar-thumb": { bgcolor: "#a1a1a1", borderRadius: "3rem" } }}>
-                <Table aria-label="sticky table" size="small" dense >
+                <Table aria-label="sticky table" size="small">
                     <TableHead>
                         <TableRow >
                             {dataCorrelationState.column_list.map((column) => (

@@ -9,7 +9,7 @@ import GraphicalRepresentation from './GraphicalRepresentation';
 import HeatMap from './HeatMap';
 
 import { REQUEST_STATUS_LOADING, REQUEST_STATUS_SUCCESS, REQUEST_STATUS_ERROR } from '/constants/Constants';
-import { getNumericalColumns, getCorrelationMatrix, getCorrelationHeatmap, resetRequestStatus, setCheckedColumnsRedux} from '/store/dataCorrelationSlice';
+import { getNumericalColumns, getCorrelationMatrix, getCorrelationHeatmap, resetRequestStatus, setCheckedColumnsRedux } from '/store/dataCorrelationSlice';
 
 const TabPanel = ({ children, value, index, ...other }) => {
     return (
@@ -43,7 +43,7 @@ const DataCorrelationMainSection = () => {
         if (newValue === "one" && dataCorrelationState.checked_columns.length > 1) {
             dispatch(getCorrelationMatrix({ dataset_name: selectedDataset, column_list: dataCorrelationState.checked_columns }))
         } else if (newValue === "three" && dataCorrelationState.checked_columns.length > 1) {
-            dispatch(getCorrelationHeatmap({ dataset_name: selectedDataset, column_list:dataCorrelationState.checked_columns }))
+            dispatch(getCorrelationHeatmap({ dataset_name: selectedDataset, column_list: dataCorrelationState.checked_columns }))
         }
     };
 
@@ -67,7 +67,7 @@ const DataCorrelationMainSection = () => {
     const handleSubmit = () => {
 
         dispatch(setCheckedColumnsRedux(checkedColumns));
-        
+
         if (value === "one") {
             dispatch(getCorrelationMatrix({ dataset_name: selectedDataset, column_list: checkedColumns }))
         } else if (value === "three") {
@@ -82,7 +82,9 @@ const DataCorrelationMainSection = () => {
 
     // Fetch Numerical Columns When Page Loads
     useEffect(() => {
+        setValue("one");
         dispatch(getNumericalColumns({ dataset_name: selectedDataset }))
+        dispatch(getCorrelationMatrix({ dataset_name: selectedDataset, column_list: [] }))
         dispatch(setCheckedColumnsRedux([]));
         setCheckedColumns([]);
     }, [selectedDataset])
@@ -116,38 +118,48 @@ const DataCorrelationMainSection = () => {
                             <Paper elevation={0} sx={{ pt: 0 }}>
                                 <Box height="90vh">
                                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" TabIndicatorProps={{ sx: { backgroundColor: '#0164a9' } }} >
-                                            <Tab label={<Typography variant="body1" sx={{ fontSize: "1.1rem", fontWeight: "bold", textTransform: "none", }} > Correlation Value </Typography>} value="one" />
-                                            <Tab label={<Typography variant="body1" sx={{ fontSize: "1.1rem", fontWeight: "bold", textTransform: "none", }} > Graphical Representation </Typography>} value="two" />
-                                            <Tab disabled={dataCorrelationState.checked_columns.length <= 2} label={<Typography variant="body1" sx={{ fontSize: "1.1rem", fontWeight: "bold", textTransform: "none", }} > Heatmap </Typography>} value="three" />
+                                        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" TabIndicatorProps={{ sx: { backgroundColor: dataCorrelationState.n_numerical_columns < 2 && "gray"  } }} >
+                                            <Tab disabled={dataCorrelationState.n_numerical_columns < 2} label={<Typography variant="body1" sx={{ fontSize: "1.1rem", fontWeight: "bold", textTransform: "none", }} > Correlation Value </Typography>} value="one" />
+                                            <Tab disabled={dataCorrelationState.n_numerical_columns < 2} label={<Typography variant="body1" sx={{ fontSize: "1.1rem", fontWeight: "bold", textTransform: "none", }} > Graphical Representation </Typography>} value="two" />
+                                            <Tab disabled={dataCorrelationState.n_numerical_columns < 2} label={<Typography variant="body1" sx={{ fontSize: "1.1rem", fontWeight: "bold", textTransform: "none", }} > Heatmap </Typography>} value="three" />
                                         </Tabs>
                                     </Box>
                                     <TabPanel value={value} index="one" >
-                                        {/* {datasetOverviewState.desc_num_cols_req_status === REQUEST_STATUS_LOADING ? (
-                                                <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: 374 }}>
-                                                    <CircularProgress size="1rem" color="inherit" />
+                                        {dataCorrelationState.corr_matrix_req_status === REQUEST_STATUS_LOADING ? (
+                                            <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "83vh" }}>
+                                                <CircularProgress size="2rem" color="inherit" />
+                                            </Box>
+                                        ) : (
+                                            // If No of Numerical Columns is less than 2, then show the below message
+                                            dataCorrelationState.n_numerical_columns < 2 ? (
+                                                <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "83vh" }}>
+                                                    <Box>
+                                                        <Typography variant="h4" align="center" sx={{ fontWeight: "bold" }} > No Content to Show </Typography>
+                                                        <Typography variant="h6" align="center"> You Should have atleast 2 Numerical Columns in Dataset</Typography>
+                                                    </Box>
                                                 </Box>
-                                            ) : ( */}
-                                        < CorrelationMatrix rows={[]} />
-                                        {/* )} */}
+                                            ) : (
+                                                < CorrelationMatrix rows={[]} />
+                                            )
+                                        )}
                                     </TabPanel>
                                     <TabPanel value={value} index="two" >
-                                        {/* {datasetOverviewState.desc_cat_cols_req_status === REQUEST_STATUS_LOADING ? (
-                                                <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: 374 }}>
-                                                    <CircularProgress size="1rem" color="inherit" />
-                                                </Box>
-                                            ) : ( */}
-                                        < GraphicalRepresentation />
-                                        {/* )} */}
+                                        {dataCorrelationState.scatter_plot_req_status === REQUEST_STATUS_LOADING ? (
+                                            <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "83vh" }}>
+                                                <CircularProgress size="2rem" color="inherit" />
+                                            </Box>
+                                        ) : (
+                                            < GraphicalRepresentation />
+                                        )}
                                     </TabPanel>
                                     <TabPanel value={value} index="three" >
-                                        {/* {datasetOverviewState.desc_cat_cols_req_status === REQUEST_STATUS_LOADING ? (
-                                                <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: 374 }}>
-                                                    <CircularProgress size="1rem" color="inherit" />
-                                                </Box>
-                                            ) : ( */}
-                                        < HeatMap />
-                                        {/* )} */}
+                                        {dataCorrelationState.scatter_plot_req_status === REQUEST_STATUS_LOADING ? (
+                                            <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "83vh" }}>
+                                                <CircularProgress size="2rem" color="inherit" />
+                                            </Box>
+                                        ) : (
+                                            < HeatMap />
+                                        )}
                                     </TabPanel>
                                 </Box>
                             </Paper>

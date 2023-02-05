@@ -18,9 +18,9 @@ const initialState = {
     column_list: [],
     correlation_matrix: [],
     scatter_plot_req_status: REQUEST_STATUS_IDLE,
-    scatter_plot: null,
+    scatter_plot: "",
     heatmap_req_status: REQUEST_STATUS_IDLE,
-    heatmap: null,
+    heatmap: "",
 }
 
 export const getNumericalColumns = createAsyncThunk('/numerical-columns', async (formData) => {
