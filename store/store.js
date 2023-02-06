@@ -7,6 +7,7 @@ import state2Slice from "./stateSlice2";
 import authSlice from "./authSlice";
 import datasetSlice from "./datasetSlice";
 import datasetOverviewSlice from "./datasetOverviewSlice";
+import dataCorrelationSlice from "./dataCorrelationSlice";
 
 const combineReducer = combineReducers({
     global:globalStateSlice,
@@ -14,7 +15,8 @@ const combineReducer = combineReducers({
     state2:state2Slice,
     auth:authSlice,
     dataset:datasetSlice,
-    datasetOverview:datasetOverviewSlice
+    datasetOverview:datasetOverviewSlice,
+    dataCorrelation:dataCorrelationSlice
 });
 
 export const makeStore = () => configureStore({reducer:combineReducer});

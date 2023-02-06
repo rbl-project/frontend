@@ -15,7 +15,7 @@ const columns = [
 const ColumnList = ({rows}) => {
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 468, height:468 }}>
+      <TableContainer sx={{ height:"55vh", overflow:"auto", "&::-webkit-scrollbar": { width: "0.6rem",borderRadius:"2rem" }, "&::-webkit-scrollbar-track": { bgcolor:"#f1f1f1" }, "&::-webkit-scrollbar-thumb": { bgcolor:"#c1c1c1",borderRadius:"3rem" }}}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
