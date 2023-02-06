@@ -2,56 +2,9 @@ import React from 'react'
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { useSelector } from 'react-redux';
 
-const columns1 = [
-    { id: 'column_name', label: "", included: true, },
-    { id: 'name', label: 'Name', included: true, },
-    { id: 'count', label: 'Count', included: true, },
-    { id: 'mode', label: 'Mode', included: false },
-    { id: 'mode_count', label: 'Mode Count', included: false },
-    { id: 'unique_count', label: 'Unique Count', included: false },
-    { id: 'name1', label: 'Name', included: false },
-    { id: 'count1', label: 'Count', included: false },
-    { id: 'mode1', label: 'Mode', included: false },
-    { id: 'mode_count1', label: 'Mode Count', included: false },
-    { id: 'unique_count1', label: 'Unique Count', included: false },
-    { id: 'name2', label: 'Name', included: false },
-    { id: 'count2', label: 'Count', included: false },
-    { id: 'mode2', label: 'Mode', included: false },
-    { id: 'mode_count2', label: 'Mode Count', included: false },
-    { id: 'unique_count2', label: 'Unique Count', included: false },
-    { id: 'name3', label: 'Name', included: false },
-    { id: 'count3', label: 'Count', included: false },
-    { id: 'mode3', label: 'Mode', included: false },
-    { id: 'mode_count3', label: 'Mode Count', included: false },
-    { id: 'unique_count3', label: 'Unique Count', included: false },
-];
-
-const rows1 = [
-    { column_name: 'Name', name: 1, count: 0.5555, },
-    { column_name: 'Count', name: 0.555, count: 1, },
-    { column_name: 'Mode', included: false },
-    { column_name: 'Mode Count', included: false },
-    { column_name: 'Unique Count', included: false },
-    { column_name: 'Name1', included: false },
-    { column_name: 'Count1', included: false },
-    { column_name: 'Mode1', included: false },
-    { column_name: 'Mode Count1', included: false },
-    { column_name: 'Unique Count1', included: false },
-    { column_name: 'Name2', included: false },
-    { column_name: 'Count2', included: false },
-    { column_name: 'Mode2', included: false },
-    { column_name: 'Mode Count2', included: false },
-    { column_name: 'Unique Count2', included: false },
-    { column_name: 'Name3', included: false },
-    { column_name: 'Count3', included: false },
-    { column_name: 'Mode3', included: false },
-    { column_name: 'Mode Count3', included: false },
-    { column_name: 'Unique Count3', included: false },
-]
-
 const formatNumber = (value) => value.toFixed(2);
 
-const CorrelationMatrix = ({ }) => {
+const CorrelationMatrix = () => {
 
     // Redux State
     const dataCorrelationState = useSelector((state) => state.dataCorrelation);

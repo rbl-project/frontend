@@ -11,6 +11,8 @@ import * as API from "../api";
 
 const initialState = {
     checked_columns: [],
+    column1:"",
+    column2:"",
     num_cols_req_status: REQUEST_STATUS_IDLE,
     n_numerical_columns: 0,
     numerical_columns: [],
@@ -55,9 +57,21 @@ const dataCorrelationSlice = createSlice({
             state.heatmap_req_status = REQUEST_STATUS_IDLE;
             state.message = null;
         },
+        resetPlotState: (state,action) => {
+            state.column1 = ""
+            state.column2 = ""
+            state.scatter_plot = ""
+            state.heatmap = ""
+        },
         setCheckedColumnsRedux: (state, action) => {
             state.checked_columns = action.payload;
-        }
+        },
+        setColumn1: (state, action) => {
+            state.column1 = action.payload;
+        },
+        setColumn2: (state,action) => {
+            state.column2 = action.payload;
+        } 
     },
     extraReducers: (builder) => {
         builder
@@ -145,6 +159,6 @@ const dataCorrelationSlice = createSlice({
     }
 });
 
-export const { resetRequestStatus,setCheckedColumnsRedux } = dataCorrelationSlice.actions;
+export const { resetRequestStatus,setCheckedColumnsRedux,setColumn1,setColumn2,resetPlotState } = dataCorrelationSlice.actions;
 
 export default dataCorrelationSlice.reducer;

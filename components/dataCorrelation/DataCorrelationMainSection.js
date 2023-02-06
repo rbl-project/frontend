@@ -8,8 +8,8 @@ import CorrelationMatrix from './CorrelationMatrix';
 import GraphicalRepresentation from './GraphicalRepresentation';
 import HeatMap from './HeatMap';
 
-import { REQUEST_STATUS_LOADING, REQUEST_STATUS_SUCCESS, REQUEST_STATUS_ERROR } from '/constants/Constants';
-import { getNumericalColumns, getCorrelationMatrix, getCorrelationHeatmap, resetRequestStatus, setCheckedColumnsRedux } from '/store/dataCorrelationSlice';
+import { REQUEST_STATUS_LOADING, REQUEST_STATUS_FAILED } from '/constants/Constants';
+import { getNumericalColumns, getCorrelationMatrix, getCorrelationHeatmap, resetRequestStatus, setCheckedColumnsRedux,resetPlotState  } from '/store/dataCorrelationSlice';
 
 const TabPanel = ({ children, value, index, ...other }) => {
     return (
@@ -67,6 +67,7 @@ const DataCorrelationMainSection = () => {
     const handleSubmit = () => {
 
         dispatch(setCheckedColumnsRedux(checkedColumns));
+        dispatch(resetPlotState());
 
         if (value === "one") {
             dispatch(getCorrelationMatrix({ dataset_name: selectedDataset, column_list: checkedColumns }))
@@ -86,8 +87,31 @@ const DataCorrelationMainSection = () => {
         dispatch(getNumericalColumns({ dataset_name: selectedDataset }))
         dispatch(getCorrelationMatrix({ dataset_name: selectedDataset, column_list: [] }))
         dispatch(setCheckedColumnsRedux([]));
+        dispatch(resetPlotState());
         setCheckedColumns([]);
     }, [selectedDataset])
+
+    // Handle Error Message
+    useEffect(() => {
+        // Error Message
+        if (
+          dataCorrelationState.num_cols_req_status === REQUEST_STATUS_FAILED ||
+          dataCorrelationState.corr_matrix_req_status === REQUEST_STATUS_FAILED ||
+          dataCorrelationState.scatter_plot_req_status === REQUEST_STATUS_FAILED ||
+          dataCorrelationState.heatmap_req_status === REQUEST_STATUS_FAILED
+        ) {
+          toast.error([undefined, null, ""].includes(dataCorrelationState.message) ? CUSTOM_ERROR_MESSAGE : dataCorrelationState.message + ". Please Refresh", {
+            position: "bottom-right",
+            autoClose: false,
+            hideProgressBar: true,
+            closeOnClick: false,
+            pauseOnHover: false,
+            draggable: false,
+            theme: "dark",
+          });
+          dispatch(resetRequestStatus());
+        }
+      }, [dataCorrelationState.num_cols_req_status, dataCorrelationState.corr_matrix_req_status, dataCorrelationState.scatter_plot_req_status, dataCorrelationState.heatmap_req_status])
 
 
     return (
@@ -144,16 +168,10 @@ const DataCorrelationMainSection = () => {
                                         )}
                                     </TabPanel>
                                     <TabPanel value={value} index="two" >
-                                        {dataCorrelationState.scatter_plot_req_status === REQUEST_STATUS_LOADING ? (
-                                            <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "83vh" }}>
-                                                <CircularProgress size="2rem" color="inherit" />
-                                            </Box>
-                                        ) : (
                                             < GraphicalRepresentation />
-                                        )}
                                     </TabPanel>
                                     <TabPanel value={value} index="three" >
-                                        {dataCorrelationState.scatter_plot_req_status === REQUEST_STATUS_LOADING ? (
+                                        {dataCorrelationState.heatmap_req_status === REQUEST_STATUS_LOADING ? (
                                             <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "83vh" }}>
                                                 <CircularProgress size="2rem" color="inherit" />
                                             </Box>

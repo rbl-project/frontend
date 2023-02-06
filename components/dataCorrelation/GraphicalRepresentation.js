@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Box, MenuItem, FormControl, Select, Button, InputLabel, Typography } from '@mui/material';
+import { Box, MenuItem, FormControl, Select, Button, InputLabel, Typography,CircularProgress, } from '@mui/material';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Actions from Redux State
-import { getScatterPlot } from "/store/dataCorrelationSlice";
+import { getScatterPlot, setColumn1, setColumn2 } from "/store/dataCorrelationSlice";
+// Constants
+import { REQUEST_STATUS_LOADING, REQUEST_STATUS_SUCCESS, REQUEST_STATUS_ERROR } from '/constants/Constants';
 
 
 const GraphicalRepresentation = () => {
@@ -20,27 +22,25 @@ const GraphicalRepresentation = () => {
     const [column2_options, set_column2_options] = useState([]);
 
     // State Variables for Scatter plot X and Y
-    const [column1, setColumn1] = useState('');
     const handleCoulmn1Change = (event) => {
-        setColumn1(event.target.value);
+        dispatch(setColumn1(event.target.value));
         set_column2_options(checkedColumns.filter((column) => column !== event.target.value));
     };
 
-    const [column2, setColumn2] = useState('');
     const handleCoulmn2Change = (event) => {
-        setColumn2(event.target.value);
+        dispatch(setColumn2(event.target.value));
         set_column1_options(checkedColumns.filter((column) => column !== event.target.value));
     };
 
     // Generate Scatter Plot Submit button Hnadler
     const handleSubmit = () => {
-        dispatch(getScatterPlot({ dataset_name: selectedDataset, column1: column1, column2: column2 }))
+        dispatch(getScatterPlot({ dataset_name: selectedDataset, column1: dataCorrelationState.column1, column2: dataCorrelationState.column2 }))
     }
 
     // Update Scatter Plot Column1 and Column2 Options
     useEffect(() => {
-        set_column1_options(checkedColumns.filter((column) => column !== column2));
-        set_column2_options(checkedColumns.filter((column) => column !== column1));
+        set_column1_options(checkedColumns.filter((column) => column !== dataCorrelationState.column2));
+        set_column2_options(checkedColumns.filter((column) => column !== dataCorrelationState.column1));
     }, [checkedColumns]);
 
     return (
@@ -67,7 +67,7 @@ const GraphicalRepresentation = () => {
                                     <Select
                                         labelId="demo-simple-select-label"
                                         id="demo-simple-select"
-                                        value={column1}
+                                        value={dataCorrelationState.column1}
                                         onChange={handleCoulmn1Change}
                                         label="Column1"
                                     >
@@ -88,7 +88,7 @@ const GraphicalRepresentation = () => {
                                     <Select
                                         labelId="demo-simple-select-label-2"
                                         id="demo-simple-select-2"
-                                        value={column2}
+                                        value={dataCorrelationState.column2}
                                         onChange={handleCoulmn2Change}
                                         label="Column2"
                                     >
@@ -103,26 +103,33 @@ const GraphicalRepresentation = () => {
                                 </FormControl>
                             </Box>
                             <Box sx={{ width: "30vw", display: "flex", justifyContent: "flex-end" }}>
-                                <Button variant="contained" disabled={column1 === "" || column2 === ""} onClick={handleSubmit} >Submit</Button>
+                                <Button variant="contained" disabled={dataCorrelationState.column1 === "" || dataCorrelationState.column2 === ""} onClick={handleSubmit} >Submit</Button>
                             </Box>
                         </Box>
                         <Box sx={{ height: "76vh", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
 
-                            { /* Show Scatter Plot Only if Column1 and Column2 are selected  and Scatter Plot is not empty */}
-                            {column1 === "" || column2 === "" || dataCorrelationState.scatter_plot === "" ?
-                                (
-                                    // When No Scatter plot to show
-                                    <Box>
-                                        <Typography variant="h4" sx={{ fontWeight: "bold" }} align="center" >No Content to Show</Typography>
-                                        <Typography variant="h6" >Please Select Column 1 and Column 2</Typography>
-                                    </Box>
+                            {dataCorrelationState.scatter_plot_req_status === REQUEST_STATUS_LOADING ? (
+                                // Loading Spinner
+                                <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "76vh" }}>
+                                    <CircularProgress size="2rem" color="inherit" />
+                                </Box>
+                            ) : (
+                                // Show Scatter Plot Only if Column1 and Column2 are selected  and Scatter Plot is not empty 
+                                dataCorrelationState.column1 === "" || dataCorrelationState.column2 === "" || dataCorrelationState.scatter_plot === "" ?
+                                    (
+                                        // When No Scatter plot to show
+                                        <Box>
+                                            <Typography variant="h4" sx={{ fontWeight: "bold" }} align="center" >No Content to Show</Typography>
+                                            <Typography variant="h6" >Please Select Column 1 and Column 2</Typography>
+                                        </Box>
 
-                                ) : (
-                                    // Scatter Plot
-                                    <Box sx={{ height: "65vh", width: "55vw", position: "relative" }}>
-                                        <Image layout="fill" src={`data:image/png;base64,${dataCorrelationState.scatter_plot}`} />
-                                    </Box>
-                                )}
+                                    ) : (
+                                        // Scatter Plot
+                                        <Box sx={{ height: "65vh", width: "55vw", position: "relative" }}>
+                                            <Image layout="fill" src={`data:image/png;base64,${dataCorrelationState.scatter_plot}`} />
+                                        </Box>
+                                    )
+                            )}
                         </Box>
                     </>
                 )}
