@@ -22,7 +22,7 @@ const formatNumber = (e) => {
     ans =  e.value;
   }
 
-  ans = ans.replace(/\.0/, '');
+  // ans = ans.replace(/\.0/, '');
   return ans;
 }
 
