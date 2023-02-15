@@ -9,6 +9,7 @@ import { toggleSidebar } from "/store/globalStateSlice";
 import { useSelector, useDispatch } from 'react-redux';
 import Box from '@mui/material/Box';
 import AdbIcon from '@mui/icons-material/Adb';
+import DataThresholdingIcon from '@mui/icons-material/DataThresholding';
 
 
 import { getAllDatasets } from '/store/datasetSlice';
@@ -42,7 +43,7 @@ const Navbar = () => {
                 <IconButton color="inherit" aria-label="open drawer" onClick={() => { dispatch(toggleSidebar()) }} edge="start" sx={{ marginRight: 5 }} >
                     <MenuIcon />
                 </IconButton>
-                <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                <DataThresholdingIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                 <Typography variant="h6" noWrap component="div">
                     Dashboard
                 </Typography>
