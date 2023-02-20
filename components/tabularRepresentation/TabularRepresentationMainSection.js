@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Box,
     Grid,
@@ -29,13 +29,25 @@ import {
 } from "@mui/material";
 
 import { ToolTipText } from "./TabularRepresentationStyles";
+import { useDispatch, useSelector } from 'react-redux';
 
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 import { styled } from '@mui/material/styles';
+import { getCategoricalColumns } from "/store/tabularRepresentationSlice";
 
 const TabularRepresentationMainSection = () => {
+
+    const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
+    const tabularRepresentationState = useSelector((state) => state.tabularRepresentation);
+    
+    const dispatch = useDispatch();
+    
+    useEffect(() => {
+        dispatch(getCategoricalColumns({ dataset_name: selectedDataset }));
+    }, [selectedDataset])
+
 
     const datasetColumns = ["Species", "SepalLengthCm", "Iris-setosa", "Iris-versicolor", "Iris-virginica", "SepalWidthCm", "PetalLengthCm", "PetalWidthCm"];
 
@@ -178,7 +190,7 @@ const TabularRepresentationMainSection = () => {
                                                     onChange={(e) => setSearchColumn(e.target.value)}
                                                 >
                                                     {
-                                                        datasetColumns.map((col) => {
+                                                        tabularRepresentationState.categoricalColumns.map((col) => {
                                                             return (
                                                                 <MenuItem value={col} key={col}>{col}</MenuItem>
                                                             )
