@@ -43,7 +43,7 @@ const CorrelationMatrix = () => {
                                     {dataCorrelationState.column_list.map((column) => {
                                         const value = row[column.id];
                                         return (
-                                            < Tooltip title={value} placement="bottom" disableHoverListener={column.id !== "column_name"}>
+                                            < Tooltip title={value} key={column.id} placement="bottom" disableHoverListener={column.id !== "column_name"}>
                                                 <TableCell
                                                     key={column.id}
                                                     align="center"
