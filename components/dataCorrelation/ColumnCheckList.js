@@ -36,7 +36,7 @@ const ColumnCheckList = ({ checkedColumns, handleCheckToggle }) => {
               disablePadding
             >
               <ListItemButton key={`list-button-${value}`} disabled={columns.length < 2} >
-                <Tooltip title={value} placement="bottom-start">
+                <Tooltip title={value} placement="bottom-start" key={`tooltip-${value}`}>
                   <ListItemText id={labelId} primary={value} primaryTypographyProps={{ sx: { overflow: "hidden", textOverflow: "ellipsis" } }} />
                 </Tooltip>
               </ListItemButton>

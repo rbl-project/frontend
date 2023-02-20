@@ -16,7 +16,7 @@ const CorrelationMatrix = () => {
                     <TableHead>
                         <TableRow >
                             {dataCorrelationState.column_list.map((column) => (
-                                < Tooltip title={column.label} placement="bottom">
+                                < Tooltip title={column.label} placement="bottom" key={column.id}>
                                     <TableCell
                                         key={column.id}
                                         align="center"
