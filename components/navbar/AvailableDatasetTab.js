@@ -363,7 +363,7 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
 
             {datasetState.availableDatasets.length > 0 && (
                 <Box sx={{ display: "flex", justifyContent: "flex-end" }}  >
-                    <Button onClick={handleSelectDataset} variant="contained" disabled={datasetState.requestStatus === REQUEST_STATUS_LOADING} >Submit</Button>
+                    <Button onClick={handleSelectDataset} variant="contained" disabled={datasetState.requestStatus === REQUEST_STATUS_LOADING} >Select</Button>
                 </Box>
             )}
 

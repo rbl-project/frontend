@@ -6,27 +6,29 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import Tooltip from '@mui/material/Tooltip';
+
 
 const columns = [
-  { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'count',label: 'Count',minWidth: 100,},
-  { id: 'mode',label: 'Mode',minWidth: 170},
-  { id: 'mode_count', label: 'Mode Count', minWidth: 100 },
-  { id: 'unique_count',label: 'Unique Count',minWidth: 100},
+  { id: 'name', label: 'Name', width: "30%" },
+  { id: 'count', label: 'Count', width: "13%", },
+  { id: 'mode', label: 'Mode', width: "30%" },
+  { id: 'mode_count', label: 'Mode Count', width: "13%" },
+  { id: 'unique_count', label: 'Unique Count', width: "13%" },
 ];
 
-const DescribeCategoricalColumnsTable = ({rows}) => {
+const DescribeCategoricalColumnsTable = ({ rows }) => {
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ height:"44vh",overflow:"auto","&::-webkit-scrollbar": { width: "0.6rem",borderRadius:"2rem" }, "&::-webkit-scrollbar-track": { bgcolor:"#f1f1f1" }, "&::-webkit-scrollbar-thumb": { bgcolor:"#c1c1c1",borderRadius:"3rem" }}}>
-        <Table stickyHeader aria-label="sticky table">
+      <TableContainer sx={{ height: "44vh", overflow: "auto", "&::-webkit-scrollbar": { width: "0.6rem", height: "0.6rem", borderRadius: "2rem" }, "&::-webkit-scrollbar-track": { bgcolor: "#f1f1f1" }, "&::-webkit-scrollbar-thumb": { bgcolor: "#c1c1c1", borderRadius: "3rem" } }}>
+        <Table stickyHeader aria-label="sticky table" sx={{ tableLayout: "fixed" }}>
           <TableHead>
             <TableRow>
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  sx={{ minWidth: column.minWidth,fontWeight: 'bolder'}}
+                  sx={{ width: column.width, fontWeight: 'bolder' }}
                 >
                   {column.label}
                 </TableCell>
@@ -35,21 +37,21 @@ const DescribeCategoricalColumnsTable = ({rows}) => {
           </TableHead>
           <TableBody>
             {rows.map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.name}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align} sx={{fontWeight:column.id ==="name"&& 500}}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
+              return (
+                <TableRow hover role="checkbox" tabIndex={-1} key={row.name}>
+                  {columns.map((column) => {
+                    const value = row[column.id];
+                    return (
+                      < Tooltip title={value === null ? "null" : value} placement="bottom-start">
+                        <TableCell key={column.id} align={column.align} sx={{ fontWeight: column.id === "name" && 500, overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {value}
                         </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
+                      </Tooltip>
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
