@@ -10,60 +10,48 @@ import {
 import * as API from "../api";
 
 const initialState = {
-    column1:"",
-    column2:"",
-    num_cols_req_status: REQUEST_STATUS_IDLE,
     n_numerical_columns: 0,
     numerical_columns: [],
-    corr_matrix_req_status: REQUEST_STATUS_IDLE,
-    column_list: [],
-    correlation_matrix: [],
-    scatter_plot_req_status: REQUEST_STATUS_IDLE,
-    scatter_plot: "",
-    heatmap_req_status: REQUEST_STATUS_IDLE,
-    heatmap: "",
+    num_cols_req_status: REQUEST_STATUS_IDLE,
+    n_categorical_columns: 0,
+    categorical_columns: [],
+    cat_cols_req_status: REQUEST_STATUS_IDLE,
+    graph_type:"",
+    graph: "",
+    graph_req_status: REQUEST_STATUS_IDLE,
 }
 
-export const getNumericalColumns = createAsyncThunk('/numerical-columns', async (formData) => {
-    const response = await API.getNumericalColumns(formData);
+export const getNumericalColumnsInfo = createAsyncThunk('/get-numerical-columns-info', async (formData) => {
+    const response = await API.getNumericalColumnsInfo(formData);
     return response.data; // response.data is your entire object that is seen in postman as the response
 });
 
-export const getCorrelationMatrix = createAsyncThunk('/correlation-matrix', async (formData) => {
-    const response = await API.getCorrelationMatrix(formData);
+export const getCategoricalColumnsInfo = createAsyncThunk('/get-categorical-columns-info', async (formData) => {
+    const response = await API.getCategoricalColumnsInfo(formData);
     return response.data; // response.data is your entire object that is seen in postman as the response
 });
 
-export const getScatterPlot = createAsyncThunk('/scatter-plot', async (formData) => {
-    const response = await API.getScatterPlot(formData);
-    return response.data; // response.data is your entire object that is seen in postman as the response
-});
-
-export const getCorrelationHeatmap = createAsyncThunk('/correlation-heatmap', async (formData) => {
-    const response = await API.getCorrelationHeatmap(formData);
+export const generateGraph = createAsyncThunk('/generate-graph', async (formData) => {
+    const response = await API.generateGraph(formData);
     return response.data; // response.data is your entire object that is seen in postman as the response
 });
 
 
-const dataCorrelationSlice = createSlice({
-    name: "dataCorrelation",
+const graphsSlice = createSlice({
+    name: "graphs",
     initialState: initialState,
     reducers: {
         resetRequestStatus: (state, action) => {
             state.num_cols_req_status = REQUEST_STATUS_IDLE;
-            state.corr_matrix_req_status = REQUEST_STATUS_IDLE;
-            state.scatter_plot_req_status = REQUEST_STATUS_IDLE;
-            state.heatmap_req_status = REQUEST_STATUS_IDLE;
+            state.cat_cols_req_status = REQUEST_STATUS_IDLE;
+            state.graph_req_status = REQUEST_STATUS_IDLE;
             state.message = null;
         },
-        resetPlotState: (state,action) => {
+        resetGraphState: (state,action) => {
             state.column1 = ""
             state.column2 = ""
-            state.scatter_plot = ""
-            state.heatmap = ""
-        },
-        setCheckedColumnsRedux: (state, action) => {
-            state.checked_columns = action.payload;
+            state.graph = ""
+            state.graph_type = ""
         },
         setColumn1: (state, action) => {
             state.column1 = action.payload;
@@ -74,90 +62,73 @@ const dataCorrelationSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-
-            // Get Numerical Columns
-            .addCase(getNumericalColumns.pending, (state, action) => {
+            
+            // Get Numerical Columns Info
+            .addCase(getNumericalColumnsInfo.pending, (state, action) => {
                 state.num_cols_req_status = REQUEST_STATUS_LOADING;
             })
-            .addCase(getNumericalColumns.fulfilled, (state, action) => { // action.payload.data is the response.data
+            .addCase(getNumericalColumnsInfo.fulfilled, (state, action) => { // action.payload.data is the response.data
                 if (action.payload.status) {
                     state.n_numerical_columns = action.payload.data.n_numerical_columns;
                     state.numerical_columns = action.payload.data.numerical_columns;
                     state.num_cols_req_status = REQUEST_STATUS_SUCCEEDED;
-                } else {
+                }
+                else {
                     state.num_cols_req_status = REQUEST_STATUS_FAILED;
-                    state.message = action.payload.error; // error sent by us from our backend
+                    state.message = action.payload.error // error sent by us from our backend
                 }
             })
-            .addCase(getNumericalColumns.rejected, (state, action) => {
+            .addCase(getNumericalColumnsInfo.rejected, (state, action) => {
                 state.num_cols_req_status = REQUEST_STATUS_FAILED;
                 state.message = CUSTOM_ERROR_MESSAGE; // unknow error in request
             })
 
-
-            // Get Correlation Matrix
-            .addCase(getCorrelationMatrix.pending, (state, action) => {
-                state.corr_matrix_req_status = REQUEST_STATUS_LOADING;
-            })
-            .addCase(getCorrelationMatrix.fulfilled, (state, action) => { // action.payload.data is the response.data
-                if (action.payload.status) {
-                    state.column_list = action.payload.data.column_list;
-                    state.correlation_matrix = action.payload.data.correlation_matrix;
-                    state.corr_matrix_req_status = REQUEST_STATUS_SUCCEEDED;
-                }
-                else {
-                    state.corr_matrix_req_status = REQUEST_STATUS_FAILED;
-                    state.message = action.payload.error; // error sent by us from our backend
-                }
-            })
-            .addCase(getCorrelationMatrix.rejected, (state, action) => {
-                state.corr_matrix_req_status = REQUEST_STATUS_FAILED;
-                state.message = CUSTOM_ERROR_MESSAGE; // unknow error in request
-            })
-
             
-            // Get Scatter Plot
-            .addCase(getScatterPlot.pending, (state, action) => {
-                state.scatter_plot_req_status = REQUEST_STATUS_LOADING;
+            // Get Categorical Columns Info
+            .addCase(getCategoricalColumnsInfo.pending, (state, action) => {
+                state.cat_cols_req_status = REQUEST_STATUS_LOADING;
             })
-            .addCase(getScatterPlot.fulfilled, (state, action) => { // action.payload.data is the response.data
+            .addCase(getCategoricalColumnsInfo.fulfilled, (state, action) => { // action.payload.data is the response.data
                 if (action.payload.status) {
-                    state.scatter_plot = action.payload.data.scatter_plot;
-                    state.scatter_plot_req_status = REQUEST_STATUS_SUCCEEDED;
+                    state.n_categorical_columns = action.payload.data.n_categorical_columns;
+                    state.categorical_columns = action.payload.data.categorical_columns;
+                    state.cat_cols_req_status = REQUEST_STATUS_SUCCEEDED;
                 }
                 else {
-                    state.scatter_plot_req_status = REQUEST_STATUS_FAILED;
+                    state.cat_cols_req_status = REQUEST_STATUS_FAILED;
                     state.message = action.payload.error // error sent by us from our backend
                 }
             })
-            .addCase(getScatterPlot.rejected, (state, action) => {
-                state.scatter_plot_req_status = REQUEST_STATUS_FAILED;
+            .addCase(getCategoricalColumnsInfo.rejected, (state, action) => {
+                state.cat_cols_req_status = REQUEST_STATUS_FAILED;
                 state.message = CUSTOM_ERROR_MESSAGE; // unknow error in request
             })
 
-            
-            // Get Correlation Heatmap
-            .addCase(getCorrelationHeatmap.pending, (state, action) => {
-                state.heatmap_req_status = REQUEST_STATUS_LOADING;
+
+            // Generate Graph
+            .addCase(generateGraph.pending, (state, action) => {
+                state.graph_req_status = REQUEST_STATUS_LOADING;
             })
-            .addCase(getCorrelationHeatmap.fulfilled, (state, action) => { // action.payload.data is the response.data
+            .addCase(generateGraph.fulfilled, (state, action) => { // action.payload.data is the response.data
                 if (action.payload.status) {
-                    state.heatmap = action.payload.data.heatmap;
-                    state.heatmap_req_status = REQUEST_STATUS_SUCCEEDED;
+                    state.graph = action.payload.data.graph;
+                    state.graph_type = action.payload.data.graph_type;
+                    state.graph_req_status = REQUEST_STATUS_SUCCEEDED;
                 }
                 else {
-                    state.heatmap_req_status = REQUEST_STATUS_FAILED;
-                    state.message = action.payload.error; // error sent by us from our backend
+                    state.graph_req_status = REQUEST_STATUS_FAILED;
+                    state.message = action.payload.error // error sent by us from our backend
                 }
             })
-            .addCase(getCorrelationHeatmap.rejected, (state, action) => {
-                state.heatmap_req_status = REQUEST_STATUS_FAILED;
+            .addCase(generateGraph.rejected, (state, action) => {
+                state.graph_req_status = REQUEST_STATUS_FAILED;
                 state.message = CUSTOM_ERROR_MESSAGE; // unknow error in request
             })
+
 
     }
 });
 
-export const { resetRequestStatus,setCheckedColumnsRedux,setColumn1,setColumn2,resetPlotState } = dataCorrelationSlice.actions;
+export const { resetRequestStatus,setColumn1,setColumn2,resetGraphState } = graphsSlice.actions;
 
-export default dataCorrelationSlice.reducer;
+export default graphsSlice.reducer;

@@ -8,6 +8,7 @@ import authSlice from "./authSlice";
 import datasetSlice from "./datasetSlice";
 import datasetOverviewSlice from "./datasetOverviewSlice";
 import dataCorrelationSlice from "./dataCorrelationSlice";
+import graphsSlice from "./graphsSlice";
 
 const combineReducer = combineReducers({
     global:globalStateSlice,
@@ -16,7 +17,8 @@ const combineReducer = combineReducers({
     auth:authSlice,
     dataset:datasetSlice,
     datasetOverview:datasetOverviewSlice,
-    dataCorrelation:dataCorrelationSlice
+    dataCorrelation:dataCorrelationSlice,
+    graphs:graphsSlice
 });
 
 export const makeStore = () => configureStore({reducer:combineReducer});
