@@ -12,8 +12,10 @@ import * as API from "../api";
 const initialState = {
     requestStatus: REQUEST_STATUS_IDLE,
     tabularRepresentation: null,
-    categoricalColumns: [],
-    numericalColumns: [],
+    categorical_columns: [],
+    categorical_column_values: {},
+    numerical_columns: [],
+    all_columns: [],
 }
 
 export const getTabularRepresentation = createAsyncThunk('/filtered-tabular-representation', async (formData) => {
@@ -21,8 +23,8 @@ export const getTabularRepresentation = createAsyncThunk('/filtered-tabular-repr
     return response.data; // response.data is your entire object that is seen in postman as the response
 });
 
-export const getCategoricalColumns = createAsyncThunk('/get-categorical-columns', async (formData) => {
-    const response = await API.getCategoricalColumns(formData);
+export const getColumnInfo = createAsyncThunk('/get-categorical-columns', async (formData) => {
+    const response = await API.getColumnInfo(formData);
     return response.data;
 });
 
@@ -33,20 +35,24 @@ const tabularRepresentationSlice = createSlice({
     extraReducers: (builder) => {
         builder
         // categorical columns
-        .addCase( getCategoricalColumns.pending, (state, action) => {
+        .addCase( getColumnInfo.pending, (state, action) => {
             state.requestStatus = REQUEST_STATUS_LOADING;
         })
-        .addCase( getCategoricalColumns.fulfilled, (state, action) => { // action.payload is the response.data
+        .addCase( getColumnInfo.fulfilled, (state, action) => { // action.payload is the response.data
             if (action.payload.status) {
                 state.requestStatus = REQUEST_STATUS_SUCCEEDED;
                 state.message = null;
-                state.categoricalColumns = action.payload.data;
+                state.categorical_columns = action.payload.data.categorical_columns;
+                state.categorical_column_values = action.payload.data.categorical_values;
+                state.numerical_columns = action.payload.data.numerical_columns;
+                state.all_columns = action.payload.data.all_columns;
+
             } else {
                 state.requestStatus = REQUEST_STATUS_FAILED;
                 state.message = action.payload.error; // error sent by us from our backend
             }
         })
-        .addCase( getCategoricalColumns.rejected, (state, action) => {
+        .addCase( getColumnInfo.rejected, (state, action) => {
             state.requestStatus = REQUEST_STATUS_FAILED;
             state.message = CUSTOM_ERROR_MESSAGE;
         })

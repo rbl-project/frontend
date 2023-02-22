@@ -25,7 +25,9 @@ import {
     TableBody,
     Table,
     Link,
-    Badge
+    Badge, 
+    Autocomplete,
+    TextField
 } from "@mui/material";
 
 import { ToolTipText } from "./TabularRepresentationStyles";
@@ -35,35 +37,42 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 import { styled } from '@mui/material/styles';
-import { getCategoricalColumns } from "/store/tabularRepresentationSlice";
+import { getColumnInfo, getTabularRepresentation } from "/store/tabularRepresentationSlice";
 
 const TabularRepresentationMainSection = () => {
 
+    //! ================ SELECTED DATASET AND OTHER STATE INFO ===============
+
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     const tabularRepresentationState = useSelector((state) => state.tabularRepresentation);
+    const [categoricalColValuesOptions, setCategoricalColValuesOptions] = useState([]);
     
     const dispatch = useDispatch();
     
     useEffect(() => {
-        dispatch(getCategoricalColumns({ dataset_name: selectedDataset }));
+        dispatch(getColumnInfo({ dataset_name: selectedDataset }));
     }, [selectedDataset])
 
 
     const datasetColumns = ["Species", "SepalLengthCm", "Iris-setosa", "Iris-versicolor", "Iris-virginica", "SepalWidthCm", "PetalLengthCm", "PetalWidthCm"];
 
-    // SEARCH
+    //! ====================  SEARCH PARAMETERS ============================
     const [searchQuery, setSearchQuery] = useState({});
     const [searchColumn, setSearchColumn] = useState('');
     const [searchValue, setSearchValue] = useState([]);
     const [searchOpen, setSearchOpen] = useState(false);
 
 
-    const handleSearchColumnChange = (event) => {
-        const { target: { value }, } = event;
-        setSearchValue(
-            // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
+    const handleSearchColumnChange = (event, value, reason) => {
+
+        setSearchValue(value)
+        
+        // =======old code for multiple select========
+        // const { target: { value }, } = event;
+        // setSearchValue(
+        //     // On autofill we get a stringified value.
+        //     typeof value === 'string' ? value.split(',') : value,
+        // );
     }
 
     const handleSearchColumnSubmit = () => {
@@ -74,12 +83,10 @@ const TabularRepresentationMainSection = () => {
 
         setSearchColumn('');
         setSearchValue([]);
+        console.log(tabularRepresentationState.categorical_column_values["Species"]);
     }
 
-
-
-
-    // SORTING
+    //! ====================== SORTING PARAMETERS ==========================
     const [sortColumn, setSortColumn] = useState('');
     const [sortOrder, setSortOrder] = useState('');
     const [sortQuery, setSortQuery] = useState({});
@@ -98,7 +105,8 @@ const TabularRepresentationMainSection = () => {
         setSortOrder('');
     }
 
-    // FILTERING
+    //! ======================= FILTERING PARAMETERS ========================
+    
     const intital_filter_query = {
         "end": 'end', // end index is end of dataframe itself
         "columns": [], // all columns
@@ -149,9 +157,21 @@ const TabularRepresentationMainSection = () => {
         setFilterColumn([]);
     }
 
-    // Others
+    //! ====================== FINAL SUBMIT AND OTHERs========================
 
     const handleFinalSubmit = (e) => {
+        // if(endIndex != 'end' && endIndex < startIndex){
+        //     alert("End index should be greater than start index");
+        //     return;
+        // }
+        const finalQuery = {
+            "dataset_name": selectedDataset,
+            "search": searchQuery,
+            "sort": sortQuery,
+            "filter": filterQuery
+        }
+        
+        dispatch(getTabularRepresentation(finalQuery));
 
     }
 
@@ -162,7 +182,7 @@ const TabularRepresentationMainSection = () => {
     return (
         <Box sx={{ flexGrow: 1, width: "100%" }}>
             <Grid container spacing={2}>
-                <Grid item xs={3}>
+                <Grid item xs={4}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Paper elevation={0} sx={{ py: "0.1rem", px: "0.5rem", overflow: 'hidden' }}>
@@ -181,8 +201,8 @@ const TabularRepresentationMainSection = () => {
                                         {/* Select Column Dropdown  */}
                                         <Box sx={{ width: "30vw", mr: 2 }}>
                                             <FormControl fullWidth size="small">
-                                                <InputLabel id="demo-simple-select-label">Column</InputLabel>
-                                                <Select
+                                                {/* <InputLabel id="demo-simple-select-label">Column</InputLabel> */}
+                                                {/* <Select
                                                     labelId="demo-simple-select-label"
                                                     id="demo-simple-select"
                                                     value={searchColumn}
@@ -196,15 +216,31 @@ const TabularRepresentationMainSection = () => {
                                                             )
                                                         })
                                                     }
-                                                </Select>
+                                                </Select> */}
+                                                <Autocomplete
+                                                    disableClearable
+                                                    disableCloseOnSelect
+                                                    fullWidth="true"
+                                                    filterSelectedOptions="true"
+                                                    id="combo-box-demo"
+                                                    options={tabularRepresentationState.categorical_columns}
+                                                    size="small"
+                                                    value={searchColumn}
+                                                    // sx={{ width: "130px", padding: "0px" }}
+                                                    onChange={(e, value, reason) => {
+                                                        setSearchColumn(value)
+                                                        setCategoricalColValuesOptions(tabularRepresentationState.categorical_column_values[value])
+                                                    }}
+                                                    renderInput={(params) => <TextField sx={{ }} {...params} label="Column" />}
+                                                />
                                             </FormControl>
                                         </Box>
 
                                         {/* Select Value Dropdown  */}
                                         <Box sx={{ width: "30vw" }}>
                                             <FormControl fullWidth size="small">
-                                                <InputLabel id="demo-simple-select-label-2">Value</InputLabel>
-                                                <Select
+                                                {/* <InputLabel id="demo-simple-select-label-2">Value</InputLabel> */}
+                                                {/* <Select
                                                     labelId="demo-simple-select-label-2"
                                                     id="demo-simple-select-2"
                                                     value={searchValue}
@@ -226,7 +262,20 @@ const TabularRepresentationMainSection = () => {
                                                             )
                                                         })
                                                     }
-                                                </Select>
+                                                </Select> */}
+                                                <Autocomplete
+                                                    multiple
+                                                    disableClearable
+                                                    disableCloseOnSelect
+                                                    fullWidth="true"
+                                                    filterSelectedOptions="true"
+                                                    id="combo-box-demo"
+                                                    options={categoricalColValuesOptions}
+                                                    size="small"
+                                                    value={searchValue}
+                                                    onChange={(e, value, reason) => setSearchValue(value)}
+                                                    renderInput={(params) => <TextField sx={{ }} {...params} label="Value" />}
+                                                />
                                             </FormControl>
                                         </Box>
 
@@ -271,8 +320,8 @@ const TabularRepresentationMainSection = () => {
                                         {/* Select Column 1 Dropdown  */}
                                         <Box sx={{ width: "30vw", mr: 2 }}>
                                             <FormControl fullWidth size="small">
-                                                <InputLabel id="demo-simple-select-label">Column</InputLabel>
-                                                <Select
+                                                {/* <InputLabel id="demo-simple-select-label">Column</InputLabel> */}
+                                                {/* <Select
                                                     labelId="demo-simple-select-label"
                                                     id="demo-simple-select"
                                                     value={sortColumn}
@@ -286,7 +335,19 @@ const TabularRepresentationMainSection = () => {
                                                             )
                                                         })
                                                     }
-                                                </Select>
+                                                </Select> */}
+                                                <Autocomplete
+                                                    disableClearable
+                                                    disableCloseOnSelect
+                                                    fullWidth="true"
+                                                    filterSelectedOptions="true"
+                                                    id="combo-box-demo"
+                                                    options={tabularRepresentationState.all_columns}
+                                                    size="small"
+                                                    value={sortColumn}
+                                                    onChange={(e, value, reason) => setSortColumn(value)}
+                                                    renderInput={(params) => <TextField sx={{ }} {...params} label="Column" />}
+                                                />
                                             </FormControl>
                                         </Box>
 
@@ -464,8 +525,8 @@ const TabularRepresentationMainSection = () => {
 
                                         <Box sx={{ width: "30vw" }}>
                                             <FormControl fullWidth size="small">
-                                                <InputLabel id="demo-simple-select-label-2">Value</InputLabel>
-                                                <Select
+                                                {/* <InputLabel id="demo-simple-select-label-2">Value</InputLabel> */}
+                                                {/* <Select
                                                     labelId="demo-simple-select-label-2"
                                                     id="demo-simple-select-2"
                                                     value={filterColumn}
@@ -488,7 +549,21 @@ const TabularRepresentationMainSection = () => {
                                                             )
                                                         })
                                                     }
-                                                </Select>
+                                                </Select> */}
+                                                <Autocomplete
+                                                    multiple
+                                                    disableClearable
+                                                    disableCloseOnSelect
+                                                    fullWidth="true"
+                                                    filterSelectedOptions="true"
+                                                    id="combo-box-demo"
+                                                    options={tabularRepresentationState.all_columns}
+                                                    size="small"
+                                                    value={filterColumn}
+                                                    // sx={{ width: "130px", padding: "0px" }}
+                                                    onChange={(e,value, reason) => setFilterColumn(value)}
+                                                    renderInput={(params) => <TextField sx={{ }} {...params} label="Value" />}
+                                                />
                                             </FormControl>
                                         </Box>
 
@@ -531,7 +606,7 @@ const TabularRepresentationMainSection = () => {
                 </Grid>
 
 
-                <Grid item xs={9}>
+                <Grid item xs={8}>
                     <Grid container xs={12}>
                         <Grid item xs={12}>
                             <Paper elevation={0} sx={{ py: "0.1rem" }}>

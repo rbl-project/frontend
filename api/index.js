@@ -37,7 +37,7 @@ export const getAllDatasets = () => API.get("/get-datasets");
 export const exportDataset = (formData) => API.post("/export-dataset",formData);
 export const deleteDataset = (formData) => API.post("/delete-dataset",formData);
 export const renameDataset = (formData) => API.post("/rename-dataset",formData);
-export const getCategoricalColumns = (formData) => API.post("/get-categorical-columns",formData);
+export const getColumnInfo = (formData) => API.post("/get-columns-info",formData);
 
 // Dataset Overview APIs
 export const getBasicInformation = (formData) => API.post("/basic-information",formData);
