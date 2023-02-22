@@ -32,6 +32,7 @@ import {
 
 import { ToolTipText } from "./TabularRepresentationStyles";
 import { useDispatch, useSelector } from 'react-redux';
+import MUIDataTable from "mui-datatables";
 
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -56,6 +57,22 @@ const TabularRepresentationMainSection = () => {
 
     const datasetColumns = ["Species", "SepalLengthCm", "Iris-setosa", "Iris-versicolor", "Iris-virginica", "SepalWidthCm", "PetalLengthCm", "PetalWidthCm"];
 
+    // const columns = ["Name", "Company", "City", "State"];
+
+    const data_columns = tabularRepresentationState.filterd_data?.dataframe?.columns;
+    const data_rows = tabularRepresentationState.filterd_data?.dataframe?.data;
+
+    // const data = [
+    // ["Joe James", "Test Corp", "Yonkers", "NY"],
+    // ["John Walsh", "Test Corp", "Hartford", "CT"],
+    // ["Bob Herm", "Test Corp", "Tampa", "FL"],
+    // ["James Houston", "Test Corp", "Dallas", "TX"],
+    // ];
+
+    const options = {
+        selectableRowsHideCheckboxes: true,
+        selectableRowsOnClick: false,
+      };
     //! ====================  SEARCH PARAMETERS ============================
     const [searchQuery, setSearchQuery] = useState({});
     const [searchColumn, setSearchColumn] = useState('');
@@ -610,12 +627,20 @@ const TabularRepresentationMainSection = () => {
                     <Grid container xs={12}>
                         <Grid item xs={12}>
                             <Paper elevation={0} sx={{ py: "0.1rem" }}>
-                                <Typography
+                                {/* <Typography
                                     variant='h6'
                                     sx={{ fontWeight: "bold", ml: 2, my: 1 }}
                                 >
                                     Result
-                                </Typography>
+                                </Typography> */}
+                                <Box>
+                                    <MUIDataTable
+                                        title={"Result"}
+                                        data={data_rows}
+                                        columns={data_columns}
+                                        options={options}
+                                    />
+                                </Box>
                             </Paper>
 
                         </Grid>

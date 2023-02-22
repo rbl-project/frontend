@@ -11,7 +11,7 @@ import * as API from "../api";
 
 const initialState = {
     requestStatus: REQUEST_STATUS_IDLE,
-    tabularRepresentation: null,
+    filterd_data: {},
     categorical_columns: [],
     categorical_column_values: {},
     numerical_columns: [],
@@ -66,7 +66,7 @@ const tabularRepresentationSlice = createSlice({
             if (action.payload.status) {
                 state.requestStatus = REQUEST_STATUS_SUCCEEDED;
                 state.message = null;
-                state.tabularRepresentation = action.payload.data;
+                state.filterd_data = action.payload.data;
             } else {
                 state.requestStatus = REQUEST_STATUS_FAILED;
                 state.message = action.payload.error; // error sent by us from our backend
