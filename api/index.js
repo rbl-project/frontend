@@ -28,7 +28,7 @@ export const signIn = (formData) => API.post("/login", formData);
 export const signOut = () => API.get("/logout");
 export const signUp = (formData) => API.post("/register", formData);
 
-// Dataset I/O APIs
+// Dataset Utilities APIs
 export const uploadDataset = ({dataset,updateProgress}) => API.post("/upload-dataset", {dataset:dataset}, {
     headers: { "Content-Type": "multipart/form-data" }, 
     onUploadProgress: updateProgress
@@ -37,6 +37,8 @@ export const getAllDatasets = () => API.get("/get-datasets");
 export const exportDataset = (formData) => API.post("/export-dataset",formData);
 export const deleteDataset = (formData) => API.post("/delete-dataset",formData);
 export const renameDataset = (formData) => API.post("/rename-dataset",formData);
+export const getNumericalColumnsInfo = (formData) => API.post("/get-numerical-columns-info",formData);
+export const getCategoricalColumnsInfo = (formData) => API.post("/get-categorical-columns-info",formData);
 
 // Dataset Overview APIs
 export const getBasicInformation = (formData) => API.post("/basic-information",formData);
@@ -49,3 +51,7 @@ export const getNumericalColumns = (formData) => API.post("/numerical-columns",f
 export const getCorrelationMatrix = (formData) => API.post("/correlation-matrix",formData);
 export const getCorrelationHeatmap = (formData) => API.post("/correlation-heatmap",formData);
 export const getScatterPlot = (formData) => API.post("/scatter-plot",formData);
+
+// Graph APIs
+export const generateGraph = (formData) => API.post("/generte-graph",formData);
+

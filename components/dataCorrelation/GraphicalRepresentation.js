@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, MenuItem, FormControl, Select, Button, InputLabel, Typography,CircularProgress, } from '@mui/material';
+import { Box, MenuItem, FormControl, Select, Button, InputLabel, Typography, CircularProgress, ListItemText, Tooltip } from '@mui/material';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -60,6 +60,7 @@ const GraphicalRepresentation = () => {
                     // Scatter Plot Tab Content
                     <>
                         <Box sx={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+
                             {/* Select Column 1 Dropdown  */}
                             <Box sx={{ width: "20vw", mr: 2 }}>
                                 <FormControl fullWidth size="small">
@@ -74,13 +75,18 @@ const GraphicalRepresentation = () => {
                                         {
                                             column1_options.map((column1_option) => {
                                                 return (
-                                                    <MenuItem value={column1_option} key={column1_option}>{column1_option}</MenuItem>
+                                                    <MenuItem value={column1_option} key={column1_option} sx={{ width: "20vw" }}>
+                                                        <Tooltip title={column1_option} placement="bottom-start" key={`tooltip-${column1_option}`}>
+                                                            <ListItemText key={column1_option} primaryTypographyProps={{ sx: { overflow: "hidden", textOverflow: "ellipsis" } }} >{column1_option}</ListItemText>
+                                                        </Tooltip>
+                                                    </MenuItem>
                                                 )
                                             })
                                         }
                                     </Select>
                                 </FormControl>
                             </Box>
+
                             {/* Select Column 2 Dropdown  */}
                             <Box sx={{ width: "20vw" }}>
                                 <FormControl fullWidth size="small">
@@ -95,15 +101,21 @@ const GraphicalRepresentation = () => {
                                         {
                                             column2_options.map((column2_option) => {
                                                 return (
-                                                    <MenuItem value={column2_option} key={column2_option}>{column2_option}</MenuItem>
+                                                    <MenuItem value={column2_option} key={column2_option} sx={{ width: "20vw" }}>
+                                                        <Tooltip title={column2_option} placement="bottom-start" key={`tooltip-${column2_option}`}>
+                                                            <ListItemText key={column2_option} primaryTypographyProps={{ sx: { overflow: "hidden", textOverflow: "ellipsis" } }} >{column2_option}</ListItemText>
+                                                        </Tooltip>
+                                                    </MenuItem>
                                                 )
                                             })
                                         }
                                     </Select>
                                 </FormControl>
                             </Box>
-                            <Box sx={{ width: "30vw", display: "flex", justifyContent: "flex-end" }}>
-                                <Button variant="contained" disabled={dataCorrelationState.column1 === "" || dataCorrelationState.column2 === ""} onClick={handleSubmit} >Submit</Button>
+
+                            {/* Select Button  */}
+                            <Box sx={{ width: "35vw", display: "flex", justifyContent: "flex-end" }}>
+                                <Button variant="contained" disabled={dataCorrelationState.column1 === "" || dataCorrelationState.column2 === ""} onClick={handleSubmit} >Select</Button>
                             </Box>
                         </Box>
                         <Box sx={{ height: "76vh", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -120,7 +132,7 @@ const GraphicalRepresentation = () => {
                                         // When No Scatter plot to show
                                         <Box>
                                             <Typography variant="h4" sx={{ fontWeight: "bold" }} align="center" >No Content to Show</Typography>
-                                            <Typography variant="h6" >Please Select Column 1 and Column 2</Typography>
+                                            <Typography variant="h6" align='center' >Please Select Column 1 and Column 2</Typography>
                                         </Box>
 
                                     ) : (
