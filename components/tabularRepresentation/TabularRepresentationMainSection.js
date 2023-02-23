@@ -65,28 +65,22 @@ const TabularRepresentationMainSection = () => {
         selectableRowsHideCheckboxes: true,
         selectableRowsOnClick: false,
         rowsPerPage: 12,
-        elevation: 5,
-        tableBodyHeight: '640px',
+        elevation: 3,
+        tableBodyHeight: '650px',
         fixedHeader: true,
+        textLabels: {
+            body: {
+              noMatch: 'Your custom message here',
+            }
+          }
       };
+
+
     //! ====================  SEARCH PARAMETERS ============================
     const [searchQuery, setSearchQuery] = useState({});
     const [searchColumn, setSearchColumn] = useState('');
     const [searchValue, setSearchValue] = useState([]);
     const [searchOpen, setSearchOpen] = useState(false);
-
-
-    const handleSearchColumnChange = (event, value, reason) => {
-
-        setSearchValue(value)
-        
-        // =======old code for multiple select========
-        // const { target: { value }, } = event;
-        // setSearchValue(
-        //     // On autofill we get a stringified value.
-        //     typeof value === 'string' ? value.split(',') : value,
-        // );
-    }
 
     const handleSearchColumnSubmit = () => {
         // append serachColumn as key and searchValue as value in searchQuery object
@@ -98,6 +92,7 @@ const TabularRepresentationMainSection = () => {
         setSearchValue([]);
         console.log(tabularRepresentationState.categorical_column_values["Species"]);
     }
+
 
     //! ====================== SORTING PARAMETERS ==========================
     const [sortColumn, setSortColumn] = useState('');
@@ -118,6 +113,7 @@ const TabularRepresentationMainSection = () => {
         setSortOrder('');
     }
 
+    
     //! ======================= FILTERING PARAMETERS ========================
     
     const intital_filter_query = {
@@ -153,14 +149,6 @@ const TabularRepresentationMainSection = () => {
         })
     }
 
-    const handleFilterColumnChange = (event) => {
-        const { target: { value }, } = event;
-        setFilterColumn(
-            // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
-    }
-
     const handleFilterColumnSubmit = (e) => {
         // upadte the filterQuery object with new filterColumn
         setFilterQuery({
@@ -173,19 +161,13 @@ const TabularRepresentationMainSection = () => {
     //! ====================== FINAL SUBMIT AND OTHERs========================
 
     const handleFinalSubmit = (e) => {
-        // if(endIndex != 'end' && endIndex < startIndex){
-        //     alert("End index should be greater than start index");
-        //     return;
-        // }
         const finalQuery = {
             "dataset_name": selectedDataset,
             "search": searchQuery,
             "sort": sortQuery,
             "filter": filterQuery
         }
-        
         dispatch(getTabularRepresentation(finalQuery));
-
     }
 
     const ListItem = styled('li')(({ theme }) => ({
@@ -193,7 +175,7 @@ const TabularRepresentationMainSection = () => {
     }));
 
     return (
-        <Box sx={{ flexGrow: 1, width: "100%" }}>
+        <Box sx={{ flexGrow: 1, width: "100%", overflow: 'hidden !important' }}>
             <Grid container spacing={2}>
                 <Grid item xs={4}>
                     <Grid container spacing={2}>
@@ -217,22 +199,6 @@ const TabularRepresentationMainSection = () => {
                                         {/* Select Column Dropdown  */}
                                         <Box sx={{ width: "30vw", mr: 2 }}>
                                             <FormControl fullWidth size="small">
-                                                {/* <InputLabel id="demo-simple-select-label">Column</InputLabel> */}
-                                                {/* <Select
-                                                    labelId="demo-simple-select-label"
-                                                    id="demo-simple-select"
-                                                    value={searchColumn}
-                                                    label="Column"
-                                                    onChange={(e) => setSearchColumn(e.target.value)}
-                                                >
-                                                    {
-                                                        tabularRepresentationState.categoricalColumns.map((col) => {
-                                                            return (
-                                                                <MenuItem value={col} key={col}>{col}</MenuItem>
-                                                            )
-                                                        })
-                                                    }
-                                                </Select> */}
                                                 <Autocomplete
                                                     disableClearable
                                                     disableCloseOnSelect
@@ -255,30 +221,6 @@ const TabularRepresentationMainSection = () => {
                                         {/* Select Value Dropdown  */}
                                         <Box sx={{ width: "30vw" }}>
                                             <FormControl fullWidth size="small">
-                                                {/* <InputLabel id="demo-simple-select-label-2">Value</InputLabel> */}
-                                                {/* <Select
-                                                    labelId="demo-simple-select-label-2"
-                                                    id="demo-simple-select-2"
-                                                    value={searchValue}
-                                                    label="Value"
-                                                    onChange={handleSearchColumnChange}
-                                                    multiple
-                                                    renderValue={(selected) => (
-                                                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                                            {selected.map((value) => (
-                                                                <Chip key={value} label={value} />
-                                                            ))}
-                                                        </Box>
-                                                    )}
-                                                >
-                                                    {
-                                                        datasetColumns.map((col) => {
-                                                            return (
-                                                                <MenuItem value={col} key={col}>{col}</MenuItem>
-                                                            )
-                                                        })
-                                                    }
-                                                </Select> */}
                                                 <Autocomplete
                                                     multiple
                                                     disableClearable
@@ -336,22 +278,6 @@ const TabularRepresentationMainSection = () => {
                                         {/* Select Column 1 Dropdown  */}
                                         <Box sx={{ width: "30vw", mr: 2 }}>
                                             <FormControl fullWidth size="small">
-                                                {/* <InputLabel id="demo-simple-select-label">Column</InputLabel> */}
-                                                {/* <Select
-                                                    labelId="demo-simple-select-label"
-                                                    id="demo-simple-select"
-                                                    value={sortColumn}
-                                                    label="Column"
-                                                    onChange={(e) => setSortColumn(e.target.value)}
-                                                >
-                                                    {
-                                                        datasetColumns.map((col) => {
-                                                            return (
-                                                                <MenuItem value={col} key={col}>{col}</MenuItem>
-                                                            )
-                                                        })
-                                                    }
-                                                </Select> */}
                                                 <Autocomplete
                                                     disableClearable
                                                     disableCloseOnSelect
@@ -461,21 +387,16 @@ const TabularRepresentationMainSection = () => {
                                             {
                                                 startIndex === 0 ? // if index is not start and also not undefined then disable start
                                                     (
-                                                        <Input value={startIndex} onChange={handleStartIndexChange} style={{ padding: "6px 16px", WebkitTextFillColor: "rgba(0, 0, 0, 0.38)" }} type="number" placeholder="Index" />
+                                                        <Input value={startIndex} min="5" onChange={handleStartIndexChange} style={{ padding: "6px 16px", WebkitTextFillColor: "rgba(0, 0, 0, 0.38)" }} type="number" placeholder="Index" />
 
                                                     ) :
                                                     (
-                                                        <Input value={startIndex} onChange={handleStartIndexChange} style={{ padding: "6px 16px" }} type="number" placeholder="Index" />
+                                                        <Input value={startIndex} min="5" onChange={handleStartIndexChange} style={{ padding: "6px 16px" }} type="number" placeholder="Index" />
                                                     )
 
 
                                             }
                                         </Box>
-                                        {/* <Box sx={{ ml: "0.5rem" }}>
-                                            <Button variant='outlined' onClick={handleStartIndexSubmit} >
-                                                <FileDownloadDoneIcon />
-                                            </Button>
-                                        </Box> */}
                                     </Box>
 
                                     {/* Row End Index */}
@@ -525,11 +446,6 @@ const TabularRepresentationMainSection = () => {
 
                                             }
                                         </Box>
-                                        {/* <Box sx={{ ml: "0.5rem" }}>
-                                            <Button variant='outlined' onClick={handleEndIndexSubmit} >
-                                                <FileDownloadDoneIcon />
-                                            </Button>
-                                        </Box> */}
                                     </Box>
 
                                     <Typography variant='h6' sx={{ fontWeight: "bold", my: 1, fontSize: "15px", textAlign: "center" }} >
@@ -541,31 +457,6 @@ const TabularRepresentationMainSection = () => {
 
                                         <Box sx={{ width: "30vw" }}>
                                             <FormControl fullWidth size="small">
-                                                {/* <InputLabel id="demo-simple-select-label-2">Value</InputLabel> */}
-                                                {/* <Select
-                                                    labelId="demo-simple-select-label-2"
-                                                    id="demo-simple-select-2"
-                                                    value={filterColumn}
-                                                    label="Column"
-                                                    multiple
-                                                    onChange={handleFilterColumnChange}
-                                                    renderValue={(selected) => (
-                                                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                                            {selected.map((value) => (
-                                                                <Chip key={value} label={value} />
-                                                            ))}
-                                                        </Box>
-                                                    )}
-
-                                                >
-                                                    {
-                                                        datasetColumns.map((col) => {
-                                                            return (
-                                                                <MenuItem value={col} key={col}>{col}</MenuItem>
-                                                            )
-                                                        })
-                                                    }
-                                                </Select> */}
                                                 <Autocomplete
                                                     multiple
                                                     disableClearable
@@ -576,7 +467,6 @@ const TabularRepresentationMainSection = () => {
                                                     options={tabularRepresentationState.all_columns}
                                                     size="small"
                                                     value={filterColumn}
-                                                    // sx={{ width: "130px", padding: "0px" }}
                                                     onChange={(e,value, reason) => setFilterColumn(value)}
                                                     renderInput={(params) => <TextField sx={{ }} {...params} label="Value" />}
                                                 />
@@ -626,13 +516,7 @@ const TabularRepresentationMainSection = () => {
                     <Grid container xs={12}>
                         <Grid item xs={12}>
                             <Paper elevation={0} sx={{ py: "0.1rem" }}>
-                                {/* <Typography
-                                    variant='h6'
-                                    sx={{ fontWeight: "bold", ml: 2, my: 1 }}
-                                >
-                                    Result
-                                </Typography> */}
-                                <Box sx={{height: "640px"}}>
+                                <Box sx={{height: "760px"}}>
                                     {
                                         tabularRepresentationState.requestStatus === REQUEST_STATUS_LOADING
                                         ? (
