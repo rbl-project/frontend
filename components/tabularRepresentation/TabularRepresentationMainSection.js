@@ -27,7 +27,8 @@ import {
     Link,
     Badge, 
     Autocomplete,
-    TextField
+    TextField,
+    CircularProgress
 } from "@mui/material";
 
 import { ToolTipText } from "./TabularRepresentationStyles";
@@ -39,6 +40,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 import { styled } from '@mui/material/styles';
 import { getColumnInfo, getTabularRepresentation } from "/store/tabularRepresentationSlice";
+import { REQUEST_STATUS_LOADING } from '../../constants/Constants';
 
 const TabularRepresentationMainSection = () => {
 
@@ -52,26 +54,20 @@ const TabularRepresentationMainSection = () => {
     
     useEffect(() => {
         dispatch(getColumnInfo({ dataset_name: selectedDataset }));
+        dispatch(getTabularRepresentation({ dataset_name: selectedDataset }));
     }, [selectedDataset])
 
-
-    const datasetColumns = ["Species", "SepalLengthCm", "Iris-setosa", "Iris-versicolor", "Iris-virginica", "SepalWidthCm", "PetalLengthCm", "PetalWidthCm"];
-
-    // const columns = ["Name", "Company", "City", "State"];
 
     const data_columns = tabularRepresentationState.filterd_data?.dataframe?.columns;
     const data_rows = tabularRepresentationState.filterd_data?.dataframe?.data;
 
-    // const data = [
-    // ["Joe James", "Test Corp", "Yonkers", "NY"],
-    // ["John Walsh", "Test Corp", "Hartford", "CT"],
-    // ["Bob Herm", "Test Corp", "Tampa", "FL"],
-    // ["James Houston", "Test Corp", "Dallas", "TX"],
-    // ];
-
     const options = {
         selectableRowsHideCheckboxes: true,
         selectableRowsOnClick: false,
+        rowsPerPage: 12,
+        elevation: 5,
+        tableBodyHeight: '640px',
+        fixedHeader: true,
       };
     //! ====================  SEARCH PARAMETERS ============================
     const [searchQuery, setSearchQuery] = useState({});
@@ -202,7 +198,7 @@ const TabularRepresentationMainSection = () => {
                 <Grid item xs={4}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Paper elevation={0} sx={{ py: "0.1rem", px: "0.5rem", overflow: 'hidden' }}>
+                            <Paper elevation={0} sx={{ py: "0.1rem", px: "0.5rem", overflow: 'hidden',}}>
 
                                 {/* SEARCH  */}
                                 <Box sx={{ my: "1rem", height: "33%" }}>
@@ -212,6 +208,9 @@ const TabularRepresentationMainSection = () => {
                                         sx={{ fontWeight: "bold", my: 1, fontSize: "1rem" }}
                                     >
                                         Search Parameters
+                                        <Tooltip arrow title="Only for columns with less than 100 unique values">
+                                            <ToolTipText>i</ToolTipText>
+                                        </Tooltip>
                                     </Typography>
 
                                     <Box sx={{ mt: "0.8rem", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -633,13 +632,23 @@ const TabularRepresentationMainSection = () => {
                                 >
                                     Result
                                 </Typography> */}
-                                <Box>
-                                    <MUIDataTable
-                                        title={"Result"}
-                                        data={data_rows}
-                                        columns={data_columns}
-                                        options={options}
-                                    />
+                                <Box sx={{height: "640px"}}>
+                                    {
+                                        tabularRepresentationState.requestStatus === REQUEST_STATUS_LOADING
+                                        ? (
+                                            <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "640px" }}>
+                                                <CircularProgress size="4rem" color="inherit" />
+                                            </Box>
+                                        ) : (
+                                            <MUIDataTable
+                                                title={"Result"}
+                                                data={data_rows}
+                                                columns={data_columns}
+                                                options={options}
+                                            />
+                                        )
+                                    }
+                                    
                                 </Box>
                             </Paper>
 
