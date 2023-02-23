@@ -1,47 +1,82 @@
 import React, { useState, useEffect } from 'react'
-import { Box, MenuItem, FormControl, Select, Button, InputLabel, Typography, CircularProgress,Tooltip,ListItemText } from '@mui/material';
+import { Box, MenuItem, FormControl, Select, Button, InputLabel, Typography, CircularProgress, Tooltip, ListItemText, Autocomplete, TextField } from '@mui/material';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Actions from Redux State
-import { getScatterPlot, setColumn1, setColumn2 } from "/store/dataCorrelationSlice";
+import { generateGraph } from '/store/graphsSlice';
+
 // Constants
 import { REQUEST_STATUS_LOADING, REQUEST_STATUS_SUCCESS, REQUEST_STATUS_ERROR } from '/constants/Constants';
 
 
-const GraphContainerTab = ({ title, nColumns }) => {
+const GraphContainerTab = ({ title, nColumns, graphType, column1, column2, setColumn1, setColumn2 }) => {
 
     // Redux State
     const dispatch = useDispatch();
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
-    const checkedColumns = useSelector((state) => state.dataCorrelation.checked_columns);
-    const dataCorrelationState = useSelector((state) => state.dataCorrelation);
+    const graphsState = useSelector((state) => state.graphs);
 
-    // State Variable for Scatter Plot Column1 Options and Column2 Options
+    // State Variable for Column1 Options and Column2 Options
     const [column1_options, set_column1_options] = useState([]);
     const [column2_options, set_column2_options] = useState([]);
 
-    // State Variables for Scatter plot X and Y
-    const handleCoulmn1Change = (event) => {
-        dispatch(setColumn1(event.target.value));
-        set_column2_options(checkedColumns.filter((column) => column !== event.target.value));
+    // Column1 and Column2 Change Handlers
+    const handleCoulmn1Change = (e, value, reason) => {
+        // When the user selects an option from the dropdown, the value is set to the state variable
+        if (reason === "selectOption") {
+            setColumn1({...column1,[graphType]: value});
+            set_column2_options(column2_options.filter((column) => column !== value));
+        }
+        // When the user clears the selected option, the value is set to the state variable
+        else if (reason === "clear") {
+            setColumn1({...column1,[graphType]: ""});
+            if (graphType === "bar" || graphType === "pie") {
+                set_column2_options(graphsState.categorical_columns);
+            }
+            else {
+                set_column2_options(graphsState.numerical_columns);
+            }
+        }
+    }
+    const handleCoulmn2Change = (e, value, reason) => {
+        // When the user selects an option from the dropdown, the value is set to the state variable
+        if (reason === "selectOption") {
+            setColumn2({...column2,[graphType]: value});
+            set_column1_options(column1_options.filter((column) => column !== value));
+        }
+        // When the user clears the selected option, the value is set to the state variable
+        else if (reason === "clear") {
+            setColumn2({...column2,[graphType]: ""});
+            if (graphType === "bar" || graphType === "pie") {
+                set_column1_options(graphsState.categorical_columns);
+            }
+            else {
+                set_column1_options(graphsState.numerical_columns);
+            }
+        }
     };
 
-    const handleCoulmn2Change = (event) => {
-        dispatch(setColumn2(event.target.value));
-        set_column1_options(checkedColumns.filter((column) => column !== event.target.value));
-    };
-
-    // Generate Scatter Plot Submit button Hnadler
+    // Generate Graph Submit button Hnadler
     const handleSubmit = () => {
-        dispatch(getScatterPlot({ dataset_name: selectedDataset, column1: dataCorrelationState.column1, column2: dataCorrelationState.column2 }))
+        console.log(nColumns);
+        dispatch(generateGraph({ dataset_name: selectedDataset, graph_type: graphType, n_columns: nColumns, column1: column1[graphType], column2: column2[graphType] }));
     }
 
-    // Update Scatter Plot Column1 and Column2 Options
+    // Condition for Submit Button Disable ( When nColumns === 1, only column1 is required, else both column1 and column2 are required)
+    const isSubmitDisabled = nColumns === 1 ? column1[graphType] === "" : column1[graphType] === "" || column2[graphType] === "";
+
+    // Update Column1 and Column2 Options
     useEffect(() => {
-        set_column1_options(checkedColumns.filter((column) => column !== dataCorrelationState.column2));
-        set_column2_options(checkedColumns.filter((column) => column !== dataCorrelationState.column1));
-    }, [checkedColumns]);
+        if (graphType === "bar" || graphType === "pie") {
+            set_column1_options(graphsState.categorical_columns);
+            set_column2_options(graphsState.categorical_columns);
+        }
+        else {
+            set_column1_options(graphsState.numerical_columns);
+            set_column2_options(graphsState.numerical_columns);
+        }
+    }, [graphsState.numerical_columns, graphsState.categorical_columns]);
 
 
     return (
@@ -66,69 +101,61 @@ const GraphContainerTab = ({ title, nColumns }) => {
                     {/* Select Column 1 Dropdown  */}
                     <Box sx={{ width: "20vw", mr: 2 }}>
                         <FormControl fullWidth size="small">
-                            <InputLabel id="demo-simple-select-label">Column1</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={dataCorrelationState.column1}
+                            <Autocomplete
+                                disableCloseOnSelect
+                                fullWidth={true}
+                                filterSelectedOptions={true}
+                                id="combo-box-demo"
+                                options={column1_options}
+                                size="small"
+                                value={column1[graphType]===""?null:column1[graphType]}
                                 onChange={handleCoulmn1Change}
-                                label="Column1"
-                            >
-                                {
-                                    column1_options.map((column1_option) => {
-                                        return (
-                                            <MenuItem value={column1_option} key={column1_option} sx={{ width: "20vw" }}>
-                                                <Tooltip title={column1_option} placement="bottom-start" key={`tooltip-${column1_option}`}>
-                                                    <ListItemText key={column1_option} primaryTypographyProps={{ sx: { overflow: "hidden", textOverflow: "ellipsis" } }} >{column1_option}</ListItemText>
-                                                </Tooltip>
-                                            </MenuItem>
-                                        )
-                                    })
-                                }
-                            </Select>
+                                renderInput={(params) => <TextField sx={{}} {...params} label="Column1" />}
+                                renderOption={(props, option) => (
+                                    < Tooltip title={option} placement="bottom-start" key={`tooltip-${option}`}>
+                                        <ListItemText key={option} {...props} primaryTypographyProps={{ sx: { overflow: "hidden", textOverflow: "ellipsis" } }} >{option}</ListItemText>
+                                    </Tooltip>
+                                )}
+                            />
                         </FormControl>
                     </Box>
                     {/* Select Column 2 Dropdown  */}
                     <Box sx={{ width: "20vw" }}>
                         {nColumns === 2 &&
                             (<FormControl fullWidth size="small">
-                                <InputLabel id="demo-simple-select-label-2">Column2</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label-2"
-                                    id="demo-simple-select-2"
-                                    value={dataCorrelationState.column2}
+                                <Autocomplete
+                                    disableCloseOnSelect
+                                    fullWidth={true}
+                                    filterSelectedOptions={true}
+                                    id="combo-box-demo"
+                                    options={column2_options}
+                                    size="small"
+                                    value={column2[graphType]=== ""?null:column2[graphType]}
                                     onChange={handleCoulmn2Change}
-                                    label="Column2"
-                                >
-                                    {
-                                        column2_options.map((column2_option) => {
-                                            return (
-                                                <MenuItem value={column2_option} key={column2_option} sx={{ width: "20vw" }}>
-                                                    <Tooltip title={column2_option} placement="bottom-start" key={`tooltip-${column2_option}`}>
-                                                        <ListItemText key={column2_option} primaryTypographyProps={{ sx: { overflow: "hidden", textOverflow: "ellipsis" } }} >{column2_option}</ListItemText>
-                                                    </Tooltip>
-                                                </MenuItem>
-                                            )
-                                        })
-                                    }
-                                </Select>
+                                    renderInput={(params) => <TextField sx={{}} {...params} label="Column2" />}
+                                    renderOption={(props, option) => (
+                                        < Tooltip title={option} placement="bottom-start" key={`tooltip-${option}`}>
+                                            <ListItemText key={option} {...props} primaryTypographyProps={{ sx: { overflow: "hidden", textOverflow: "ellipsis" } }} >{option}</ListItemText>
+                                        </Tooltip>
+                                    )}
+                                />
                             </FormControl>
                             )}
                     </Box>
                     <Box sx={{ width: "35vw", display: "flex", justifyContent: "flex-end" }}>
-                        <Button variant="contained" disabled={dataCorrelationState.column1 === "" || dataCorrelationState.column2 === ""} onClick={handleSubmit} >Select</Button>
+                        <Button variant="contained" disabled={isSubmitDisabled} onClick={handleSubmit} >Select</Button>
                     </Box>
                 </Box>
                 <Box sx={{ height: "76vh", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
 
-                    {dataCorrelationState.scatter_plot_req_status === REQUEST_STATUS_LOADING ? (
+                    {graphsState.graph_req_status === REQUEST_STATUS_LOADING ? (
                         // Loading Spinner
                         <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "76vh" }}>
                             <CircularProgress size="2rem" color="inherit" />
                         </Box>
-                    ) : (
-                        // Show Scatter Plot Only if Column1 and Column2 are selected  and Scatter Plot is not empty 
-                        dataCorrelationState.column1 === "" || dataCorrelationState.column2 === "" || dataCorrelationState.scatter_plot === "" ?
+                    ) : ( 
+                            // When No Graph to show
+                            graphsState.graph[graphType] === "" ?
                             (
                                 // When No Scatter plot to show
                                 <Box>
@@ -137,9 +164,9 @@ const GraphContainerTab = ({ title, nColumns }) => {
                                 </Box>
 
                             ) : (
-                                // Scatter Plot
+                                // Show Graph
                                 <Box sx={{ height: "65vh", width: "55vw", position: "relative" }}>
-                                    <Image layout="fill" src={`data:image/png;base64,${dataCorrelationState.scatter_plot}`} />
+                                    <Image layout="fill" src={`data:image/png;base64,${graphsState.graph[graphType]}`} />
                                 </Box>
                             )
                     )}

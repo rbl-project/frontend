@@ -53,5 +53,5 @@ export const getCorrelationHeatmap = (formData) => API.post("/correlation-heatma
 export const getScatterPlot = (formData) => API.post("/scatter-plot",formData);
 
 // Graph APIs
-export const generateGraph = (formData) => API.post("/generte-graph",formData);
+export const generateGraph = (formData) => API.post("/generate-graph",formData);
 

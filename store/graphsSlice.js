@@ -9,6 +9,17 @@ import {
 
 import * as API from "../api";
 
+const initialBlankGraph = {
+    line: "",
+    scatter: "",
+    bar: "",
+    hist: "",
+    density: "",
+    hexbin: "",
+    pie: "",
+    box: "",
+}
+
 const initialState = {
     n_numerical_columns: 0,
     numerical_columns: [],
@@ -16,8 +27,8 @@ const initialState = {
     n_categorical_columns: 0,
     categorical_columns: [],
     cat_cols_req_status: REQUEST_STATUS_IDLE,
-    graph_type:"",
-    graph: "",
+    graph_type: "",
+    graph: initialBlankGraph,
     graph_req_status: REQUEST_STATUS_IDLE,
 }
 
@@ -47,22 +58,14 @@ const graphsSlice = createSlice({
             state.graph_req_status = REQUEST_STATUS_IDLE;
             state.message = null;
         },
-        resetGraphState: (state,action) => {
-            state.column1 = ""
-            state.column2 = ""
-            state.graph = ""
+        resetGraphState: (state, action) => {
+            state.graph = initialBlankGraph;
             state.graph_type = ""
-        },
-        setColumn1: (state, action) => {
-            state.column1 = action.payload;
-        },
-        setColumn2: (state,action) => {
-            state.column2 = action.payload;
-        } 
+        }
     },
     extraReducers: (builder) => {
         builder
-            
+
             // Get Numerical Columns Info
             .addCase(getNumericalColumnsInfo.pending, (state, action) => {
                 state.num_cols_req_status = REQUEST_STATUS_LOADING;
@@ -83,7 +86,7 @@ const graphsSlice = createSlice({
                 state.message = CUSTOM_ERROR_MESSAGE; // unknow error in request
             })
 
-            
+
             // Get Categorical Columns Info
             .addCase(getCategoricalColumnsInfo.pending, (state, action) => {
                 state.cat_cols_req_status = REQUEST_STATUS_LOADING;
@@ -111,8 +114,8 @@ const graphsSlice = createSlice({
             })
             .addCase(generateGraph.fulfilled, (state, action) => { // action.payload.data is the response.data
                 if (action.payload.status) {
-                    state.graph = action.payload.data.graph;
                     state.graph_type = action.payload.data.graph_type;
+                    state.graph[action.payload.data.graph_type] = action.payload.data.graph;
                     state.graph_req_status = REQUEST_STATUS_SUCCEEDED;
                 }
                 else {
@@ -129,6 +132,6 @@ const graphsSlice = createSlice({
     }
 });
 
-export const { resetRequestStatus,setColumn1,setColumn2,resetGraphState } = graphsSlice.actions;
+export const { resetRequestStatus, resetGraphState } = graphsSlice.actions;
 
 export default graphsSlice.reducer;
