@@ -6,6 +6,16 @@ import { useDispatch, useSelector} from 'react-redux';
 import SelectGraphType from './SelectGraphType';
 import GraphContainerTab from './GraphContainerTab';
 
+//Icons 
+import LinePlotIcon from '@mui/icons-material/ShowChart';
+import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
+import BarGraphIcon from '@mui/icons-material/SignalCellularAlt';
+import HistogramIcon from '@mui/icons-material/BarChart';
+import DensityPlotIcon from '@mui/icons-material/MultilineChartOutlined';
+import HexbinPlotIcon from '@mui/icons-material/HiveOutlined';
+import PieChartIcon from '@mui/icons-material/PieChart';
+import {AiFillBoxPlot as BoxPlotIcon} from 'react-icons/ai';
+
 // Actions from Redux State
 import { getNumericalColumnsInfo, getCategoricalColumnsInfo, resetGraphState } from '/store/graphsSlice';
 
@@ -86,28 +96,28 @@ const GraphsMainSection = () => {
                             <Paper elevation={0} sx={{ pt: 0 }}>
                                 <Box height="90vh">
                                     <TabPanel value={graphType} index="line" >
-                                        < GraphContainerTab title="Line Plot" nColumns={1} graphType={graphType} column1={column1} column2={column2} setColumn1={setColumn1} setColumn2={setColumn2} />
+                                        < GraphContainerTab title="Line Plot" TabIcon={LinePlotIcon} nColumns={1} graphType={graphType} column1={column1} column2={column2} setColumn1={setColumn1} setColumn2={setColumn2} />
                                     </TabPanel>
                                     <TabPanel value={graphType} index="scatter" >
-                                        < GraphContainerTab title="Scatter Plot" nColumns={2} graphType={graphType} column1={column1} column2={column2} setColumn1={setColumn1} setColumn2={setColumn2} />
+                                        < GraphContainerTab title="Scatter Plot" TabIcon={ScatterPlotIcon} nColumns={2} graphType={graphType} column1={column1} column2={column2} setColumn1={setColumn1} setColumn2={setColumn2} />
                                     </TabPanel>
                                     <TabPanel value={graphType} index="bar" >
-                                        < GraphContainerTab title="Bar Graph" nColumns={1} graphType={graphType} column1={column1} column2={column2} setColumn1={setColumn1} setColumn2={setColumn2} />
+                                        < GraphContainerTab title="Bar Graph" TabIcon={BarGraphIcon} nColumns={1} graphType={graphType} column1={column1} column2={column2} setColumn1={setColumn1} setColumn2={setColumn2} />
                                     </TabPanel>
                                     <TabPanel value={graphType} index="hist" >
-                                        < GraphContainerTab title="Histogram" nColumns={1} graphType={graphType} column1={column1} column2={column2} setColumn1={setColumn1} setColumn2={setColumn2} />
+                                        < GraphContainerTab title="Histogram" TabIcon={HistogramIcon} nColumns={1} graphType={graphType} column1={column1} column2={column2} setColumn1={setColumn1} setColumn2={setColumn2} />
                                     </TabPanel>
                                     <TabPanel value={graphType} index="density" >
-                                        < GraphContainerTab title="Density Plot" nColumns={1} graphType={graphType} column1={column1} column2={column2} setColumn1={setColumn1} setColumn2={setColumn2} />
+                                        < GraphContainerTab title="Density Plot" TabIcon={DensityPlotIcon} nColumns={1} graphType={graphType} column1={column1} column2={column2} setColumn1={setColumn1} setColumn2={setColumn2} />
                                     </TabPanel>
                                     <TabPanel value={graphType} index="hexbin" >
-                                        < GraphContainerTab title="Hexbin Plot" nColumns={2} graphType={graphType} column1={column1} column2={column2} setColumn1={setColumn1} setColumn2={setColumn2} />
+                                        < GraphContainerTab title="Hexbin Plot" TabIcon={HexbinPlotIcon} nColumns={2} graphType={graphType} column1={column1} column2={column2} setColumn1={setColumn1} setColumn2={setColumn2} />
                                     </TabPanel>
                                     <TabPanel value={graphType} index="pie" >
-                                        < GraphContainerTab title="Pie Chart" nColumns={1} graphType={graphType} column1={column1} column2={column2} setColumn1={setColumn1} setColumn2={setColumn2} />
+                                        < GraphContainerTab title="Pie Chart" TabIcon={PieChartIcon} nColumns={1} graphType={graphType} column1={column1} column2={column2} setColumn1={setColumn1} setColumn2={setColumn2} />
                                     </TabPanel>
                                     <TabPanel value={graphType} index="box" >
-                                        < GraphContainerTab title="Box Plot" nColumns={1} graphType={graphType} column1={column1} column2={column2} setColumn1={setColumn1} setColumn2={setColumn2} />
+                                        < GraphContainerTab title="Box Plot" TabIcon={BoxPlotIcon} nColumns={1} graphType={graphType} column1={column1} column2={column2} setColumn1={setColumn1} setColumn2={setColumn2} />
                                     </TabPanel>
                                 </Box>
                             </Paper>
