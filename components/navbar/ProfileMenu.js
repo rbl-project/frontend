@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
+import CircularProgress from '@mui/material/CircularProgress';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useRouter } from 'next/router';
 import decode from "jwt-decode";
@@ -19,7 +20,7 @@ const ProfileMenu = () => {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [user, setUser] = useState(null);
-    
+
     const authState = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const router = useRouter();
@@ -31,10 +32,10 @@ const ProfileMenu = () => {
         const token = current_user?.access_token;
         if (token) {
             const decodedToken = decode(token);
-            if (decodedToken.exp * 1000 < new Date().getTime()){
+            if (decodedToken.exp * 1000 < new Date().getTime()) {
                 localStorage.removeItem('profile'); // no need to logout from backend as token is expired
                 router.replace('/auth/login');
-            } 
+            }
         } else {
             router.replace('/auth/login');
         }
@@ -62,9 +63,9 @@ const ProfileMenu = () => {
                 id="demo-positioned-button"
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
-                sx={{p:0}}
+                sx={{ p: 0 }}
             >
-                <AccountCircle fontSize="large"  />
+                <AccountCircle fontSize="large" />
             </IconButton>
             <Menu
                 id="demo-positioned-menu"
@@ -86,10 +87,10 @@ const ProfileMenu = () => {
                 <MenuItem onClick={() => { dispatch(logout()) }}>
                     {
                         authState.requestStatus === REQUEST_STATUS_LOADING ?
-                        (    <div>
-                            <Image src="/images/loadingdots2.gif" style={{width: "50px", height: "30px"}}/>
-                        </div>)
-                        : "Logout"
+                            (<div>
+                                <CircularProgress size="1rem" color="inherit" />
+                            </div>)
+                            : "Logout"
                     }
                 </MenuItem>
             </Menu>

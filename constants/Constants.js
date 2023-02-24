@@ -11,3 +11,6 @@ export const LARGEST_VALID_STRING_LENGTH = 30;
 
 export const MAXIMUM_ALLOWED_DATASETS_PER_USER = 3;
 
+export const NUMERICAL = "Numerical";
+export const CATEGORICAL = "Categorical";
+
