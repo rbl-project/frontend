@@ -90,7 +90,7 @@ const TabularRepresentationMainSection = () => {
 
         setSearchColumn('');
         setSearchValue([]);
-        console.log(tabularRepresentationState.categorical_column_values["Species"]);
+        // console.log(tabularRepresentationState.categorical_column_values["Species"]);
     }
 
 
@@ -202,8 +202,8 @@ const TabularRepresentationMainSection = () => {
                                                 <Autocomplete
                                                     disableClearable
                                                     disableCloseOnSelect
-                                                    fullWidth="true"
-                                                    filterSelectedOptions="true"
+                                                    fullWidth={true}
+                                                    filterSelectedOptions={true}
                                                     id="combo-box-demo"
                                                     options={tabularRepresentationState.categorical_columns}
                                                     size="small"
@@ -225,8 +225,8 @@ const TabularRepresentationMainSection = () => {
                                                     multiple
                                                     disableClearable
                                                     disableCloseOnSelect
-                                                    fullWidth="true"
-                                                    filterSelectedOptions="true"
+                                                    fullWidth={true}
+                                                    filterSelectedOptions={true}
                                                     id="combo-box-demo"
                                                     options={categoricalColValuesOptions}
                                                     size="small"
@@ -281,8 +281,8 @@ const TabularRepresentationMainSection = () => {
                                                 <Autocomplete
                                                     disableClearable
                                                     disableCloseOnSelect
-                                                    fullWidth="true"
-                                                    filterSelectedOptions="true"
+                                                    fullWidth={true}
+                                                    filterSelectedOptions={true}
                                                     id="combo-box-demo"
                                                     options={tabularRepresentationState.all_columns}
                                                     size="small"
@@ -461,8 +461,8 @@ const TabularRepresentationMainSection = () => {
                                                     multiple
                                                     disableClearable
                                                     disableCloseOnSelect
-                                                    fullWidth="true"
-                                                    filterSelectedOptions="true"
+                                                    fullWidth={true}
+                                                    filterSelectedOptions={true}
                                                     id="combo-box-demo"
                                                     options={tabularRepresentationState.all_columns}
                                                     size="small"
@@ -513,7 +513,7 @@ const TabularRepresentationMainSection = () => {
 
 
                 <Grid item xs={8}>
-                    <Grid container xs={12}>
+                    <Grid container >
                         <Grid item xs={12}>
                             <Paper elevation={0} sx={{ py: "0.1rem" }}>
                                 <Box sx={{height: "760px"}}>
@@ -550,7 +550,7 @@ const TabularRepresentationMainSection = () => {
                 onClose={() => setSearchOpen(false)}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
-                maxWidth
+                fullWidth
             >
                 <DialogTitle id="alert-dialog-title">
                     {"Search Parameters"}

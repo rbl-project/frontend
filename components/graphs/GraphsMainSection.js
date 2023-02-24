@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Box, Grid, Paper, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 // Components
 import SelectGraphType from './SelectGraphType';
@@ -18,6 +19,9 @@ import { AiFillBoxPlot as BoxPlotIcon } from 'react-icons/ai';
 
 // Actions from Redux State
 import { getNumericalColumnsInfo, getCategoricalColumnsInfo, resetGraphState, resetRequestStatus } from '/store/graphsSlice';
+
+// Constants
+import { REQUEST_STATUS_LOADING, REQUEST_STATUS_SUCCESS, REQUEST_STATUS_FAILED, CUSTOM_ERROR_MESSAGE } from '/constants/Constants';
 
 const TabPanel = ({ children, value, index, ...other }) => {
     return (
@@ -65,12 +69,11 @@ const GraphsMainSection = () => {
 
     // Selecting the Correct Graph Type
     useEffect(() => {
-        console.log("Graph Type Changed", graphsState);
         // If there are no numerical columns, then the graph type is set to Bar Graph
         if (graphsState.n_numerical_columns === 0) {
             setGraphType("bar");
         }
-    }, [graphsState]);
+    }, [graphsState.n_numerical_columns, graphsState.n_categorical_columns]);
 
     // Calling the API to get the list of columns
     useEffect(() => {

@@ -7,9 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { generateGraph } from '/store/graphsSlice';
 
 // Constants
-import { REQUEST_STATUS_LOADING, REQUEST_STATUS_SUCCESS, REQUEST_STATUS_ERROR } from '/constants/Constants';
-
-
+import { REQUEST_STATUS_LOADING, } from '/constants/Constants';
 
 const GraphContainerTab = ({ title, nColumns, graphType, column1, column2, setColumn1, setColumn2, TabIcon }) => {
 
@@ -60,7 +58,6 @@ const GraphContainerTab = ({ title, nColumns, graphType, column1, column2, setCo
 
     // Generate Graph Submit button Hnadler
     const handleSubmit = () => {
-        console.log(nColumns);
         dispatch(generateGraph({ dataset_name: selectedDataset, graph_type: graphType, n_columns: nColumns, column1: column1[graphType], column2: column2[graphType] }));
     }
 
@@ -82,40 +79,53 @@ const GraphContainerTab = ({ title, nColumns, graphType, column1, column2, setCo
 
     return (
         <Box sx={{ height: "90vh", width: "100%", px: 2, }} >
-            <Box sx={{display:"flex", alignItems:"Center",mb:1}}>
-                < TabIcon fontSize={graphType === "box" ?"2.1rem" :"large"} />
-                <Typography variant="h6" sx={{ fontWeight: "bold",ml:1}}>{title}</Typography>
+            
+            {/* Title and Icon */}
+            <Box sx={{ display: "flex", alignItems: "Center", mb: 1 }}>
+                < TabIcon fontSize={graphType === "box" ? "2.1rem" : "large"} />
+                <Typography variant="h6" sx={{ fontWeight: "bold", ml: 1 }}>{title}</Typography>
             </Box>
+            
             <Divider sx={{ mb: 3 }} />
-            {/* Show Scatter Plot Tab Content when 2 or More Columns are selected */}
-            {/* {dataCorrelationState.checked_columns.length < 2 ?
-                (
-                    // Loading Spinner
-                    <Box sx={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }} >
-                        <Box>
-                            <Typography variant="h4" sx={{ fontWeight: "bold" }} align="center" >No Content to Show</Typography>
-                            <Typography variant="h6" >Please Select Two or More Columns</Typography>
-                        </Box>
+            
+            <Box sx={{ width: "100%", px: 4, display: "flex", alignItems: "center", }}>
+                <Box sx={{ width: "100%", display: "flex", alignItems: "center", }}>
+                    
+                    {/* Select Column 1 Dropdown  */}
+                    <Box sx={{ width: "20vw", mr: 2 }}>
+                        <FormControl fullWidth size="small">
+                            <Autocomplete
+                                disableCloseOnSelect
+                                fullWidth={true}
+                                filterSelectedOptions={true}
+                                id="combo-box-demo"
+                                options={column1_options}
+                                size="small"
+                                value={column1[graphType] === "" ? null : column1[graphType]}
+                                onChange={handleCoulmn1Change}
+                                renderInput={(params) => <TextField sx={{}} {...params} label="Column1" />}
+                                renderOption={(props, option) => (
+                                    < Tooltip title={option} placement="bottom-start" key={`tooltip-${option}`}>
+                                        <ListItemText key={option} {...props} primaryTypographyProps={{ sx: { overflow: "hidden", textOverflow: "ellipsis" } }} >{option}</ListItemText>
+                                    </Tooltip>
+                                )}
+                            />
+                        </FormControl>
                     </Box>
-
-                ) : ( */}
-            {/* Graph Container Tab Content */}
-            <>
-                <Box sx={{ width: "100%", px: 4, display: "flex", alignItems: "center", }}>
-                    <Box sx={{ width: "100%", display: "flex", alignItems: "center", }}>
-                        {/* Select Column 1 Dropdown  */}
-                        <Box sx={{ width: "20vw", mr: 2 }}>
-                            <FormControl fullWidth size="small">
+                    {/* Select Column 2 Dropdown  */}
+                    <Box sx={{ width: "20vw", mr: 2 }}>
+                        {nColumns === 2 &&
+                            (<FormControl fullWidth size="small">
                                 <Autocomplete
                                     disableCloseOnSelect
                                     fullWidth={true}
                                     filterSelectedOptions={true}
                                     id="combo-box-demo"
-                                    options={column1_options}
+                                    options={column2_options}
                                     size="small"
-                                    value={column1[graphType] === "" ? null : column1[graphType]}
-                                    onChange={handleCoulmn1Change}
-                                    renderInput={(params) => <TextField sx={{}} {...params} label="Column1" />}
+                                    value={column2[graphType] === "" ? null : column2[graphType]}
+                                    onChange={handleCoulmn2Change}
+                                    renderInput={(params) => <TextField sx={{}} {...params} label="Column2" />}
                                     renderOption={(props, option) => (
                                         < Tooltip title={option} placement="bottom-start" key={`tooltip-${option}`}>
                                             <ListItemText key={option} {...props} primaryTypographyProps={{ sx: { overflow: "hidden", textOverflow: "ellipsis" } }} >{option}</ListItemText>
@@ -123,63 +133,42 @@ const GraphContainerTab = ({ title, nColumns, graphType, column1, column2, setCo
                                     )}
                                 />
                             </FormControl>
-                        </Box>
-                        {/* Select Column 2 Dropdown  */}
-                        <Box sx={{ width: "20vw", mr: 2 }}>
-                            {nColumns === 2 &&
-                                (<FormControl fullWidth size="small">
-                                    <Autocomplete
-                                        disableCloseOnSelect
-                                        fullWidth={true}
-                                        filterSelectedOptions={true}
-                                        id="combo-box-demo"
-                                        options={column2_options}
-                                        size="small"
-                                        value={column2[graphType] === "" ? null : column2[graphType]}
-                                        onChange={handleCoulmn2Change}
-                                        renderInput={(params) => <TextField sx={{}} {...params} label="Column2" />}
-                                        renderOption={(props, option) => (
-                                            < Tooltip title={option} placement="bottom-start" key={`tooltip-${option}`}>
-                                                <ListItemText key={option} {...props} primaryTypographyProps={{ sx: { overflow: "hidden", textOverflow: "ellipsis" } }} >{option}</ListItemText>
-                                            </Tooltip>
-                                        )}
-                                    />
-                                </FormControl>
-                                )}
-                        </Box>
-                    </Box>
-                    <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                        <Button variant="contained" disabled={isSubmitDisabled} onClick={handleSubmit} >Select</Button>
+                            )}
                     </Box>
                 </Box>
-
-                <Box sx={{ height: "76vh", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-
-                    {graphsState.graph_req_status === REQUEST_STATUS_LOADING ? (
-                        // Loading Spinner
-                        <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "76vh" }}>
-                            <CircularProgress size="2rem" color="inherit" />
-                        </Box>
-                    ) : (
-                        // When No Graph to show
-                        graphsState.graph[graphType] === "" ?
-                            (
-                                // When No Scatter plot to show
-                                <Box>
-                                    <Typography variant="h4" sx={{ fontWeight: "bold" }} align="center" >No Content to Show</Typography>
-                                    <Typography variant="h6" align="center"> {nColumns === 2 ? "Please Select Column 1 and Column 2" : "Please Select the Column"}</Typography>
-                                </Box>
-
-                            ) : (
-                                // Show Graph
-                                <Box sx={{ height: "65vh", width: "45vw", position: "relative" }}>
-                                    <Image layout="fill" src={`data:image/png;base64,${graphsState.graph[graphType]}`} />
-                                </Box>
-                            )
-                    )}
+                
+                {/* Select Button  */}
+                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Button variant="contained" disabled={isSubmitDisabled} onClick={handleSubmit} >Select</Button>
                 </Box>
-            </>
-            {/* )} */}
+            </Box>
+
+            {/* Graph Container */}
+            <Box sx={{ height: "76vh", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+
+                {graphsState.graph_req_status === REQUEST_STATUS_LOADING ? (
+                    // Loading Spinner
+                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "76vh" }}>
+                        <CircularProgress size="2rem" color="inherit" />
+                    </Box>
+                ) : (
+                    // When No Graph to show
+                    graphsState.graph[graphType] === "" ?
+                        (
+                            // When No Grpah to show
+                            <Box>
+                                <Typography variant="h4" sx={{ fontWeight: "bold" }} align="center" >No Content to Show</Typography>
+                                <Typography variant="h6" align="center"> {nColumns === 2 ? "Please Select Column 1 and Column 2" : "Please Select the Column"}</Typography>
+                            </Box>
+
+                        ) : (
+                            // Show Graph
+                            <Box sx={{ height: "65vh", width: "45vw", position: "relative" }}>
+                                <Image layout="fill" src={`data:image/png;base64,${graphsState.graph[graphType]}`} />
+                            </Box>
+                        )
+                )}
+            </Box>
         </Box>
     )
 }
