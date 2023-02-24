@@ -36,7 +36,7 @@ const SidebarItem = ({ itemKey, path, name, open, isSelect, ItemIcon }) => {
 
     return (
         <ThemeProvider theme={theme}>
-            <ListItem key={itemKey} disablePadding sx={{ display: 'block',borderRadius:3, }} selected={selectedMenuItem === name}  onClick={clickHandler} >
+            <ListItem key={itemKey} disablePadding sx={{ display: 'block',borderRadius:'5px', }} selected={selectedMenuItem === name}  onClick={clickHandler} >
                 <Link href={path} >
                     <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: "auto" }}  >
                         <Tooltip title={name} placement="right" TransitionComponent={Zoom} >

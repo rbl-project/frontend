@@ -115,14 +115,14 @@ const DatasetOverviewMainSection = () => {
         <Grid item xs={3}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Paper elevation={0} >
+              <Paper elevation={0} style={{border: "2px solid blue"}} >
                 <Box height="3rem" sx={{ display: "flex", alignItems: "center", ml: 2 }} >
                   {datasetOverviewState.basic_info_req_status === REQUEST_STATUS_LOADING ? (
                     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "Center", width: "100%" }}>
                       <CircularProgress size="1rem" color="inherit" />
                     </Box>
                   ) : (
-                    <Typography variant="h5" sx={{ fontWeight: "bold", color: "primary" }} >{datasetOverviewState.dataset_name}</Typography>
+                    <Typography variant="h5" sx={{ fontWeight: "bold", color: "blue" }} >{datasetOverviewState.dataset_name}</Typography>
                   )}
                 </Box>
               </Paper>

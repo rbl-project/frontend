@@ -28,7 +28,7 @@ export const signIn = (formData) => API.post("/login", formData);
 export const signOut = () => API.get("/logout");
 export const signUp = (formData) => API.post("/register", formData);
 
-// Dataset I/O APIs
+// Dataset I/O and other utility APIs
 export const uploadDataset = ({dataset,updateProgress}) => API.post("/upload-dataset", {dataset:dataset}, {
     headers: { "Content-Type": "multipart/form-data" }, 
     onUploadProgress: updateProgress
@@ -37,6 +37,7 @@ export const getAllDatasets = () => API.get("/get-datasets");
 export const exportDataset = (formData) => API.post("/export-dataset",formData);
 export const deleteDataset = (formData) => API.post("/delete-dataset",formData);
 export const renameDataset = (formData) => API.post("/rename-dataset",formData);
+export const getColumnInfo = (formData) => API.post("/get-columns-info",formData);
 
 // Dataset Overview APIs
 export const getBasicInformation = (formData) => API.post("/basic-information",formData);
@@ -49,3 +50,6 @@ export const getNumericalColumns = (formData) => API.post("/numerical-columns",f
 export const getCorrelationMatrix = (formData) => API.post("/correlation-matrix",formData);
 export const getCorrelationHeatmap = (formData) => API.post("/correlation-heatmap",formData);
 export const getScatterPlot = (formData) => API.post("/scatter-plot",formData);
+
+// Tabular Representation APIs
+export const getTabularRepresentation = (formData) => API.post("/filtered-tabular-representation",formData);
