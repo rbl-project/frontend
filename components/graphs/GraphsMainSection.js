@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Box, Grid, Paper, Typography } from '@mui/material';
-import { useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 // Components
 import SelectGraphType from './SelectGraphType';
@@ -14,10 +14,10 @@ import HistogramIcon from '@mui/icons-material/BarChart';
 import DensityPlotIcon from '@mui/icons-material/MultilineChartOutlined';
 import HexbinPlotIcon from '@mui/icons-material/HiveOutlined';
 import PieChartIcon from '@mui/icons-material/PieChart';
-import {AiFillBoxPlot as BoxPlotIcon} from 'react-icons/ai';
+import { AiFillBoxPlot as BoxPlotIcon } from 'react-icons/ai';
 
 // Actions from Redux State
-import { getNumericalColumnsInfo, getCategoricalColumnsInfo, resetGraphState } from '/store/graphsSlice';
+import { getNumericalColumnsInfo, getCategoricalColumnsInfo, resetGraphState, resetRequestStatus } from '/store/graphsSlice';
 
 const TabPanel = ({ children, value, index, ...other }) => {
     return (
@@ -46,7 +46,7 @@ const initialState = {
     density: "",
     hexbin: "",
     pie: "",
-    box: "",  
+    box: "",
 }
 
 const GraphsMainSection = () => {
@@ -65,22 +65,45 @@ const GraphsMainSection = () => {
 
     // Selecting the Correct Graph Type
     useEffect(() => {
-        console.log("Graph Type Changed",graphsState);
+        console.log("Graph Type Changed", graphsState);
         // If there are no numerical columns, then the graph type is set to Bar Graph
-        if(graphsState.n_numerical_columns === 0) {
+        if (graphsState.n_numerical_columns === 0) {
             setGraphType("bar");
         }
     }, [graphsState]);
 
     // Calling the API to get the list of columns
     useEffect(() => {
-        dispatch(getNumericalColumnsInfo({ dataset_name: selectedDataset}));
-        dispatch(getCategoricalColumnsInfo({ dataset_name: selectedDataset}));
+        dispatch(getNumericalColumnsInfo({ dataset_name: selectedDataset }));
+        dispatch(getCategoricalColumnsInfo({ dataset_name: selectedDataset }));
         dispatch(resetGraphState());
         setColumn1(initialState);
         setColumn2(initialState);
         setGraphType("line");
     }, [selectedDataset]);
+
+    // Error Handling
+    useEffect(() => {
+
+        // Error Message
+        if (
+            graphsState.num_cols_req_status === REQUEST_STATUS_FAILED ||
+            graphsState.cat_cols_req_status === REQUEST_STATUS_FAILED ||
+            graphsState.graph_req_status === REQUEST_STATUS_FAILED
+        ) {
+            toast.error([undefined, null, ""].includes(graphsState.message) ? CUSTOM_ERROR_MESSAGE : graphsState.message + ". Please Refresh", {
+                position: "bottom-right",
+                autoClose: false,
+                hideProgressBar: true,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "dark",
+            });
+            dispatch(resetRequestStatus());
+        }
+    }, [graphsState.num_cols_req_status, graphsState.cat_cols_req_status, graphsState.graph_req_status])
+
 
     return (
         <Box sx={{ flexGrow: 1, width: "100%" }}>
