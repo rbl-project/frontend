@@ -63,6 +63,15 @@ const GraphsMainSection = () => {
     const [column1, setColumn1] = React.useState(initialState);
     const [column2, setColumn2] = React.useState(initialState);
 
+    // Selecting the Correct Graph Type
+    useEffect(() => {
+        console.log("Graph Type Changed",graphsState);
+        // If there are no numerical columns, then the graph type is set to Bar Graph
+        if(graphsState.n_numerical_columns === 0) {
+            setGraphType("bar");
+        }
+    }, [graphsState]);
+
     // Calling the API to get the list of columns
     useEffect(() => {
         dispatch(getNumericalColumnsInfo({ dataset_name: selectedDataset}));
