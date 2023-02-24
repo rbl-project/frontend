@@ -4,6 +4,10 @@ import List from '@mui/material/List';
 import MuiDrawer from '@mui/material/Drawer';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
+import DatasetIcon from '@mui/icons-material/Dataset';
+import TableChartIcon from '@mui/icons-material/TableChart';
+import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 
 import SidebarItem from './SidebarItem';
 import SidebarSubheader from './SidebarSubheader';
@@ -68,17 +72,21 @@ const Sidebar = () => {
             <DrawerHeader></DrawerHeader>
             <List sx={{ mt: 0 }} >
                 <SidebarSubheader title="Exploratory Data Analysis" open={open}></SidebarSubheader>
-                <SidebarItem itemKey={1} name="Dataset Overview" path="/dashboard/exploratory-data-analysis/dataset-overview" ItemIcon={InboxIcon} open={open} />
-                <SidebarItem itemKey={2} name="Data Correlation" path="/dashboard/exploratory-data-analysis/data-correlation" ItemIcon={MailIcon} open={open} />
-                <SidebarItem itemKey={3} name="Tabular Representation" path="/dashboard/exploratory-data-analysis/tabular-representation" ItemIcon={InboxIcon} open={open} />
-                <SidebarItem itemKey={4} name="Graphs" path="/dashboard/exploratory-data-analysis/graphs" ItemIcon={MailIcon} open={open} />
+                <SidebarItem itemKey={1} name="Dataset Overview" path="/dashboard/exploratory-data-analysis/dataset-overview" ItemIcon={DatasetIcon} open={open} />
+                <SidebarItem itemKey={2} name="Data Correlation" path="/dashboard/exploratory-data-analysis/data-correlation" ItemIcon={ScatterPlotIcon} open={open} />
+                <SidebarItem itemKey={2} name="Tabular Representation" path="/dashboard/exploratory-data-analysis/tabular-representation" ItemIcon={TableChartIcon} open={open} />
+                <SidebarItem itemKey={3} name="Graphical Representation" path="/dashboard/exploratory-data-analysis/data-visualization" ItemIcon={AutoGraphIcon} open={open} />
             </List >
+            
             {/* {open && (<Divider light color="white" sx={{ borderColor: "rgba(0,0,0,0.5)" }} variant="middle" />)} */}
+            <hr style={{ borderColor: 'transparent', width: "100%", backgroundColor: "rgb(86 86 86)" }} />
             <List sx={{ mt: 0 }} >
                 <SidebarSubheader title="Data Preprocessing" open={open}></SidebarSubheader>
                 <SidebarItem itemKey={1} name="Missing Value Imputation" path="/dashboard/data-preprocessing/missing-value-imputation" ItemIcon={InboxIcon} open={open} />
                 <SidebarItem itemKey={2} name="Numerical Encoding" path="/dashboard/data-preprocessing/numerical-encoding" ItemIcon={MailIcon} open={open} />
             </List>
+
+            <hr style={{ borderColor: 'transparent', width: "100%", backgroundColor: "rgb(86 86 86)" }} />
             {/* {open && (<Divider light color="white" sx={{ borderColor: "rgba(0,0,0,0.5)" }} variant="middle" />)} */}
             <List sx={{ mt: 0 }}>
                 <SidebarSubheader title="Feature Engineering" open={open}></SidebarSubheader>

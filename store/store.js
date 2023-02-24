@@ -9,6 +9,7 @@ import datasetSlice from "./datasetSlice";
 import datasetOverviewSlice from "./datasetOverviewSlice";
 import dataCorrelationSlice from "./dataCorrelationSlice";
 import graphsSlice from "./graphsSlice";
+import tabularRepresentationSlice from "./tabularRepresentationSlice";
 
 const combineReducer = combineReducers({
     global:globalStateSlice,
@@ -18,7 +19,8 @@ const combineReducer = combineReducers({
     dataset:datasetSlice,
     datasetOverview:datasetOverviewSlice,
     dataCorrelation:dataCorrelationSlice,
-    graphs:graphsSlice
+    graphs:graphsSlice,
+    tabularRepresentation:tabularRepresentationSlice,
 });
 
 export const makeStore = () => configureStore({reducer:combineReducer});
