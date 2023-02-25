@@ -30,8 +30,8 @@ const theme = createTheme({
 const SelectGraphTypeItem = ({ value, name, ItemIcon, setTabName, seletedTabName, columnType, nColumns }) => {
 
     // Redux State
-    const n_numerical_columns = useSelector((state) => state.graphs.n_numerical_columns);
-    const n_categorical_columns = useSelector((state) => state.graphs.n_categorical_columns);
+    const n_numerical_columns = useSelector((state) => state.graphicalRepresentation.n_numerical_columns);
+    const n_categorical_columns = useSelector((state) => state.graphicalRepresentation.n_categorical_columns);
 
     const isSelected = seletedTabName === value;
     const isDisabled = (columnType === NUMERICAL && n_numerical_columns < nColumns) || (columnType === CATEGORICAL && n_categorical_columns < nColumns);

@@ -8,7 +8,7 @@ import authSlice from "./authSlice";
 import datasetSlice from "./datasetSlice";
 import datasetOverviewSlice from "./datasetOverviewSlice";
 import dataCorrelationSlice from "./dataCorrelationSlice";
-import graphsSlice from "./graphsSlice";
+import graphicalRepresentationSlice from "./graphicalRepresentationSlice";
 import tabularRepresentationSlice from "./tabularRepresentationSlice";
 
 const combineReducer = combineReducers({
@@ -19,7 +19,7 @@ const combineReducer = combineReducers({
     dataset:datasetSlice,
     datasetOverview:datasetOverviewSlice,
     dataCorrelation:dataCorrelationSlice,
-    graphs:graphsSlice,
+    graphicalRepresentation:graphicalRepresentationSlice,
     tabularRepresentation:tabularRepresentationSlice,
 });
 
