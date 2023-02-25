@@ -36,7 +36,11 @@ const theme = createTheme({
 const SidebarItem = ({ itemKey, path, name, open, isSelect, ItemIcon }) => {
 
     const dispatch = useDispatch();
+    const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     const selectedMenuItem = useSelector((state) => state.global.openMenuItem);
+
+    // When No Dataset is Selected or Available
+    const isDisabled = selectedDataset === null || selectedDataset === undefined || selectedDataset === "";
 
     const clickHandler = () => {
         dispatch(setOpenMenuItem(name));
@@ -44,9 +48,9 @@ const SidebarItem = ({ itemKey, path, name, open, isSelect, ItemIcon }) => {
 
     return (
         <ThemeProvider theme={theme}>
-            <ListItem key={itemKey} disablePadding sx={{ display: 'block'}} onClick={clickHandler} >
+            <ListItem key={itemKey} disablePadding sx={{ display: 'block'}} >
                 <Link href={path} >
-                    <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: "auto",borderRadius:3,  }} selected={selectedMenuItem === name} >
+                    <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: "auto",borderRadius:3,  }} selected={selectedMenuItem === name} disabled={isDisabled} onClick={clickHandler} >
                         <Tooltip title={name} placement="right" TransitionComponent={Zoom} >
                             <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center', color: "white" }} >
                                 <ItemIcon />
