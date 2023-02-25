@@ -12,13 +12,21 @@ import {setOpenMenuItem} from "/store/globalStateSlice";
 
 const theme = createTheme({
     components: {
-        MuiListItem: {
+        MuiListItemButton: {
             styleOverrides: {
                 root: {
                     '&.Mui-selected': {
                         backgroundColor: "#3d4a6b",
                         color: "#f5f5f5"
                     },
+                    '&.Mui-selected:hover': {
+                        backgroundColor: "#3d4a6b",
+                        color: "#f5f5f5"
+                    },
+                    '&:hover': {
+                        backgroundColor: "#2e374f",
+                        color: "#f5f5f5"
+                    }
                 },
             },
         },

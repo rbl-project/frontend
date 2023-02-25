@@ -19,9 +19,10 @@ import { AiFillBoxPlot as BoxPlotIcon } from 'react-icons/ai';
 
 // Actions from Redux State
 import { getNumericalColumnsInfo, getCategoricalColumnsInfo, resetGraphState, resetRequestStatus } from '/store/graphicalRepresentationSlice';
+import {setOpenMenuItem} from "/store/globalStateSlice";
 
 // Constants
-import { REQUEST_STATUS_FAILED, CUSTOM_ERROR_MESSAGE } from '/constants/Constants';
+import { REQUEST_STATUS_FAILED, CUSTOM_ERROR_MESSAGE, GRAPHICAL_REPRESENTATION } from '/constants/Constants';
 
 const TabPanel = ({ children, value, index, ...other }) => {
     return (
@@ -59,6 +60,7 @@ const GraphsMainSection = () => {
     const dispatch = useDispatch();
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     const graphicalRepresentationState = useSelector((state) => state.graphicalRepresentation);
+    const selectedMenuItem = useSelector((state) => state.global.openMenuItem);
 
     // Graph Type State
     const [graphType, setGraphType] = React.useState("line");
@@ -77,18 +79,25 @@ const GraphsMainSection = () => {
 
     // Calling the API to get the list of columns
     useEffect(() => {
-        dispatch(getNumericalColumnsInfo({ dataset_name: selectedDataset }));
-        dispatch(getCategoricalColumnsInfo({ dataset_name: selectedDataset }));
+        if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
+            dispatch(getNumericalColumnsInfo({ dataset_name: selectedDataset }));
+            dispatch(getCategoricalColumnsInfo({ dataset_name: selectedDataset }));
+        }
         dispatch(resetGraphState());
         setColumn1(initialState);
         setColumn2(initialState);
         setGraphType("line");
     }, [selectedDataset]);
 
+    // Setting Open Menu Item When Page Loads or Refreshes
+    useEffect(() => {
+        if (selectedMenuItem !== GRAPHICAL_REPRESENTATION) {
+            dispatch(setOpenMenuItem(GRAPHICAL_REPRESENTATION));
+        }
+    }, []);
+
     // Error Handling
     useEffect(() => {
-
-        // Error Message
         if (
             graphicalRepresentationState.num_cols_req_status === REQUEST_STATUS_FAILED ||
             graphicalRepresentationState.cat_cols_req_status === REQUEST_STATUS_FAILED ||

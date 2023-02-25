@@ -2,6 +2,9 @@ import React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import List from '@mui/material/List';
 import MuiDrawer from '@mui/material/Drawer';
+import { useSelector } from 'react-redux';
+
+// Icons
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
@@ -9,11 +12,14 @@ import DatasetIcon from '@mui/icons-material/Dataset';
 import TableChartIcon from '@mui/icons-material/TableChart';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 
+// Components
 import SidebarItem from './SidebarItem';
 import SidebarSubheader from './SidebarSubheader';
-import { useSelector } from 'react-redux';
 
-const drawerWidth = 300;
+// Constants
+import { DRAWER_WIDTH, DATASET_OVERVIEW, DATASET_OVERVIEW_PATH, DATA_CORRELATION, DATA_CORRELATION_PATH, TABULAR_REPRESENTATION, TABULAR_REPRESENTATION_PATH ,GRAPHICAL_REPRESENTATION, GRAPHICAL_REPRESENTATION_PATH ,MISSING_VALUE_IMPUTATION, MISSING_VALUE_IMPUTATION_PATH ,NUMERICAL_ENCODING, NUMERICAL_ENCODING_PATH, EXPONENTIAL_TRANSFORMATION, EXPONENTIAL_TRANSFORMATION_PATH , LOGARITHMIC_TRANSFORMATION, LOGARITHMIC_TRANSFORMATION_PATH } from '/constants/Constants';
+
+const drawerWidth = DRAWER_WIDTH;
 
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -72,26 +78,24 @@ const Sidebar = () => {
             <DrawerHeader></DrawerHeader>
             <List sx={{ mt: 0 }} >
                 <SidebarSubheader title="Exploratory Data Analysis" open={open}></SidebarSubheader>
-                <SidebarItem itemKey={1} name="Dataset Overview" path="/dashboard/exploratory-data-analysis/dataset-overview" ItemIcon={DatasetIcon} open={open} />
-                <SidebarItem itemKey={2} name="Data Correlation" path="/dashboard/exploratory-data-analysis/data-correlation" ItemIcon={ScatterPlotIcon} open={open} />
-                <SidebarItem itemKey={2} name="Tabular Representation" path="/dashboard/exploratory-data-analysis/tabular-representation" ItemIcon={TableChartIcon} open={open} />
-                <SidebarItem itemKey={3} name="Graphical Representation" path="/dashboard/exploratory-data-analysis/graphical-representation" ItemIcon={AutoGraphIcon} open={open} />
+                <SidebarItem itemKey={1} name={DATASET_OVERVIEW} path={DATASET_OVERVIEW_PATH} ItemIcon={DatasetIcon} open={open} />
+                <SidebarItem itemKey={2} name={DATA_CORRELATION} path={DATA_CORRELATION_PATH} ItemIcon={ScatterPlotIcon} open={open} />
+                <SidebarItem itemKey={2} name={TABULAR_REPRESENTATION} path={TABULAR_REPRESENTATION_PATH} ItemIcon={TableChartIcon} open={open} />
+                <SidebarItem itemKey={3} name={GRAPHICAL_REPRESENTATION} path={GRAPHICAL_REPRESENTATION_PATH} ItemIcon={AutoGraphIcon} open={open} />
             </List >
-            
-            {/* {open && (<Divider light color="white" sx={{ borderColor: "rgba(0,0,0,0.5)" }} variant="middle" />)} */}
+
             <hr style={{ borderColor: 'transparent', width: "100%", backgroundColor: "rgb(86 86 86)" }} />
             <List sx={{ mt: 0 }} >
                 <SidebarSubheader title="Data Preprocessing" open={open}></SidebarSubheader>
-                <SidebarItem itemKey={1} name="Missing Value Imputation" path="/dashboard/data-preprocessing/missing-value-imputation" ItemIcon={InboxIcon} open={open} />
-                <SidebarItem itemKey={2} name="Numerical Encoding" path="/dashboard/data-preprocessing/numerical-encoding" ItemIcon={MailIcon} open={open} />
+                <SidebarItem itemKey={1} name={MISSING_VALUE_IMPUTATION} path={MISSING_VALUE_IMPUTATION_PATH} ItemIcon={InboxIcon} open={open} />
+                <SidebarItem itemKey={2} name={NUMERICAL_ENCODING} path={NUMERICAL_ENCODING_PATH} ItemIcon={MailIcon} open={open} />
             </List>
 
             <hr style={{ borderColor: 'transparent', width: "100%", backgroundColor: "rgb(86 86 86)" }} />
-            {/* {open && (<Divider light color="white" sx={{ borderColor: "rgba(0,0,0,0.5)" }} variant="middle" />)} */}
             <List sx={{ mt: 0 }}>
                 <SidebarSubheader title="Feature Engineering" open={open}></SidebarSubheader>
-                <SidebarItem itemKey={1} name="Exponential Transformation" path="/dashboard/feature-engineering/exponential-transformation" ItemIcon={InboxIcon} open={open} />
-                <SidebarItem itemKey={2} name="Logarithmic Transformation" path="/dashboard/feature-engineering/logarithmic-transformation" ItemIcon={MailIcon} open={open} />
+                <SidebarItem itemKey={1} name={EXPONENTIAL_TRANSFORMATION} path={EXPONENTIAL_TRANSFORMATION_PATH} ItemIcon={InboxIcon} open={open} />
+                <SidebarItem itemKey={2} name={LOGARITHMIC_TRANSFORMATION} path={LOGARITHMIC_TRANSFORMATION_PATH} ItemIcon={MailIcon} open={open} />
             </List>
         </Drawer >
     )

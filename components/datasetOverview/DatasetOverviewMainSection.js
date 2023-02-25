@@ -3,14 +3,19 @@ import { Box, Grid, Paper, Typography, Tabs, Tab, CircularProgress } from '@mui/
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
+// Components
 import NumericalVsCategoricalPieChart from "./NumericalVsCategoricalPieChart";
 import NullVsNonNullPieChart from "./NullVsNonNullPieChart";
 import DescribeCategoricalColumnsTable from "./DescribeCategoricalColumnsTable";
 import CoulmnList from './ColumnList';
 import DescribeNumericalColumnsTable from './DescribeNumericalColumnsTable';
 
+// Actions
 import { getBasicInformation, getGraphicalRepresentation, getDescribeNumericalData, getDescribeCategoricalData, resetRequestStatus } from "/store/datasetOverviewSlice";
-import { REQUEST_STATUS_LOADING, REQUEST_STATUS_FAILED } from '/constants/Constants';
+import {setOpenMenuItem} from "/store/globalStateSlice";
+
+// Constants
+import { REQUEST_STATUS_LOADING, REQUEST_STATUS_FAILED, DATASET_OVERVIEW } from '/constants/Constants';
 
 const TabPanel = ({ children, value, index, ...other }) => {
   return (
@@ -38,16 +43,18 @@ const DatasetOverviewMainSection = () => {
     setValue(newValue);
   };
 
+  // Redux State
   const dispatch = useDispatch();
   const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
   const datasetOverviewState = useSelector((state) => state.datasetOverview);
+  const selectedMenuItem = useSelector((state) => state.global.openMenuItem);
 
 
   // console.log("datasetOverviewState", datasetOverviewState);
 
+  // Calling Backend APIs
   useEffect(() => {
     if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
-      // console.log("selectedDataset", selectedDataset);
       dispatch(getBasicInformation(selectedDataset));
       dispatch(getGraphicalRepresentation(selectedDataset));
       dispatch(getDescribeNumericalData(selectedDataset));
@@ -61,8 +68,16 @@ const DatasetOverviewMainSection = () => {
     }
   }, [datasetOverviewState.n_categorical_columns, datasetOverviewState.n_numerical_columns]);
 
+  // Setting Open Menu Item When Page Loads or Refreshes
   useEffect(() => {
-    // Error Message
+    if (selectedMenuItem !== DATASET_OVERVIEW) {
+      dispatch(setOpenMenuItem(DATASET_OVERVIEW));
+    }
+  }, []);
+
+
+  // Error HAndling
+  useEffect(() => {
     if (
       datasetOverviewState.basic_info_req_status === REQUEST_STATUS_FAILED ||
       datasetOverviewState.desc_num_cols_req_status === REQUEST_STATUS_FAILED ||
@@ -109,6 +124,8 @@ const DatasetOverviewMainSection = () => {
     ans.value = ans.value.toString().replace(/\.0+$/, '');
     return ans;
   }
+
+
   return (
     <Box sx={{ flexGrow: 1, width: "100%" }}>
       <Grid container spacing={2}>
