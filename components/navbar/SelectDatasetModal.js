@@ -1,17 +1,21 @@
 import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import { styled } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
 import DialogTitle from '@mui/material/DialogTitle';
-import Typography from '@mui/material/Typography';
 import DialogContent from '@mui/material/DialogContent';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import { useSelector, useDispatch } from 'react-redux';
 
+//Icons
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+//Components
 import AvailableDatasetTab from './AvailableDatasetTab';
 import UploadDatasetTab from "./UploadDatasetTab"
+//Redux Actions
+import { setModalTabIndex } from '/store/globalStateSlice';
 
 const ModalContainer = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -52,9 +56,10 @@ const a11yProps = (index) => {
 
 const DatasetSelectModal = ({ open, handleModalClose }) => {
 
-    const [value, setValue] = React.useState(0);
+    const dispatch = useDispatch();
+    const value = useSelector((state) => state.global.modalTabIndex);
     const handleChange = (event, newValue) => {
-        setValue(newValue);
+        dispatch(setModalTabIndex(newValue));
     };
 
     return (
