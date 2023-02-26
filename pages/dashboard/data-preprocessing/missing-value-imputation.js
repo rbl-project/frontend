@@ -1,11 +1,19 @@
 import React from 'react';
+import Head from 'next/head'
+
+// Components
 import DashboardLayout from "/layouts/DashboardLayout";
 
 const MissingValueImputation = () => {
   return (
-    <DashboardLayout>
-      <div>MissingValueImputation</div>
-    </DashboardLayout>
+    <>
+      <Head>
+        <title>Missing Value Imputation | DataX</title>
+      </Head>
+      <DashboardLayout>
+        <div>Missing Value Imputation</div>
+      </DashboardLayout>
+    </>
   )
 }
 

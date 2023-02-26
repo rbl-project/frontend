@@ -1,6 +1,7 @@
 import React from "react";
 import Head from 'next/head'
 
+// Components
 import AuthLayout from "/layouts/AuthLayout";
 import LoginMainSection from "/components/auth/LoginMainSection";
 

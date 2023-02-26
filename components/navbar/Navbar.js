@@ -1,20 +1,21 @@
-import React,{useEffect} from 'react';
-import { styled, useTheme, alpha } from '@mui/material/styles';
-import MenuIcon from '@mui/icons-material/Menu';
+import React, { useEffect } from 'react';
+import { styled, useTheme, } from '@mui/material/styles';
+import {Toolbar,IconButton, Typography, Box} from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import { toggleSidebar } from "/store/globalStateSlice";
 import { useSelector, useDispatch } from 'react-redux';
-import Box from '@mui/material/Box';
-import AdbIcon from '@mui/icons-material/Adb';
+
+// Icons
 import DataThresholdingIcon from '@mui/icons-material/DataThresholding';
+import MenuIcon from '@mui/icons-material/Menu';
 
-
+// Actions from Redux
+import { toggleSidebar } from "/store/globalStateSlice";
 import { getAllDatasets } from '/store/datasetSlice';
+
+// Components
 import ProfileMenu from "./ProfileMenu";
 import SelectDatasetDropdown from './SelectDatasetDropdown';
+
 
 const Navbar = () => {
 
@@ -22,6 +23,7 @@ const Navbar = () => {
     const dispatch = useDispatch();
     const open = useSelector((state) => state.global.openSidebar);
 
+    // Custom styled AppBar
     const AppBar = styled(MuiAppBar, {
         shouldForwardProp: (prop) => prop !== 'open',
     })(({ theme, open }) => ({
@@ -32,26 +34,32 @@ const Navbar = () => {
         })
     }));
 
+    // Get all datasets on page load
     useEffect(() => {
         dispatch(getAllDatasets());
     }, [])
 
-
     return (
         <AppBar position="fixed" open={open} sx={{ bgcolor: "white", color: "black", zIndex: (theme) => theme.zIndex.drawer + 1 }} elevation={1} >
             <Toolbar variant='dense'>
+                {/* Menu Icon */}
                 <IconButton color="inherit" aria-label="open drawer" onClick={() => { dispatch(toggleSidebar()) }} edge="start" sx={{ marginRight: 5 }} >
                     <MenuIcon />
                 </IconButton>
+                
+                {/* Dashboard Title */}
                 <DataThresholdingIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                 <Typography variant="h6" noWrap component="div">
                     Dashboard
                 </Typography>
                 <Box sx={{ flexGrow: 1 }} />
+
+                {/* Profile Menu and Select Dataset Dropdown */}
                 <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 3 }}>
                     < SelectDatasetDropdown />
                     < ProfileMenu />
                 </Box>
+
             </Toolbar>
         </AppBar>
     )

@@ -1,27 +1,23 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Box, Button, Typography } from '@mui/material';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Checkbox from '@mui/material/Checkbox';
-import TextField from '@mui/material/TextField';
-import Tooltip from '@mui/material/Tooltip';
-import CircularProgress from '@mui/material/CircularProgress';
-import IconButton from '@mui/material/IconButton';
+import { Box, Button, Typography,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Checkbox,TextField,Tooltip,CircularProgress,IconButton} from '@mui/material';
+import { toast } from 'react-toastify';
+import {saveAs} from "file-saver";
+
+// Icons
 import ExportIcon from '@mui/icons-material/SystemUpdateAltOutlined';
 import RenameIcon from '@mui/icons-material/ModeEditOutlined';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import ConfirmIcon from '@mui/icons-material/DoneOutlined';
-import { toast } from 'react-toastify';
-import * as API from "/api";
-import {saveAs} from "file-saver";
 
+// API Endpoints
+import * as API from "/api";
+
+// Actions from Redux State
 import { getAllDatasets, updateSelectedDataset, deleteDataset, renameDataset, resetRequestStatus, setRequestStatus } from "/store/datasetSlice";
+// Constants
 import { REQUEST_STATUS_FAILED, REQUEST_STATUS_SUCCEEDED, REQUEST_STATUS_LOADING, CUSTOM_ERROR_MESSAGE, CUSTOM_SUCCESS_MESSAGE, SMALLEST_VALID_STRING_LENGTH, LARGEST_VALID_STRING_LENGTH, REQUEST_STATUS_IDLE } from '../../constants/Constants';
+
 
 const AvailableDatasetTab = ({ handleModalClose }) => {
 
@@ -253,6 +249,7 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
                                     </TableCell>
                                 </TableRow>
                             ) :
+                            //  Available Datasets
                             datasetState.availableDatasets.map((dataset) => (
                                 <TableRow
                                     hover
@@ -261,6 +258,7 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
                                     tabIndex={-1}
                                     key={dataset.name}
                                 >
+                                     {/* Dataset Name  */}
                                     <TableCell padding="checkbox" onClick={handleClick}>
                                         <Checkbox
                                             color="primary"
@@ -271,6 +269,8 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
                                             value={dataset.name}
                                         />
                                     </TableCell>
+
+                                    {/* When user enables Rename Dataset option  */}
                                     <TableCell width="40%" >
                                         {
                                             isRenameActive && requestCreatorId?.type === "rename" && requestCreatorId?.name === dataset.name ?
@@ -289,16 +289,25 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
                                                 : (dataset.name)
                                         }
                                     </TableCell>
+                                    
+                                    {/* Dataset Size  */}
                                     <TableCell align="right" >
                                         {dataset.size} KB
                                     </TableCell>
+
+                                    {/* Last Modified  */}
                                     <TableCell >
                                         {dataset.modified}
                                     </TableCell>
+
+                                    {/* Action Buttons  */}
+                                    {/* Rename / Confirm Button */}
                                     <TableCell >
                                         {
+                                            // If Rename is going on then show Confirm Button else show Rename Button
                                             isRenameActive && requestCreatorId?.type === "rename" && requestCreatorId?.name === dataset.name ?
                                                 (
+                                                    // Confirm Button
                                                     <IconButton disabled={!isValidName} aria-label="confirm" onClick={() => { handleConfirmRenameDataset(dataset.name) }} >
                                                         {
                                                             datasetState.requestStatus === REQUEST_STATUS_LOADING && requestCreatorId?.type === "confirm-rename" && requestCreatorId?.name === dataset.name
@@ -311,6 +320,7 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
                                                         }
                                                     </IconButton>
                                                 ) : (
+                                                    // Rename Button
                                                     <IconButton aria-label="rename" onClick={() => { handleRenameDataset(dataset.name) }} >
                                                         {
                                                             datasetState.requestStatus === REQUEST_STATUS_LOADING && requestCreatorId?.type === "rename" && requestCreatorId?.name === dataset.name
@@ -325,6 +335,8 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
 
                                                 )
                                         }
+
+                                        {/* Export Button  */}
                                         <IconButton aria-label="export" onClick={() => { handleExportDataset(dataset.name) }} >
                                             {
                                                 (exportDatasetLoader && requestCreatorId?.name === dataset.name) || (datasetState.requestStatus === REQUEST_STATUS_LOADING && requestCreatorId?.type === "export" && requestCreatorId?.name === dataset.name)
@@ -336,6 +348,8 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
                                                     )
                                             }
                                         </IconButton>
+
+                                        {/* Delete Button  */}
                                         <IconButton aria-label="delete" onClick={() => { handleDeleteDataset(dataset.name) }} >
                                             {
                                                 datasetState.requestStatus === REQUEST_STATUS_LOADING && requestCreatorId?.type === "delete" && requestCreatorId?.name === dataset.name
@@ -347,20 +361,23 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
                                                     )
                                             }
                                         </IconButton>
+
                                     </TableCell>
                                 </TableRow>
                             ))}
 
                     </TableBody>
                 </Table>
-            </TableContainer>
+            </TableContainer >
 
+            {/* When No Dataset is available */}
             {datasetState.availableDatasets.length === 0 && datasetState.requestStatus !== REQUEST_STATUS_LOADING && (
                 <Box sx={{ display: "flex", justifyContent: "center", alignItems: "Center", height: "40vh" }}>
                     <Typography variant="h6" >No Dataset Available</Typography>
                 </Box>
             )}
 
+            {/* Select Button */}
             {datasetState.availableDatasets.length > 0 && (
                 <Box sx={{ display: "flex", justifyContent: "flex-end" }}  >
                     <Button onClick={handleSelectDataset} variant="contained" disabled={datasetState.requestStatus === REQUEST_STATUS_LOADING} >Select</Button>

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Box, MenuItem, FormControl, Button, InputLabel, Typography, CircularProgress, Tooltip, ListItemText, Autocomplete, TextField, Divider } from '@mui/material';
 import Image from 'next/image';
+import { Box, FormControl, Button, InputLabel, Typography, CircularProgress, Tooltip, ListItemText, Autocomplete, TextField, Divider } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Actions from Redux State
 import { generateGraph } from '/store/graphicalRepresentationSlice';
-
 // Constants
 import { REQUEST_STATUS_LOADING, } from '/constants/Constants';
+
 
 const GraphContainerTab = ({ title, nColumns, graphType, column1, column2, setColumn1, setColumn2, TabIcon }) => {
 
@@ -20,7 +20,7 @@ const GraphContainerTab = ({ title, nColumns, graphType, column1, column2, setCo
     const [column1_options, set_column1_options] = useState([]);
     const [column2_options, set_column2_options] = useState([]);
 
-    // Column1 and Column2 Change Handlers
+    // Column1 Change Handler
     const handleCoulmn1Change = (e, value, reason) => {
         // When the user selects an option from the dropdown, the value is set to the state variable
         if (reason === "selectOption") {
@@ -38,6 +38,8 @@ const GraphContainerTab = ({ title, nColumns, graphType, column1, column2, setCo
             }
         }
     }
+    
+    // Column2 Change Handler
     const handleCoulmn2Change = (e, value, reason) => {
         // When the user selects an option from the dropdown, the value is set to the state variable
         if (reason === "selectOption") {
@@ -112,6 +114,7 @@ const GraphContainerTab = ({ title, nColumns, graphType, column1, column2, setCo
                             />
                         </FormControl>
                     </Box>
+
                     {/* Select Column 2 Dropdown  */}
                     <Box sx={{ width: "20vw", mr: 2 }}>
                         {nColumns === 2 &&

@@ -39,6 +39,7 @@ const DashboardLayout = ({ children }) => {
             < Sidebar />
             <Box sx={{ mt: 8, mb: 2, width: "100%", px: 2 }}>
                 {
+                    // If no dataset is selected, show the no dataset component
                     isNoDataset ?
                         (<Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%", width: "100%", bgcolor: "rgba(255, 255, 255,1)" }} >
                             <Box>
@@ -50,6 +51,7 @@ const DashboardLayout = ({ children }) => {
                                 </Box>
                             </Box>
                         </Box>) :
+                        // If dataset is selected, show the children component
                         (children)
                 }
             </Box>

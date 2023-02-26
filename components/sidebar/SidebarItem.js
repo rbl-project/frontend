@@ -8,8 +8,11 @@ import Zoom from '@mui/material/Zoom';
 import Link from "next/link";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import {useSelector,useDispatch} from "react-redux";
+
+// Redux Actions
 import {setOpenMenuItem} from "/store/globalStateSlice";
 
+// Custom Theme for Sidebar Item
 const theme = createTheme({
     components: {
         MuiListItemButton: {
@@ -35,6 +38,7 @@ const theme = createTheme({
 
 const SidebarItem = ({ itemKey, path, name, open, isSelect, ItemIcon }) => {
 
+    // Redux State
     const dispatch = useDispatch();
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     const selectedMenuItem = useSelector((state) => state.global.openMenuItem);

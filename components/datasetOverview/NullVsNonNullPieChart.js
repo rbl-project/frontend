@@ -1,4 +1,4 @@
-import { ResponsivePie } from '@nivo/pie'
+import { ResponsivePie } from '@nivo/pie';
 
 const formatNumber = (e) => {
 

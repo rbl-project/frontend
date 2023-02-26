@@ -1,14 +1,6 @@
 import * as React from 'react';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
-import Divider from '@mui/material/Divider';
-import Tooltip from '@mui/material/Tooltip';
-
+import { List, ListItem, ListItemButton, ListItemText, Checkbox, Divider, Tooltip } from '@mui/material';
 import { useSelector } from 'react-redux';
-
 
 
 const ColumnCheckList = ({ checkedColumns, handleCheckToggle }) => {

@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import IconButton from '@mui/material/IconButton';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import CircularProgress from '@mui/material/CircularProgress';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import {IconButton,MenuItem,Menu,CircularProgress }from '@mui/material/IconButton';
 import { useRouter } from 'next/router';
 import decode from "jwt-decode";
 
-//constants
+// Icons
+import AccountCircle from '@mui/icons-material/AccountCircle';
+
+// Constants
 import { REQUEST_STATUS_LOADING, REQUEST_STATUS_SUCCEEDED } from '/constants/Constants';
 
-//actions
+// Actions from Redux
 import { logout } from "/store/authSlice";
-import Image from 'next/image';
 
 
 const ProfileMenu = () => {

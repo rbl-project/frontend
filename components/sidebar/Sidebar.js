@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
-import List from '@mui/material/List';
+import { List} from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
 import { useSelector } from 'react-redux';
 
@@ -21,6 +21,7 @@ import { DRAWER_WIDTH, DATASET_OVERVIEW, DATASET_OVERVIEW_PATH, DATA_CORRELATION
 
 const drawerWidth = DRAWER_WIDTH;
 
+
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
@@ -35,6 +36,7 @@ const Sidebar = () => {
     const theme = useTheme();
     const open = useSelector((state) => state.global.openSidebar);
 
+    // Custom styles for opened sidebar
     const openedMixin = (theme) => ({
         width: drawerWidth,
         transition: theme.transitions.create('width', {
@@ -44,6 +46,7 @@ const Sidebar = () => {
         overflowX: 'hidden',
     });
 
+    // Custom styles for closed sidebar
     const closedMixin = (theme) => ({
         transition: theme.transitions.create('width', {
             easing: theme.transitions.easing.sharp,
@@ -56,6 +59,7 @@ const Sidebar = () => {
         },
     });
 
+    // Custom styled Drawer
     const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
         ({ theme, open }) => ({
             width: drawerWidth,
@@ -76,6 +80,8 @@ const Sidebar = () => {
     return (
         <Drawer variant="permanent" open={open} PaperProps={{ sx: { backgroundColor: "rgba(30,41,59,1)", color: "white", px: 1 } }} >
             <DrawerHeader></DrawerHeader>
+
+            {/* Exploratory Data Analysis Functions */}
             <List sx={{ mt: 0 }} >
                 <SidebarSubheader title="Exploratory Data Analysis" open={open}></SidebarSubheader>
                 <SidebarItem itemKey={1} name={DATASET_OVERVIEW} path={DATASET_OVERVIEW_PATH} ItemIcon={DatasetIcon} open={open} />
@@ -84,6 +90,7 @@ const Sidebar = () => {
                 <SidebarItem itemKey={3} name={GRAPHICAL_REPRESENTATION} path={GRAPHICAL_REPRESENTATION_PATH} ItemIcon={AutoGraphIcon} open={open} />
             </List >
 
+            {/* Data Preprocessing Functions */}
             <hr style={{ borderColor: 'transparent', width: "100%", backgroundColor: "rgb(86 86 86)" }} />
             <List sx={{ mt: 0 }} >
                 <SidebarSubheader title="Data Preprocessing" open={open}></SidebarSubheader>
@@ -91,12 +98,14 @@ const Sidebar = () => {
                 <SidebarItem itemKey={2} name={NUMERICAL_ENCODING} path={NUMERICAL_ENCODING_PATH} ItemIcon={MailIcon} open={open} />
             </List>
 
+            {/* Feature Engineering Functions */}
             <hr style={{ borderColor: 'transparent', width: "100%", backgroundColor: "rgb(86 86 86)" }} />
             <List sx={{ mt: 0 }}>
                 <SidebarSubheader title="Feature Engineering" open={open}></SidebarSubheader>
                 <SidebarItem itemKey={1} name={EXPONENTIAL_TRANSFORMATION} path={EXPONENTIAL_TRANSFORMATION_PATH} ItemIcon={InboxIcon} open={open} />
                 <SidebarItem itemKey={2} name={LOGARITHMIC_TRANSFORMATION} path={LOGARITHMIC_TRANSFORMATION_PATH} ItemIcon={MailIcon} open={open} />
             </List>
+
         </Drawer >
     )
 }

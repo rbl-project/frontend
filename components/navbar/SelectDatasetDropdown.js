@@ -1,7 +1,7 @@
 import React from 'react'
 import { styled } from '@mui/material/styles';
-import { useSelector,useDispatch } from 'react-redux';
-import Button from '@mui/material/Button';
+import { useSelector, useDispatch } from 'react-redux';
+import { Button } from '@mui/material';
 
 // Redux Actions
 import { setOpenModal, setCloseModal } from '/store/globalStateSlice';
@@ -10,7 +10,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 // Components
 import SelectDatasetModal from './SelectDatasetModal';
 
-
+// Custom styled Button
 const ColorButton = styled(Button)(({ theme }) => ({
     '&:hover': {
         backgroundColor: "lightgray",

@@ -1,13 +1,10 @@
 import React from 'react';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+import { ListItem, ListItemButton, ListItemIcon, ListItemText, Tooltip } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useSelector } from "react-redux";
 import { CATEGORICAL, NUMERICAL } from '/constants/Constants';
-import { Tooltip } from '@mui/material';
 
+// Theme Overrides for MuiListItemButton
 const theme = createTheme({
     components: {
         MuiListItemButton: {
@@ -26,6 +23,7 @@ const theme = createTheme({
         },
     },
 });
+
 
 const SelectGraphTypeItem = ({ value, name, ItemIcon, setTabName, seletedTabName, columnType, nColumns }) => {
 

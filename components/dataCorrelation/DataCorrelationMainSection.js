@@ -122,7 +122,6 @@ const DataCorrelationMainSection = () => {
 
     // Handle Error Message
     useEffect(() => {
-        // Error Message
         if (
             dataCorrelationState.num_cols_req_status === REQUEST_STATUS_FAILED ||
             dataCorrelationState.corr_matrix_req_status === REQUEST_STATUS_FAILED ||
