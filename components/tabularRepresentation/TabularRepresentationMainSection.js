@@ -83,8 +83,9 @@ const TabularRepresentationMainSection = () => {
         selectableRowsHideCheckboxes: true,
         selectableRowsOnClick: false,
         rowsPerPage: 12,
-        elevation: 3,
+        elevation: 0,
         tableBodyHeight: '650px',
+        tableBodyMaxHeight: '650px',
         fixedHeader: true,
         textLabels: {
             body: {
@@ -534,7 +535,7 @@ const TabularRepresentationMainSection = () => {
                     <Grid container >
                         <Grid item xs={12}>
                             <Paper elevation={0} sx={{ py: "0.1rem" }}>
-                                <Box sx={{ height: "760px" }}>
+                                <Box sx={{ height: "760px",width:"100%" }}>
                                     {
                                         tabularRepresentationState.requestStatus === REQUEST_STATUS_LOADING
                                             ? (

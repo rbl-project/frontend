@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 
 const ColumnCheckList = ({ checkedColumns, handleCheckToggle }) => {
 
+  // Redux state
   const dataCorrelationState = useSelector((state) => state.dataCorrelation);
   const columns = dataCorrelationState.numerical_columns;
 

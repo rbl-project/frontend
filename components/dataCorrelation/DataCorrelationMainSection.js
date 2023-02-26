@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Grid, Paper, Typography, Tabs, Tab, CircularProgress, Button } from '@mui/material';
+import { Box, Grid, Paper, Typography, Tabs, Tab, CircularProgress, Button, Checkbox } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -11,7 +11,7 @@ import HeatMap from './HeatMap';
 
 // Actions
 import { getNumericalColumns, getCorrelationMatrix, getCorrelationHeatmap, resetRequestStatus, setCheckedColumnsRedux, resetPlotState } from '/store/dataCorrelationSlice';
-import {setOpenMenuItem} from "/store/globalStateSlice";
+import { setOpenMenuItem } from "/store/globalStateSlice";
 
 // Constants
 import { REQUEST_STATUS_LOADING, REQUEST_STATUS_FAILED, DATA_CORRELATION } from '/constants/Constants';
@@ -82,6 +82,18 @@ const DataCorrelationMainSection = () => {
         }
     }
 
+    // Select All Checkbox State
+    const [selectAll, setSelectAll] = useState(false);
+    const handleSelectAllColumns = (event) => {
+        selectAll ? setSelectAll(false) : setSelectAll(true);
+        if (event.target.checked) {
+            setCheckedColumns(dataCorrelationState.numerical_columns);
+        } else {
+            setCheckedColumns([]);
+        }
+    }
+
+
     //Redux State
     const dispatch = useDispatch();
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
@@ -98,6 +110,7 @@ const DataCorrelationMainSection = () => {
         dispatch(setCheckedColumnsRedux([]));
         dispatch(resetPlotState());
         setCheckedColumns([]);
+        setSelectAll(false);
     }, [selectedDataset])
 
     // Setting Open Menu Item When Page Loads or Refreshes
@@ -137,13 +150,16 @@ const DataCorrelationMainSection = () => {
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Paper elevation={0} sx={{ py: "0.1rem" }}>
-                                <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2, my: 1 }} > Select Columns </Typography>
+                                < Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mx: 2 }} >
+                                    <Typography variant="h6" sx={{ fontWeight: "bold", }} > Select Columns </Typography>
+                                    <Checkbox edge="end" checked={selectAll} onChange={handleSelectAllColumns}  />
+                                </Box>
                                 {dataCorrelationState.num_cols_req_status === REQUEST_STATUS_LOADING ? (
                                     <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "77vh" }}>
                                         <CircularProgress size="1rem" color="inherit" />
                                     </Box>
                                 ) : (
-                                    <CoulmnCheckList handleCheckToggle={handleCheckToggle} checkedColumns={checkedColumns} />
+                                    <CoulmnCheckList handleCheckToggle={handleCheckToggle} checkedColumns={checkedColumns}  />
                                 )}
                                 <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", m: 1, mt: 2 }}>
                                     <Button variant="contained" onClick={handleSubmit} disabled={checkedColumns.length < 2} fullWidth>Submit</Button>

@@ -32,7 +32,8 @@ const DashboardLayout = ({ children }) => {
             display: 'flex',
             bgcolor: "rgba(218, 223, 230,1)",
             color: "black",
-            minHeight: "100vh"
+            minHeight: "100vh",
+            maxWidth: "100vw",
         }}>
             < Navbar />
             < Sidebar />
