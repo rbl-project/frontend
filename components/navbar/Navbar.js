@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { styled, useTheme, } from '@mui/material/styles';
-import {Toolbar,IconButton, Typography, Box} from '@mui/material';
+import { Toolbar, IconButton, Typography, Box } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -22,6 +22,7 @@ const Navbar = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
     const open = useSelector((state) => state.global.openSidebar);
+    const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
 
     // Custom styled AppBar
     const AppBar = styled(MuiAppBar, {
@@ -36,7 +37,9 @@ const Navbar = () => {
 
     // Get all datasets on page load
     useEffect(() => {
-        dispatch(getAllDatasets());
+        if (selectedDataset === null || selectedDataset === undefined || selectedDataset === "") {
+            dispatch(getAllDatasets());
+        }
     }, [])
 
     return (
@@ -46,7 +49,7 @@ const Navbar = () => {
                 <IconButton color="inherit" aria-label="open drawer" onClick={() => { dispatch(toggleSidebar()) }} edge="start" sx={{ marginRight: 5 }} >
                     <MenuIcon />
                 </IconButton>
-                
+
                 {/* Dashboard Title */}
                 <DataThresholdingIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                 <Typography variant="h6" noWrap component="div">

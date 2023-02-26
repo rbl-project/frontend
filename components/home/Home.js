@@ -1,11 +1,7 @@
 import React from "react";
 import Image from "next/image";
+import {Box,Grid,Container} from '@mui/material';
 
-// material ui
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
-import Container from '@mui/material/Container';
 
 // components
 import HomePageFooter from "../footers/HomePageFooter";

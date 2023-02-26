@@ -148,8 +148,8 @@ const DataCorrelationMainSection = () => {
                 <Grid item xs={2}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Paper elevation={0} sx={{ py: "0.1rem" }}>
-                                < Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mx: 2 }} >
+                            <Paper elevation={0} sx={{ py: "0.02rem" }}>
+                                < Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mx: 2 ,mt:1}} >
                                     <Typography variant="h6" sx={{ fontWeight: "bold", }} > Select Columns </Typography>
                                     <Checkbox edge="end" checked={selectAll} onChange={handleSelectAllColumns}  />
                                 </Box>

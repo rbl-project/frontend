@@ -1,19 +1,20 @@
 import React from 'react';
-import "react-toastify/dist/ReactToastify.css";
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import { ToastContainer } from 'react-toastify';
-import { useSelector,useDispatch } from "react-redux";
 import Image from 'next/image';
+import "react-toastify/dist/ReactToastify.css";
+import { Box, Typography, Button } from '@mui/material';
+import { ToastContainer } from 'react-toastify';
+import { useSelector, useDispatch } from "react-redux";
 
 // Icons
 import UploadIcon from '@mui/icons-material/FileUploadOutlined';
+
 // Components
 import Navbar from '../components/navbar/Navbar';
 import Sidebar from '../components/sidebar/Sidebar';
+
 // Redux Actions
-import { setOpenModal,setModalTabIndex} from '/store/globalStateSlice';
+import { setOpenModal, setModalTabIndex } from '/store/globalStateSlice';
+
 
 const DashboardLayout = ({ children }) => {
 
@@ -26,7 +27,7 @@ const DashboardLayout = ({ children }) => {
         dispatch(setModalTabIndex(1));
         dispatch(setOpenModal());
     }
-    
+
     return (
         <Box sx={{
             display: 'flex',
@@ -45,8 +46,8 @@ const DashboardLayout = ({ children }) => {
                             <Box>
                                 <Image src="/images/dataset_upload.jpeg" alt="No Dataset" width={800} height={400} />
                                 <Typography variant="h4" sx={{ fontWeight: "bold" }} align="center" >No Dataset Available</Typography>
-                                <Box sx={{display:"flex", justifyContent:"center",alignItems:"center",mt:1}}>
-                                    <Button variant="contained" size='small' onClick={clickHandler} color="warning" sx={{ textTransform: "none", fontSize:"1rem", bgcolor: "gold",color:"black" ,"&:hover": { bgcolor: "goldenrod",color:"white" },mr:1 }} startIcon={<UploadIcon />}>Upload</Button>
+                                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mt: 1 }}>
+                                    <Button variant="contained" size='small' onClick={clickHandler} color="warning" sx={{ textTransform: "none", fontSize: "1rem", bgcolor: "gold", color: "black", "&:hover": { bgcolor: "goldenrod", color: "white" }, mr: 1 }} startIcon={<UploadIcon />}>Upload</Button>
                                     <Typography variant="h6" align="center" color="#5a5a5a" >New Dataset to Get Started</Typography>
                                 </Box>
                             </Box>

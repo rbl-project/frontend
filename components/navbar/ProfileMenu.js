@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {IconButton,MenuItem,Menu,CircularProgress }from '@mui/material/IconButton';
+import {IconButton,MenuItem,Menu,CircularProgress }from '@mui/material';
 import { useRouter } from 'next/router';
 import decode from "jwt-decode";
 

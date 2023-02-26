@@ -1,19 +1,15 @@
 import React from 'react';
-import Dialog from '@mui/material/Dialog';
+import {Dialog, DialogTitle, DialogContent, Tabs, Tab, Box, IconButton} from '@mui/material';
 import { styled } from '@mui/material/styles';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
 import { useSelector, useDispatch } from 'react-redux';
 
 //Icons
-import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+
 //Components
 import AvailableDatasetTab from './AvailableDatasetTab';
 import UploadDatasetTab from "./UploadDatasetTab"
+
 //Redux Actions
 import { setModalTabIndex } from '/store/globalStateSlice';
 

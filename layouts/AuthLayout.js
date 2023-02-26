@@ -1,5 +1,5 @@
 import React from "react";
-import Box from '@mui/material/Box';
+import {Box} from '@mui/material';
 
 // Import components
 import AuthNavbar from '../components/navbar/AuthNavbar/AuthNavbar';
