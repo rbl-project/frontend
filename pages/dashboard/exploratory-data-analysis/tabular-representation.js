@@ -1,8 +1,8 @@
 import React from 'react';
 import Head from 'next/head'
 
+// Components
 import DashboardLayout from "/layouts/DashboardLayout";
-import DataCorrelationMainSection from '/components/dataCorrelation/DataCorrelationMainSection';
 import TabularRepresentationMainSection from '/components/tabularRepresentation/TabularRepresentationMainSection';
 
 const DatasetOverview = () => {

@@ -1,10 +1,5 @@
 import React from 'react'
-
-// material ui
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Divider from '@mui/material/Divider';
+import {Box,Container,Divider,Grid} from '@mui/material'
 
 const HomePageFooter = () => {
     return (

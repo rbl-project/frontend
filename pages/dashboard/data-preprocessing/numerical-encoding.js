@@ -1,11 +1,20 @@
 import React from 'react';
+import Head from 'next/head'
+
+// Components
 import DashboardLayout from "/layouts/DashboardLayout";
+
 
 const NumericalEncoding = () => {
   return (
-    <DashboardLayout>
-      <div>NumericalEncoding</div>
-    </DashboardLayout>
+    <>
+      <Head>
+        <title>Numerical Encoding | DataX</title>
+      </Head>
+      <DashboardLayout>
+        <div>Numerical Encoding</div>
+      </DashboardLayout>
+    </>
   )
 }
 

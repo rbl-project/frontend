@@ -1,11 +1,16 @@
 import React from 'react'
 import { styled } from '@mui/material/styles';
-import { useSelector } from 'react-redux';
-import Button from '@mui/material/Button';
+import { useSelector, useDispatch } from 'react-redux';
+import { Button } from '@mui/material';
+
+// Redux Actions
+import { setOpenModal, setCloseModal } from '/store/globalStateSlice';
+// Icons
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+// Components
+import SelectDatasetModal from './SelectDatasetModal';
 
-import DatasetSelectModal from './SelectDatasetModal';
-
+// Custom styled Button
 const ColorButton = styled(Button)(({ theme }) => ({
     '&:hover': {
         backgroundColor: "lightgray",
@@ -15,14 +20,16 @@ const ColorButton = styled(Button)(({ theme }) => ({
 
 const DatasetSelectButton = () => {
 
+    // Redux State
+    const dispatch = useDispatch();
     const datasetState = useSelector((state) => state.dataset);
-    const [open, setOpen] = React.useState(false);
+    const isModalOpen = useSelector((state) => state.global.openModal);
 
     const handleClickOpen = () => {
-        setOpen(true);
+        dispatch(setOpenModal());
     };
     const handleClose = () => {
-        setOpen(false);
+        dispatch(setCloseModal());
     };
 
     return (
@@ -30,10 +37,10 @@ const DatasetSelectButton = () => {
             <ColorButton variant="outlined" size="large" align="left" onClick={handleClickOpen} disableElevation={true} fullWidth={true} endIcon={<KeyboardArrowDownIcon fontSize='large' />} sx={{
                 mr: 2, textTransform: "none", height: 30, my: "auto", minWidth: 120, justifyContent: "space-between", px: 1
             }}>
-                {datasetState.selectedDataset === null ? "No Detaset Selected" : datasetState.selectedDataset}
+                {datasetState.selectedDataset === null ? "No Detaset Available" : datasetState.selectedDataset}
             </ColorButton>
 
-            < DatasetSelectModal open={open} handleModalClose={handleClose} />
+            < SelectDatasetModal open={isModalOpen} handleModalClose={handleClose} />
         </>
     )
 }

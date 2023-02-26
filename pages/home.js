@@ -1,10 +1,8 @@
 import Head from 'next/head';
-import Image from 'next/image';
-import AuthNavbar from '../components/navbar/AuthNavbar/AuthNavbar';
 
 // components
-import HomeSection from '../components/home/Home';
-
+import AuthNavbar from '/components/navbar/AuthNavbar/AuthNavbar';
+import HomeSection from '/components/home/Home';
 
 
 const Home = () => {

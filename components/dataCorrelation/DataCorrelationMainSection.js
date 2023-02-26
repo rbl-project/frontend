@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Grid, Paper, Typography, Tabs, Tab, CircularProgress, Button } from '@mui/material';
+import { Box, Grid, Paper, Typography, Tabs, Tab, CircularProgress, Button, Checkbox } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
+// Components
 import CoulmnCheckList from './ColumnCheckList';
 import CorrelationMatrix from './CorrelationMatrix';
 import GraphicalRepresentation from './GraphicalRepresentation';
 import HeatMap from './HeatMap';
 
-import { REQUEST_STATUS_LOADING, REQUEST_STATUS_FAILED } from '/constants/Constants';
-import { getNumericalColumns, getCorrelationMatrix, getCorrelationHeatmap, resetRequestStatus, setCheckedColumnsRedux,resetPlotState  } from '/store/dataCorrelationSlice';
+// Actions
+import { getNumericalColumns, getCorrelationMatrix, getCorrelationHeatmap, resetRequestStatus, setCheckedColumnsRedux, resetPlotState } from '/store/dataCorrelationSlice';
+import { setOpenMenuItem } from "/store/globalStateSlice";
+
+// Constants
+import { REQUEST_STATUS_LOADING, REQUEST_STATUS_FAILED, DATA_CORRELATION } from '/constants/Constants';
+
 
 const TabPanel = ({ children, value, index, ...other }) => {
     return (
@@ -76,42 +82,64 @@ const DataCorrelationMainSection = () => {
         }
     }
 
+    // Select All Checkbox State
+    const [selectAll, setSelectAll] = useState(false);
+    const handleSelectAllColumns = (event) => {
+        selectAll ? setSelectAll(false) : setSelectAll(true);
+        if (event.target.checked) {
+            setCheckedColumns(dataCorrelationState.numerical_columns);
+        } else {
+            setCheckedColumns([]);
+        }
+    }
+
+
     //Redux State
     const dispatch = useDispatch();
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     const dataCorrelationState = useSelector((state) => state.dataCorrelation);
+    const selectedMenuItem = useSelector((state) => state.global.openMenuItem);
 
-    // Fetch Numerical Columns When Page Loads
+    // Call Backend API When Dataset Changes
     useEffect(() => {
         setValue("one");
-        dispatch(getNumericalColumns({ dataset_name: selectedDataset }))
-        dispatch(getCorrelationMatrix({ dataset_name: selectedDataset, column_list: [] }))
+        if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
+            dispatch(getNumericalColumns({ dataset_name: selectedDataset }))
+            dispatch(getCorrelationMatrix({ dataset_name: selectedDataset, column_list: [] }))
+        }
         dispatch(setCheckedColumnsRedux([]));
         dispatch(resetPlotState());
         setCheckedColumns([]);
+        setSelectAll(false);
     }, [selectedDataset])
+
+    // Setting Open Menu Item When Page Loads or Refreshes
+    useEffect(() => {
+        if (selectedMenuItem !== DATA_CORRELATION) {
+            dispatch(setOpenMenuItem(DATA_CORRELATION));
+        }
+    }, []);
 
     // Handle Error Message
     useEffect(() => {
-        // Error Message
         if (
-          dataCorrelationState.num_cols_req_status === REQUEST_STATUS_FAILED ||
-          dataCorrelationState.corr_matrix_req_status === REQUEST_STATUS_FAILED ||
-          dataCorrelationState.scatter_plot_req_status === REQUEST_STATUS_FAILED ||
-          dataCorrelationState.heatmap_req_status === REQUEST_STATUS_FAILED
+            dataCorrelationState.num_cols_req_status === REQUEST_STATUS_FAILED ||
+            dataCorrelationState.corr_matrix_req_status === REQUEST_STATUS_FAILED ||
+            dataCorrelationState.scatter_plot_req_status === REQUEST_STATUS_FAILED ||
+            dataCorrelationState.heatmap_req_status === REQUEST_STATUS_FAILED
         ) {
-          toast.error([undefined, null, ""].includes(dataCorrelationState.message) ? CUSTOM_ERROR_MESSAGE : dataCorrelationState.message + ". Please Refresh", {
-            position: "bottom-right",
-            autoClose: false,
-            hideProgressBar: true,
-            closeOnClick: false,
-            pauseOnHover: false,
-            draggable: false,
-            theme: "dark",
-          });
-          dispatch(resetRequestStatus());
+            toast.error([undefined, null, ""].includes(dataCorrelationState.message) ? CUSTOM_ERROR_MESSAGE : dataCorrelationState.message + ". Please Refresh", {
+                position: "bottom-right",
+                autoClose: false,
+                hideProgressBar: true,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "dark",
+            });
+            dispatch(resetRequestStatus());
         }
-      }, [dataCorrelationState.num_cols_req_status, dataCorrelationState.corr_matrix_req_status, dataCorrelationState.scatter_plot_req_status, dataCorrelationState.heatmap_req_status])
+    }, [dataCorrelationState.num_cols_req_status, dataCorrelationState.corr_matrix_req_status, dataCorrelationState.scatter_plot_req_status, dataCorrelationState.heatmap_req_status])
 
 
     return (
@@ -120,14 +148,17 @@ const DataCorrelationMainSection = () => {
                 <Grid item xs={2}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Paper elevation={0} sx={{ py: "0.1rem" }}>
-                                <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2, my: 1 }} > Select Columns </Typography>
+                            <Paper elevation={0} sx={{ py: "0.02rem" }}>
+                                < Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mx: 2 ,mt:1}} >
+                                    <Typography variant="h6" sx={{ fontWeight: "bold", }} > Select Columns </Typography>
+                                    <Checkbox edge="end" checked={selectAll} onChange={handleSelectAllColumns}  />
+                                </Box>
                                 {dataCorrelationState.num_cols_req_status === REQUEST_STATUS_LOADING ? (
                                     <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "77vh" }}>
                                         <CircularProgress size="1rem" color="inherit" />
                                     </Box>
                                 ) : (
-                                    <CoulmnCheckList handleCheckToggle={handleCheckToggle} checkedColumns={checkedColumns} />
+                                    <CoulmnCheckList handleCheckToggle={handleCheckToggle} checkedColumns={checkedColumns}  />
                                 )}
                                 <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", m: 1, mt: 2 }}>
                                     <Button variant="contained" onClick={handleSubmit} disabled={checkedColumns.length < 2} fullWidth>Submit</Button>
@@ -142,7 +173,7 @@ const DataCorrelationMainSection = () => {
                             <Paper elevation={0} sx={{ pt: 0 }}>
                                 <Box height="90vh">
                                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" TabIndicatorProps={{ sx: { backgroundColor: dataCorrelationState.n_numerical_columns < 2 && "gray"  } }} >
+                                        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" TabIndicatorProps={{ sx: { backgroundColor: dataCorrelationState.n_numerical_columns < 2 && "gray" } }} >
                                             <Tab disabled={dataCorrelationState.n_numerical_columns < 2} label={<Typography variant="body1" sx={{ fontSize: "1.1rem", fontWeight: "bold", textTransform: "none", }} > Correlation Value </Typography>} value="one" />
                                             <Tab disabled={dataCorrelationState.n_numerical_columns < 2} label={<Typography variant="body1" sx={{ fontSize: "1.1rem", fontWeight: "bold", textTransform: "none", }} > Graphical Representation </Typography>} value="two" />
                                             <Tab disabled={dataCorrelationState.n_numerical_columns < 2} label={<Typography variant="body1" sx={{ fontSize: "1.1rem", fontWeight: "bold", textTransform: "none", }} > Heatmap </Typography>} value="three" />
@@ -168,7 +199,7 @@ const DataCorrelationMainSection = () => {
                                         )}
                                     </TabPanel>
                                     <TabPanel value={value} index="two" >
-                                            < GraphicalRepresentation />
+                                        < GraphicalRepresentation />
                                     </TabPanel>
                                     <TabPanel value={value} index="three" >
                                         {dataCorrelationState.heatmap_req_status === REQUEST_STATUS_LOADING ? (

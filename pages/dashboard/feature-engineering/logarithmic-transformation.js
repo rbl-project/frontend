@@ -1,11 +1,20 @@
 import React from 'react';
+import Head from 'next/head'
+
+// Components
 import DashboardLayout from "/layouts/DashboardLayout";
+
 
 const LogarithmicTransformation = () => {
   return (
-    <DashboardLayout>
-      <div>LogarithmicTransformation</div>
-    </DashboardLayout>
+    <>
+      <Head>
+        <title>Logarithmic Transformation | DataX</title>
+      </Head>
+      <DashboardLayout>
+        <div>Logarithmic Transformation</div>
+      </DashboardLayout>
+    </>
   )
 }
 

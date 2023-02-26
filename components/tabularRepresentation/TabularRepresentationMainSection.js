@@ -25,7 +25,7 @@ import {
     TableBody,
     Table,
     Link,
-    Badge, 
+    Badge,
     Autocomplete,
     TextField,
     CircularProgress
@@ -34,28 +34,46 @@ import {
 import { ToolTipText } from "./TabularRepresentationStyles";
 import { useDispatch, useSelector } from 'react-redux';
 import MUIDataTable from "mui-datatables";
+import { styled } from '@mui/material/styles';
 
+// icons
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
-import { styled } from '@mui/material/styles';
+// actions
 import { getColumnInfo, getTabularRepresentation } from "/store/tabularRepresentationSlice";
-import { REQUEST_STATUS_LOADING } from '../../constants/Constants';
+import { setOpenMenuItem } from "/store/globalStateSlice";
+
+// constants
+import { REQUEST_STATUS_LOADING, TABULAR_REPRESENTATION } from '/constants/Constants';
 
 const TabularRepresentationMainSection = () => {
 
     //! ================ SELECTED DATASET AND OTHER STATE INFO ===============
 
+    // REdux state
+    const dispatch = useDispatch();
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     const tabularRepresentationState = useSelector((state) => state.tabularRepresentation);
+    const selectedMenuItem = useSelector((state) => state.global.openMenuItem);
+
+    // local state
     const [categoricalColValuesOptions, setCategoricalColValuesOptions] = useState([]);
-    
-    const dispatch = useDispatch();
-    
+
+    // Calling backend APIs
     useEffect(() => {
-        dispatch(getColumnInfo({ dataset_name: selectedDataset }));
-        dispatch(getTabularRepresentation({ dataset_name: selectedDataset }));
+        if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
+            dispatch(getColumnInfo({ dataset_name: selectedDataset }));
+            dispatch(getTabularRepresentation({ dataset_name: selectedDataset }));
+        }
     }, [selectedDataset])
+
+    // Setting Open Menu Item When Page Loads or Refreshes
+    useEffect(() => {
+        if (selectedMenuItem !== TABULAR_REPRESENTATION) {
+            dispatch(setOpenMenuItem(TABULAR_REPRESENTATION));
+        }
+    }, []);
 
 
     const data_columns = tabularRepresentationState.filterd_data?.dataframe?.columns;
@@ -65,15 +83,16 @@ const TabularRepresentationMainSection = () => {
         selectableRowsHideCheckboxes: true,
         selectableRowsOnClick: false,
         rowsPerPage: 12,
-        elevation: 3,
+        elevation: 0,
         tableBodyHeight: '650px',
+        tableBodyMaxHeight: '650px',
         fixedHeader: true,
         textLabels: {
             body: {
-              noMatch: 'Your custom message here',
+                noMatch: 'Your custom message here',
             }
-          }
-      };
+        }
+    };
 
 
     //! ====================  SEARCH PARAMETERS ============================
@@ -113,9 +132,9 @@ const TabularRepresentationMainSection = () => {
         setSortOrder('');
     }
 
-    
+
     //! ======================= FILTERING PARAMETERS ========================
-    
+
     const intital_filter_query = {
         "end": 'end', // end index is end of dataframe itself
         "columns": [], // all columns
@@ -137,7 +156,7 @@ const TabularRepresentationMainSection = () => {
     const handleStartIndexChange = (event) => {
         setStartIndex(event.target.value);
         setFilterQuery({
-            ...filterQuery, ["row_start"] : event.target.value
+            ...filterQuery, ["row_start"]: event.target.value
         })
     }
 
@@ -145,14 +164,14 @@ const TabularRepresentationMainSection = () => {
     const handleEndIndexChange = (event) => {
         setEndIndex(event.target.value);
         setFilterQuery({
-            ...filterQuery, ["row_end"] : event.target.value
+            ...filterQuery, ["row_end"]: event.target.value
         })
     }
 
     const handleFilterColumnSubmit = (e) => {
         // upadte the filterQuery object with new filterColumn
         setFilterQuery({
-            ...filterQuery, ['columns'] : filterColumn
+            ...filterQuery, ['columns']: filterColumn
         })
 
         setFilterColumn([]);
@@ -180,7 +199,7 @@ const TabularRepresentationMainSection = () => {
                 <Grid item xs={4}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Paper elevation={0} sx={{ py: "0.1rem", px: "0.5rem", overflow: 'hidden',}}>
+                            <Paper elevation={0} sx={{ py: "0.1rem", px: "0.5rem", overflow: 'hidden', }}>
 
                                 {/* SEARCH  */}
                                 <Box sx={{ my: "1rem", height: "33%" }}>
@@ -213,7 +232,7 @@ const TabularRepresentationMainSection = () => {
                                                         setSearchColumn(value)
                                                         setCategoricalColValuesOptions(tabularRepresentationState.categorical_column_values[value])
                                                     }}
-                                                    renderInput={(params) => <TextField sx={{ }} {...params} label="Column" />}
+                                                    renderInput={(params) => <TextField sx={{}} {...params} label="Column" />}
                                                 />
                                             </FormControl>
                                         </Box>
@@ -232,7 +251,7 @@ const TabularRepresentationMainSection = () => {
                                                     size="small"
                                                     value={searchValue}
                                                     onChange={(e, value, reason) => setSearchValue(value)}
-                                                    renderInput={(params) => <TextField sx={{ }} {...params} label="Value" />}
+                                                    renderInput={(params) => <TextField sx={{}} {...params} label="Value" />}
                                                 />
                                             </FormControl>
                                         </Box>
@@ -288,7 +307,7 @@ const TabularRepresentationMainSection = () => {
                                                     size="small"
                                                     value={sortColumn}
                                                     onChange={(e, value, reason) => setSortColumn(value)}
-                                                    renderInput={(params) => <TextField sx={{ }} {...params} label="Column" />}
+                                                    renderInput={(params) => <TextField sx={{}} {...params} label="Column" />}
                                                 />
                                             </FormControl>
                                         </Box>
@@ -363,7 +382,7 @@ const TabularRepresentationMainSection = () => {
                                                         <Button onClick={() => {
                                                             setStartIndex(0)
                                                             setFilterQuery({
-                                                                ...filterQuery, ["row_start"] : 0
+                                                                ...filterQuery, ["row_start"]: 0
                                                             })
                                                         }} style={{ color: "rgba(0, 0, 0, 0.26)", border: "1px solid rgba(0, 0, 0, 0.12)", padding: 0 }} variant="outlined" sx={{}}>Start</Button>
 
@@ -372,7 +391,7 @@ const TabularRepresentationMainSection = () => {
                                                         <Button onClick={() => {
                                                             setStartIndex(0)
                                                             setFilterQuery({
-                                                                ...filterQuery, ["row_start"] : 0
+                                                                ...filterQuery, ["row_start"]: 0
                                                             })
                                                         }} style={{ padding: 0 }} variant="outlined" sx={{}}>Start</Button>
                                                     )
@@ -412,7 +431,7 @@ const TabularRepresentationMainSection = () => {
                                                         <Button onClick={() => {
                                                             setEndIndex('end')
                                                             setFilterQuery({
-                                                                ...filterQuery, ["row_end"] : 'end'
+                                                                ...filterQuery, ["row_end"]: 'end'
                                                             })
                                                         }} style={{ marginLeft: "1rem", color: "rgba(0, 0, 0, 0.26)", border: "1px solid rgba(0, 0, 0, 0.12)", padding: 0 }} variant="outlined" sx={{}}>End</Button>
 
@@ -421,7 +440,7 @@ const TabularRepresentationMainSection = () => {
                                                         <Button onClick={() => {
                                                             setEndIndex('end')
                                                             setFilterQuery({
-                                                                ...filterQuery, ["row_end"] : 'end'
+                                                                ...filterQuery, ["row_end"]: 'end'
                                                             })
                                                         }} style={{ marginLeft: "1rem", padding: 0 }} variant="outlined" sx={{}}>End</Button>
                                                     )
@@ -440,7 +459,7 @@ const TabularRepresentationMainSection = () => {
 
                                                     ) :
                                                     (
-                                                        <Input value={endIndex} onChange={handleEndIndexChange} style={{ padding: "6px 16px" }}  type="number" placeholder="Index" />
+                                                        <Input value={endIndex} onChange={handleEndIndexChange} style={{ padding: "6px 16px" }} type="number" placeholder="Index" />
                                                     )
 
 
@@ -467,14 +486,14 @@ const TabularRepresentationMainSection = () => {
                                                     options={tabularRepresentationState.all_columns}
                                                     size="small"
                                                     value={filterColumn}
-                                                    onChange={(e,value, reason) => setFilterColumn(value)}
-                                                    renderInput={(params) => <TextField sx={{ }} {...params} label="Value" />}
+                                                    onChange={(e, value, reason) => setFilterColumn(value)}
+                                                    renderInput={(params) => <TextField sx={{}} {...params} label="Value" />}
                                                 />
                                             </FormControl>
                                         </Box>
 
                                         <Box sx={{ width: "30vw", ml: "1rem" }}>
-                                        <Button variant='outlined' disabled={(filterColumn.length != 0 && filterColumn.length != 0) ? false : true} onClick={handleFilterColumnSubmit} >
+                                            <Button variant='outlined' disabled={(filterColumn.length != 0 && filterColumn.length != 0) ? false : true} onClick={handleFilterColumnSubmit} >
                                                 <FileDownloadDoneIcon />
                                             </Button>
                                         </Box>
@@ -516,23 +535,23 @@ const TabularRepresentationMainSection = () => {
                     <Grid container >
                         <Grid item xs={12}>
                             <Paper elevation={0} sx={{ py: "0.1rem" }}>
-                                <Box sx={{height: "760px"}}>
+                                <Box sx={{ height: "760px",width:"100%" }}>
                                     {
                                         tabularRepresentationState.requestStatus === REQUEST_STATUS_LOADING
-                                        ? (
-                                            <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "640px" }}>
-                                                <CircularProgress size="4rem" color="inherit" />
-                                            </Box>
-                                        ) : (
-                                            <MUIDataTable
-                                                title={"Result"}
-                                                data={data_rows}
-                                                columns={data_columns}
-                                                options={options}
-                                            />
-                                        )
+                                            ? (
+                                                <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "640px" }}>
+                                                    <CircularProgress size="4rem" color="inherit" />
+                                                </Box>
+                                            ) : (
+                                                <MUIDataTable
+                                                    title={"Result"}
+                                                    data={data_rows}
+                                                    columns={data_columns}
+                                                    options={options}
+                                                />
+                                            )
                                     }
-                                    
+
                                 </Box>
                             </Paper>
 
@@ -550,7 +569,7 @@ const TabularRepresentationMainSection = () => {
                 onClose={() => setSearchOpen(false)}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
-                fullWidth
+                maxWidth="lg"
             >
                 <DialogTitle id="alert-dialog-title">
                     {"Search Parameters"}
@@ -636,7 +655,7 @@ const TabularRepresentationMainSection = () => {
                 onClose={() => setSortOpen(false)}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
-                maxWidth
+                maxWidth="lg"
             >
                 <DialogTitle id="alert-dialog-title">
                     {"Sort Parameters"}
@@ -709,7 +728,7 @@ const TabularRepresentationMainSection = () => {
                 onClose={() => setFilterOpen(false)}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
-                maxWidth
+                maxWidth="lg"
             >
                 <DialogTitle id="alert-dialog-title">
                     {"Filter Parameters"}

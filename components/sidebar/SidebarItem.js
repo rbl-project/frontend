@@ -1,24 +1,30 @@
 import React from 'react';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Tooltip from '@mui/material/Tooltip';
-import Zoom from '@mui/material/Zoom';
-import Link from "next/link";
+import Link from 'next/link';
+import { ListItem, ListItemButton, ListItemIcon, ListItemText, Tooltip, Zoom, } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import {useSelector,useDispatch} from "react-redux";
+
+// Redux Actions
 import {setOpenMenuItem} from "/store/globalStateSlice";
 
+// Custom Theme for Sidebar Item
 const theme = createTheme({
     components: {
-        MuiListItem: {
+        MuiListItemButton: {
             styleOverrides: {
                 root: {
                     '&.Mui-selected': {
                         backgroundColor: "#3d4a6b",
                         color: "#f5f5f5"
                     },
+                    '&.Mui-selected:hover': {
+                        backgroundColor: "#3d4a6b",
+                        color: "#f5f5f5"
+                    },
+                    '&:hover': {
+                        backgroundColor: "#2e374f",
+                        color: "#f5f5f5"
+                    }
                 },
             },
         },
@@ -27,8 +33,13 @@ const theme = createTheme({
 
 const SidebarItem = ({ itemKey, path, name, open, isSelect, ItemIcon }) => {
 
+    // Redux State
     const dispatch = useDispatch();
+    const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     const selectedMenuItem = useSelector((state) => state.global.openMenuItem);
+
+    // When No Dataset is Selected or Available
+    const isDisabled = selectedDataset === null || selectedDataset === undefined || selectedDataset === "";
 
     const clickHandler = () => {
         dispatch(setOpenMenuItem(name));
@@ -36,9 +47,9 @@ const SidebarItem = ({ itemKey, path, name, open, isSelect, ItemIcon }) => {
 
     return (
         <ThemeProvider theme={theme}>
-            <ListItem key={itemKey} disablePadding sx={{ display: 'block'}} onClick={clickHandler} >
+            <ListItem key={itemKey} disablePadding sx={{ display: 'block'}} >
                 <Link href={path} >
-                    <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: "auto",borderRadius:3,  }} selected={selectedMenuItem === name} >
+                    <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: "auto",borderRadius:3,  }} selected={selectedMenuItem === name} disabled={isDisabled} onClick={clickHandler} >
                         <Tooltip title={name} placement="right" TransitionComponent={Zoom} >
                             <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center', color: "white" }} >
                                 <ItemIcon />

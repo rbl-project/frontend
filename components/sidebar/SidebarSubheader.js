@@ -1,6 +1,6 @@
 import React from 'react';
-import Typography from '@mui/material/Typography';
-import ListSubheader from '@mui/material/ListSubheader';
+import {Typography,ListSubheader} from '@mui/material';
+
 
 const SidebarSubheader = ({open,title}) => {
     return (

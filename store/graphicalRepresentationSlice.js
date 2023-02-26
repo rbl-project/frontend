@@ -48,8 +48,8 @@ export const generateGraph = createAsyncThunk('/generate-graph', async (formData
 });
 
 
-const graphsSlice = createSlice({
-    name: "graphs",
+const graphicalRepresentationSlice = createSlice({
+    name: "graphicalRepresentation",
     initialState: initialState,
     reducers: {
         resetRequestStatus: (state, action) => {
@@ -132,6 +132,6 @@ const graphsSlice = createSlice({
     }
 });
 
-export const { resetRequestStatus, resetGraphState } = graphsSlice.actions;
+export const { resetRequestStatus, resetGraphState } = graphicalRepresentationSlice.actions;
 
-export default graphsSlice.reducer;
+export default graphicalRepresentationSlice.reducer;
