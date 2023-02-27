@@ -16,6 +16,8 @@ const initialState = {
     categorical_column_values: {},
     numerical_columns: [],
     all_columns: [],
+    n_rows: 0,
+    n_cols: 0,
 }
 
 export const getTabularRepresentation = createAsyncThunk('/filtered-tabular-representation', async (formData) => {
@@ -46,6 +48,8 @@ const tabularRepresentationSlice = createSlice({
                 state.categorical_column_values = action.payload.data.categorical_values;
                 state.numerical_columns = action.payload.data.numerical_columns;
                 state.all_columns = action.payload.data.all_columns;
+                state.n_rows = action.payload.data.n_rows;
+                state.n_cols = action.payload.data.n_cols;
 
             } else {
                 state.requestStatus = REQUEST_STATUS_FAILED;
