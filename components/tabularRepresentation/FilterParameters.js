@@ -37,17 +37,17 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 const FilterParameters = ({ filterQuery, setFilterQuery }) => {
 
     const tabularRepresentationState = useSelector((state) => state.tabularRepresentation);
-
+    
     //! ======================= FILTERING PARAMETERS ========================
 
     const intital_filter_query = {
-        "end": 'end', // end index is end of dataframe itself
+        "end": tabularRepresentationState.n_rows, // end index is end of dataframe itself
         "columns": [], // all columns
         "row_start": 0, // start form 1st row
-        "row_end": 'end' // end index is end of dataframe itself
+        "row_end": tabularRepresentationState.n_rows // end index is end of dataframe itself
     }
     const [startIndex, setStartIndex] = useState(0);
-    const [endIndex, setEndIndex] = useState('end');
+    const [endIndex, setEndIndex] = useState(tabularRepresentationState.n_rows);
     const [filterColumn, setFilterColumn] = useState([]);
 
     const [filterOpen, setFilterOpen] = useState(false);
@@ -138,12 +138,12 @@ const FilterParameters = ({ filterQuery, setFilterQuery }) => {
                     <Box sx={{ mr: 2 }}>
 
                         <Button onClick={() => {
-                            setEndIndex('end')
+                            setEndIndex(tabularRepresentationState.n_rows)
                             setFilterQuery({
-                                ...filterQuery, ["row_end"]: 'end'
+                                ...filterQuery, ["row_end"]: tabularRepresentationState.n_rows
                             })
                         }}
-                            style={endIndex !== 'end' && endIndex !== undefined ? { marginLeft: "1rem", color: "rgba(0, 0, 0, 0.26)", border: "1px solid rgba(0, 0, 0, 0.12)", padding: 0 } : { marginLeft: "1rem", padding: 0 }}
+                            style={endIndex != tabularRepresentationState.n_rows && endIndex !== undefined ? { marginLeft: "1rem", color: "rgba(0, 0, 0, 0.26)", border: "1px solid rgba(0, 0, 0, 0.12)", padding: 0 } : { marginLeft: "1rem", padding: 0 }}
                             variant="outlined">
                             End
                         </Button>
@@ -154,12 +154,12 @@ const FilterParameters = ({ filterQuery, setFilterQuery }) => {
                     <Box sx={{ mr: 2 }}>
                         <TextField
                             size='small'
-                            error={endIndex !== 'end' && (parseInt(endIndex) < parseInt(startIndex))}
-                            helperText={(endIndex !== 'end' && (parseInt(endIndex) < parseInt(startIndex)) ? "End must be greater than start" : "")}
+                            error={endIndex !== tabularRepresentationState.n_rows && (parseInt(endIndex) < parseInt(startIndex))}
+                            helperText={(endIndex !== tabularRepresentationState.n_rows && (parseInt(endIndex) < parseInt(startIndex)) ? "End must be greater than start" : "")}
                             inputProps={{ inputMode: 'numeric' }}
                             value={endIndex}
                             onChange={handleEndIndexChange}
-                            style={endIndex === 'end' ? { padding: "6px 16px", WebkitTextFillColor: "rgba(0, 0, 0, 0.38)" } : { padding: "6px 16px" }} type="number" placeholder="Index" />
+                            style={endIndex === tabularRepresentationState.n_rows ? { padding: "6px 16px", WebkitTextFillColor: "rgba(0, 0, 0, 0.38)" } : { padding: "6px 16px" }} type="number" placeholder="Index" />
 
                     </Box>
                 </Box>
@@ -205,7 +205,7 @@ const FilterParameters = ({ filterQuery, setFilterQuery }) => {
                             <Button variant='outlined' onClick={() => {
                                 setFilterQuery(intital_filter_query)
                                 setStartIndex(0)
-                                setEndIndex('end')
+                                setEndIndex(tabularRepresentationState.n_rows)
                                 setFilterColumn([])
                             }} sx={{ ml: 2 }}>Reset</Button>
                         </>

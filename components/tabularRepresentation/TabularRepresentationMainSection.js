@@ -86,7 +86,7 @@ const TabularRepresentationMainSection = () => {
     const [filterQuery, setFilterQuery] = useState({ // if end is string 'end' then consider end of the dataframe and do not conisder row_end
         "columns": [], // if filtercolumn length is 0 then consider all the columnns
         "row_start": 0,
-        "row_end": 'end'
+        "row_end": tabularRepresentationState.n_rows
     });
 
     //! ======= FINAL SUBMIT AND OTHERs======
