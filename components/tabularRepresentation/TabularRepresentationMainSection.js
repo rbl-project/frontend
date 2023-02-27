@@ -28,13 +28,15 @@ import {
     Badge,
     Autocomplete,
     TextField,
-    CircularProgress
+    CircularProgress,
+    OutlinedInput,
 } from "@mui/material";
 
 import { ToolTipText } from "./TabularRepresentationStyles";
 import { useDispatch, useSelector } from 'react-redux';
 import MUIDataTable from "mui-datatables";
 import { styled } from '@mui/material/styles';
+import { ToastContainer, toast } from 'react-toastify';
 
 // icons
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
@@ -84,32 +86,50 @@ const TabularRepresentationMainSection = () => {
         selectableRowsOnClick: false,
         rowsPerPage: 12,
         elevation: 0,
-        tableBodyHeight: '650px',
-        tableBodyMaxHeight: '650px',
+        tableBodyHeight: '74vh',
+        // tableBodyMaxHeight: '650px',
         fixedHeader: true,
         textLabels: {
             body: {
-                noMatch: 'Your custom message here',
+                noMatch: 'No data to show',
             }
         }
     };
 
 
     //! ====================  SEARCH PARAMETERS ============================
-    const [searchQuery, setSearchQuery] = useState({});
+    const [searchQuery, setSearchQuery] = useState({
+        "categorical_col": {},
+        "numerical_col": {}
+    });
     const [searchColumn, setSearchColumn] = useState('');
     const [searchValue, setSearchValue] = useState([]);
+    const [searchColumnNumerical, setSearchColumnNumerical] = useState('');
+    const [searchNumericalToValue, setSearchNumericalToValue] = useState(undefined);
+    const [searchNumericalFromValue, setSearchNumericalFromValue] = useState(undefined);
     const [searchOpen, setSearchOpen] = useState(false);
 
     const handleSearchColumnSubmit = () => {
         // append serachColumn as key and searchValue as value in searchQuery object
         let searchQuery_temp = searchQuery;
-        searchQuery_temp[searchColumn] = searchValue;
+        searchQuery_temp['categorical_col'][searchColumn] = searchValue;
         setSearchQuery(searchQuery_temp);
 
         setSearchColumn('');
         setSearchValue([]);
         // console.log(tabularRepresentationState.categorical_column_values["Species"]);
+    }
+
+    const handleSearchColumnNumericalSubmit = () => {
+        // append serachColumn as key and searchValue as value in searchQuery object
+        let searchQuery_temp = searchQuery;
+        searchQuery_temp['numerical_col'][searchColumnNumerical] = [searchNumericalFromValue, searchNumericalToValue];
+        setSearchQuery(searchQuery_temp);
+
+        setSearchColumnNumerical('');
+        setSearchNumericalToValue('');
+        setSearchNumericalFromValue('');
+
     }
 
 
@@ -180,6 +200,21 @@ const TabularRepresentationMainSection = () => {
     //! ====================== FINAL SUBMIT AND OTHERs========================
 
     const handleFinalSubmit = (e) => {
+        // if row_end is not 'end' and is greater than row start then alert that row_start cannot be greater than row_end
+        if (filterQuery.row_end !== 'end' && (parseInt(filterQuery.row_end) < parseInt(filterQuery.row_start))) {
+            toast('Row start cannot be greater than row end', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+            return;
+        }
+
         const finalQuery = {
             "dataset_name": selectedDataset,
             "search": searchQuery,
@@ -194,15 +229,24 @@ const TabularRepresentationMainSection = () => {
     }));
 
     return (
-        <Box sx={{ flexGrow: 1, width: "100%", overflow: 'hidden !important' }}>
+        <Box sx={{ flexGrow: 1, width: "100%" }}>
             <Grid container spacing={2}>
                 <Grid item xs={4}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Paper elevation={0} sx={{ py: "0.1rem", px: "0.5rem", overflow: 'hidden', }}>
+                            <Paper elevation={0} sx={{
+                                py: "0.1rem",
+                                px: "0.5rem",
+                                height: "89vh",
+                                overflowY: "scroll",
+                                overflow: "auto",
+                                "&::-webkit-scrollbar": { width: "0.6rem", height: "0.6rem", borderRadius: "2rem" },
+                                "&::-webkit-scrollbar-track": { bgcolor: "#f1f1f1" },
+                                "&::-webkit-scrollbar-thumb": { bgcolor: "#c1c1c1", borderRadius: "3rem" }
+                            }}>
 
                                 {/* SEARCH  */}
-                                <Box sx={{ my: "1rem", height: "33%" }}>
+                                <Box sx={{ my: "1rem", }}>
 
                                     <Typography
                                         variant='h6'
@@ -214,9 +258,15 @@ const TabularRepresentationMainSection = () => {
                                         </Tooltip>
                                     </Typography>
 
+                                    {/* Categorical Columns */}
+
+                                    <Typography variant='h6' sx={{ fontWeight: "500", mt: 2, fontSize: "13px", textAlign: "left" }} >
+                                        Categorical Columns
+                                    </Typography>
+
                                     <Box sx={{ mt: "0.8rem", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                         {/* Select Column Dropdown  */}
-                                        <Box sx={{ width: "30vw", mr: 2 }}>
+                                        <Box sx={{ width: "50vw", mr: 2 }}>
                                             <FormControl fullWidth size="small">
                                                 <Autocomplete
                                                     disableClearable
@@ -238,7 +288,7 @@ const TabularRepresentationMainSection = () => {
                                         </Box>
 
                                         {/* Select Value Dropdown  */}
-                                        <Box sx={{ width: "30vw" }}>
+                                        <Box sx={{ width: "50vw" }}>
                                             <FormControl fullWidth size="small">
                                                 <Autocomplete
                                                     multiple
@@ -262,14 +312,60 @@ const TabularRepresentationMainSection = () => {
                                             </Button>
                                         </Box>
                                     </Box>
+
+                                    {/* Numerical Columns  */}
+                                    <Typography variant='h6' sx={{ fontWeight: "500", mt: 2, fontSize: "13px", textAlign: "left" }} >
+                                        Numerical Columns
+                                    </Typography>
+
+                                    <Box sx={{ mt: "0.8rem", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                        {/* Select Column Dropdown  */}
+                                        <Box sx={{ width: "50vw", mr: 2 }}>
+                                            <FormControl fullWidth size="small">
+                                                <Autocomplete
+                                                    disableClearable
+                                                    disableCloseOnSelect
+                                                    fullWidth={true}
+                                                    filterSelectedOptions={true}
+                                                    id="combo-box-demo"
+                                                    options={tabularRepresentationState.numerical_columns}
+                                                    size="small"
+                                                    value={searchColumnNumerical}
+                                                    // sx={{ width: "130px", padding: "0px" }}
+                                                    onChange={(e, value, reason) => {
+                                                        setSearchColumnNumerical(value)
+                                                    }}
+                                                    renderInput={(params) => <TextField sx={{}} {...params} label="Column" />}
+                                                />
+                                            </FormControl>
+                                        </Box>
+
+
+                                        <Box sx={{ width: "50vw" }}>
+                                            <FormControl fullWidth size="small" sx={{ flexDirection: 'row' }}>
+                                                <TextField placeholder='From' inputProps={{ inputMode: 'numeric' }} size='small' onChange={(e) => setSearchNumericalFromValue(e.target.value)} value={searchNumericalFromValue} sx={{ mr: 2 }} />
+                                                <TextField placeholder='To' inputProps={{ inputMode: 'numeric' }} size='small' onChange={(e) => setSearchNumericalToValue(e.target.value)} value={searchNumericalToValue} />
+                                            </FormControl>
+                                        </Box>
+
+                                        <Box sx={{ width: "30vw", ml: "1rem" }}>
+                                            <Button variant='outlined' disabled={(searchColumnNumerical.length != 0 && searchNumericalFromValue != null && searchNumericalToValue != null) ? false : true} onClick={handleSearchColumnNumericalSubmit} >
+                                                <FileDownloadDoneIcon />
+                                            </Button>
+                                        </Box>
+                                    </Box>
+
                                     <Box sx={{ mt: 2 }}>
                                         {
-                                            Object.keys(searchQuery).length != 0 ?
+                                            Object.keys(searchQuery['categorical_col']).length + Object.keys(searchQuery['numerical_col']).length != 0 ?
                                                 (<>
-                                                    <Badge badgeContent={Object.keys(searchQuery).length} color="primary">
+                                                    <Badge badgeContent={Object.keys(searchQuery['categorical_col']).length + Object.keys(searchQuery['numerical_col']).length} color="primary">
                                                         <Button variant='outlined' onClick={() => setSearchOpen(true)}>Show Parameters</Button>
                                                     </Badge>
-                                                    <Button variant='outlined' onClick={() => setSearchQuery({})} sx={{ ml: 2 }}>Reset</Button>
+                                                    <Button variant='outlined' onClick={() => setSearchQuery({
+                                                        "categorical_col": {},
+                                                        "numerical_col": {}
+                                                    })} sx={{ ml: 2 }}>Reset</Button>
                                                 </>
                                                 ) : (
                                                     <></>
@@ -280,7 +376,7 @@ const TabularRepresentationMainSection = () => {
 
                                 <Divider sx={{ mt: 5 }} />
                                 {/* SORT  */}
-                                <Box sx={{ my: "1rem", height: "23%" }}>
+                                <Box sx={{ my: "1rem", }}>
 
                                     <Typography
                                         variant='h6'
@@ -295,7 +391,7 @@ const TabularRepresentationMainSection = () => {
 
                                     <Box sx={{ mt: "0.8rem", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                         {/* Select Column 1 Dropdown  */}
-                                        <Box sx={{ width: "30vw", mr: 2 }}>
+                                        <Box sx={{ width: "50vw", mr: 2 }}>
                                             <FormControl fullWidth size="small">
                                                 <Autocomplete
                                                     disableClearable
@@ -313,7 +409,7 @@ const TabularRepresentationMainSection = () => {
                                         </Box>
 
                                         {/* Select Value Dropdown  */}
-                                        <Box sx={{ width: "30vw" }}>
+                                        <Box sx={{ width: "50vw" }}>
                                             <FormControl fullWidth size="small">
                                                 <InputLabel id="demo-simple-select-label-2">Order</InputLabel>
                                                 <Select
@@ -353,7 +449,7 @@ const TabularRepresentationMainSection = () => {
 
                                 <Divider sx={{ mt: 5 }} />
                                 {/* FILTER  */}
-                                <Box sx={{ my: "1rem", height: "33%" }}>
+                                <Box sx={{ my: "1rem", }}>
 
                                     <Typography
                                         variant='h6'
@@ -376,45 +472,26 @@ const TabularRepresentationMainSection = () => {
                                             <Typography>From: </Typography>
                                         </Box>
                                         <Box sx={{ mr: 2 }}>
-                                            {
-                                                startIndex !== 0 && startIndex !== undefined ? // if index is not start and also not undefined then disable start
-                                                    (
-                                                        <Button onClick={() => {
-                                                            setStartIndex(0)
-                                                            setFilterQuery({
-                                                                ...filterQuery, ["row_start"]: 0
-                                                            })
-                                                        }} style={{ color: "rgba(0, 0, 0, 0.26)", border: "1px solid rgba(0, 0, 0, 0.12)", padding: 0 }} variant="outlined" sx={{}}>Start</Button>
-
-                                                    ) :
-                                                    (
-                                                        <Button onClick={() => {
-                                                            setStartIndex(0)
-                                                            setFilterQuery({
-                                                                ...filterQuery, ["row_start"]: 0
-                                                            })
-                                                        }} style={{ padding: 0 }} variant="outlined" sx={{}}>Start</Button>
-                                                    )
-
-
-                                            }
+                                            <Button onClick={() => {
+                                                setStartIndex(0)
+                                                setFilterQuery({
+                                                    ...filterQuery, ["row_start"]: 0
+                                                })
+                                            }}
+                                                style={startIndex !== 0 && startIndex !== undefined ? { color: "rgba(0, 0, 0, 0.26)", border: "1px solid rgba(0, 0, 0, 0.12)", padding: 0 } : { padding: 0 }}
+                                                variant="outlined">Start</Button>
                                         </Box>
 
                                         <p>or</p>
 
                                         <Box sx={{ mr: 2 }}>
-                                            {
-                                                startIndex === 0 ? // if index is not start and also not undefined then disable start
-                                                    (
-                                                        <Input value={startIndex} min="5" onChange={handleStartIndexChange} style={{ padding: "6px 16px", WebkitTextFillColor: "rgba(0, 0, 0, 0.38)" }} type="number" placeholder="Index" />
-
-                                                    ) :
-                                                    (
-                                                        <Input value={startIndex} min="5" onChange={handleStartIndexChange} style={{ padding: "6px 16px" }} type="number" placeholder="Index" />
-                                                    )
-
-
-                                            }
+                                            <TextField
+                                                size='small'
+                                                inputProps={{ inputMode: 'numeric' }}
+                                                value={startIndex}
+                                                onChange={handleStartIndexChange}
+                                                style={startIndex === 0 ? { padding: "6px 16px", WebkitTextFillColor: "rgba(0, 0, 0, 0.38)" } : { padding: "6px 16px" }}
+                                                placeholder="Index" />
                                         </Box>
                                     </Box>
 
@@ -425,45 +502,31 @@ const TabularRepresentationMainSection = () => {
                                             <Typography>To: </Typography>
                                         </Box>
                                         <Box sx={{ mr: 2 }}>
-                                            {
-                                                endIndex !== 'end' && endIndex !== undefined ? // if index is not start and also not undefined then disable start
-                                                    (
-                                                        <Button onClick={() => {
-                                                            setEndIndex('end')
-                                                            setFilterQuery({
-                                                                ...filterQuery, ["row_end"]: 'end'
-                                                            })
-                                                        }} style={{ marginLeft: "1rem", color: "rgba(0, 0, 0, 0.26)", border: "1px solid rgba(0, 0, 0, 0.12)", padding: 0 }} variant="outlined" sx={{}}>End</Button>
 
-                                                    ) :
-                                                    (
-                                                        <Button onClick={() => {
-                                                            setEndIndex('end')
-                                                            setFilterQuery({
-                                                                ...filterQuery, ["row_end"]: 'end'
-                                                            })
-                                                        }} style={{ marginLeft: "1rem", padding: 0 }} variant="outlined" sx={{}}>End</Button>
-                                                    )
-
-
-                                            }
+                                            <Button onClick={() => {
+                                                setEndIndex('end')
+                                                setFilterQuery({
+                                                    ...filterQuery, ["row_end"]: 'end'
+                                                })
+                                            }}
+                                                style={endIndex !== 'end' && endIndex !== undefined ? { marginLeft: "1rem", color: "rgba(0, 0, 0, 0.26)", border: "1px solid rgba(0, 0, 0, 0.12)", padding: 0 } : { marginLeft: "1rem", padding: 0 }}
+                                                variant="outlined">
+                                                End
+                                            </Button>
                                         </Box>
 
                                         <p>or</p>
 
                                         <Box sx={{ mr: 2 }}>
-                                            {
-                                                endIndex === 'end' ? // if index is not start and also not undefined then disable start
-                                                    (
-                                                        <Input value={endIndex} onChange={handleEndIndexChange} style={{ padding: "6px 16px", WebkitTextFillColor: "rgba(0, 0, 0, 0.38)" }} type="number" placeholder="Index" />
+                                            <TextField
+                                                size='small'
+                                                error={endIndex !== 'end' && (parseInt(endIndex) < parseInt(startIndex))}
+                                                helperText={(endIndex !== 'end' && (parseInt(endIndex) < parseInt(startIndex)) ? "End must be greater than start" : "")}
+                                                inputProps={{ inputMode: 'numeric' }}
+                                                value={endIndex}
+                                                onChange={handleEndIndexChange}
+                                                style={endIndex === 'end' ? { padding: "6px 16px", WebkitTextFillColor: "rgba(0, 0, 0, 0.38)" } : { padding: "6px 16px" }} type="number" placeholder="Index" />
 
-                                                    ) :
-                                                    (
-                                                        <Input value={endIndex} onChange={handleEndIndexChange} style={{ padding: "6px 16px" }} type="number" placeholder="Index" />
-                                                    )
-
-
-                                            }
                                         </Box>
                                     </Box>
 
@@ -519,7 +582,7 @@ const TabularRepresentationMainSection = () => {
                                 </Box>
 
                                 <Divider sx={{ mt: 5 }} />
-                                <Box sx={{ my: "1rem", height: "33%", textAlign: 'center' }}>
+                                <Box sx={{ my: "1rem", textAlign: 'center' }}>
                                     <Button variant='contained' onClick={handleFinalSubmit}>
                                         Submit
                                     </Button>
@@ -534,8 +597,23 @@ const TabularRepresentationMainSection = () => {
                 <Grid item xs={8}>
                     <Grid container >
                         <Grid item xs={12}>
-                            <Paper elevation={0} sx={{ py: "0.1rem" }}>
-                                <Box sx={{ height: "760px",width:"100%" }}>
+                            {
+                                tabularRepresentationState.requestStatus === REQUEST_STATUS_LOADING
+                                    ? (
+                                        <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "640px" }}>
+                                            <CircularProgress size="4rem" color="inherit" />
+                                        </Box>
+                                    ) : (
+                                        <MUIDataTable
+                                            title={"Result"}
+                                            data={data_rows}
+                                            columns={data_columns}
+                                            options={options}
+                                        />
+                                    )
+                            }
+                            {/* <Paper elevation={0} sx={{ py: "0.1rem" }}>
+                                <Box sx={{ height: "90vh"}}>
                                     {
                                         tabularRepresentationState.requestStatus === REQUEST_STATUS_LOADING
                                             ? (
@@ -553,7 +631,7 @@ const TabularRepresentationMainSection = () => {
                                     }
 
                                 </Box>
-                            </Paper>
+                            </Paper> */}
 
                         </Grid>
                     </Grid>
@@ -586,8 +664,9 @@ const TabularRepresentationMainSection = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
+
                                     {
-                                        Object.keys(searchQuery).map((row) => (
+                                        Object.keys(searchQuery['categorical_col']).map((row) => (
                                             <TableRow
                                                 key={row}
                                             >
@@ -608,16 +687,16 @@ const TabularRepresentationMainSection = () => {
                                                             }}
                                                             component="ul"
                                                         > {
-                                                                searchQuery[row].map((val) => {
+                                                                searchQuery['categorical_col'][row].map((val) => {
                                                                     return (
                                                                         <ListItem key={val}>
                                                                             <Chip
                                                                                 label={val}
                                                                                 onDelete={() => {
-                                                                                    setSearchQuery({
-                                                                                        ...searchQuery,
-                                                                                        [row]: searchQuery[row].filter((item) => item !== val)
-                                                                                    })
+                                                                                    const temp_list = searchQuery['categorical_col'][row].filter((item) => item !== val);
+                                                                                    const temp_searchQuery = { ...searchQuery };
+                                                                                    temp_searchQuery['categorical_col'][row] = temp_list;
+                                                                                    setSearchQuery(temp_searchQuery)
                                                                                 }}
                                                                             />
                                                                         </ListItem>
@@ -632,13 +711,58 @@ const TabularRepresentationMainSection = () => {
                                                     <Link href="#" underline="none">
                                                         <DeleteOutlineIcon onClick={() => {
                                                             let temp = { ...searchQuery };
-                                                            delete temp[row];
+                                                            delete temp['categorical_col'][row];
                                                             setSearchQuery(temp);
                                                         }} />
                                                     </Link>
                                                 </TableCell>
                                             </TableRow>
-                                        ))}
+                                        ))
+                                    }
+
+                                    {/* Numerical */}
+                                    {
+                                        Object.keys(searchQuery['numerical_col']).map((row) => (
+                                            <TableRow
+                                                key={row}
+                                            >
+                                                <TableCell component="th" scope="row">
+                                                    {row}
+
+                                                </TableCell>
+                                                <TableCell>
+                                                    {
+                                                        <Paper
+                                                            sx={{
+                                                                display: 'flex',
+                                                                justifyContent: 'start',
+                                                                flexWrap: 'wrap',
+                                                                listStyle: 'none',
+                                                                p: 0.5,
+                                                                m: 0,
+                                                            }}
+                                                            component="ul"
+                                                        >
+                                                            <Chip
+                                                                label={`${searchQuery['numerical_col'][row][0]} - ${searchQuery['numerical_col'][row][1]}`}
+                                                            />
+
+                                                        </Paper>
+                                                    }
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Link href="#" underline="none">
+                                                        <DeleteOutlineIcon onClick={() => {
+                                                            let temp = { ...searchQuery };
+                                                            delete temp['numerical_col'][row];
+                                                            setSearchQuery(temp);
+                                                        }} />
+                                                    </Link>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))
+                                    }
+
                                 </TableBody>
                             </Table>
                         </TableContainer>
@@ -827,6 +951,18 @@ const TabularRepresentationMainSection = () => {
                 </DialogActions>
             </Dialog>
 
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
         </Box>
     )
 }
