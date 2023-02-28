@@ -165,9 +165,11 @@ const TabularRepresentationMainSection = () => {
                             {
                                 tabularRepresentationState.requestStatus === REQUEST_STATUS_LOADING
                                     ? (
-                                        <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "640px" }}>
-                                            <CircularProgress size="4rem" color="inherit" />
-                                        </Box>
+                                        <Paper elevation={0}>
+                                            <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "89vh" }}>
+                                                <CircularProgress size="4rem" color="inherit" />
+                                            </Box>
+                                        </Paper>
                                     ) : (
                                         <MUIDataTable
                                             title={"Result"}
