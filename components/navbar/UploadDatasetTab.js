@@ -23,10 +23,19 @@ const UploadDatasetTab = ({ handleModalClose }) => {
   const dispatch = useDispatch();
   const datasetState = useSelector((state) => state.dataset);
 
+  const fileSizeMB = (size) => {
+    size = size / (1024 * 1024);
+    let sizeIn2Decimal = size.toFixed(2);
+    if (sizeIn2Decimal === "0.00") {
+      sizeIn2Decimal = "< 0.01";
+    }
+    return sizeIn2Decimal;
+  }
+
   // Selected Files
   const files = acceptedFiles.map(file => (
     <li key={file.path}>
-      {file.path} - {(file.size / (1024 * 1024)).toFixed(2)} MB
+      {file.path} - {fileSizeMB(file.size)} MB
     </li>
   ));
 
