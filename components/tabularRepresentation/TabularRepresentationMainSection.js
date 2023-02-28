@@ -125,30 +125,34 @@ const TabularRepresentationMainSection = () => {
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Paper elevation={0} sx={{
-                                py: "0.1rem",
-                                px: "0.5rem",
+                                
                                 height: "89vh",
-                                overflowY: "scroll",
-                                overflow: "auto",
-                                "&::-webkit-scrollbar": { width: "0.6rem", height: "0.6rem", borderRadius: "2rem" },
-                                "&::-webkit-scrollbar-track": { bgcolor: "#f1f1f1" },
-                                "&::-webkit-scrollbar-thumb": { bgcolor: "#c1c1c1", borderRadius: "3rem" }
                             }}>
+                                <Box sx={{
+                                    py: "0.1rem",
+                                    px: "0.7rem",
+                                    height: "81vh",
+                                    overflowY: "scroll",
+                                    overflow: "auto",
+                                    "&::-webkit-scrollbar": { width: "0.6rem", height: "0.6rem", borderRadius: "2rem" },
+                                    "&::-webkit-scrollbar-track": { bgcolor: "#f1f1f1",borderRadius: "3rem" },
+                                    "&::-webkit-scrollbar-thumb": { bgcolor: "#c1c1c1", borderRadius: "3rem" }
+                                }}>
+                                    {/* SEARCH  */}
+                                    <SearchParameters searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
-                                {/* SEARCH  */}
-                                <SearchParameters searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                                    <Divider sx={{ mt: 5 }} />
+                                    {/* SORT  */}
+                                    <SortParameters sortQuery={sortQuery} setSortQuery={setSortQuery} />
 
-                                <Divider sx={{ mt: 5 }} />
-                                {/* SORT  */}
-                                <SortParameters sortQuery={sortQuery} setSortQuery={setSortQuery} />
+                                    <Divider sx={{ mt: 5 }} />
+                                    {/* FILTER  */}
+                                    <FilterParameters filterQuery={filterQuery} setFilterQuery={setFilterQuery} />
+                                </Box>
 
-                                <Divider sx={{ mt: 5 }} />
-                                {/* FILTER  */}
-                                <FilterParameters filterQuery={filterQuery} setFilterQuery={setFilterQuery} />
-
-                                <Divider sx={{ mt: 5 }} />
-                                <Box sx={{ my: "1rem", textAlign: 'center' }}>
-                                    <Button variant='contained' onClick={handleFinalSubmit}>
+                                <Divider />
+                                <Box sx={{ my: "0.8rem", textAlign: 'center',mx:5 }}>
+                                    <Button variant='contained' onClick={handleFinalSubmit} fullWidth>
                                         Submit
                                     </Button>
                                 </Box>
