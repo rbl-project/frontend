@@ -135,7 +135,7 @@ const DatasetOverviewMainSection = () => {
             {/* Dataset Name */}
             <Grid item xs={12}>
               <Paper elevation={0} style={{ border: "2px solid blue" }} >
-                <Box height="3rem" sx={{ display: "flex", alignItems: "center", ml: 2 }} >
+                <Box height="5vh" sx={{ display: "flex", alignItems: "center", ml: 2 }} >
                   {datasetOverviewState.basic_info_req_status === REQUEST_STATUS_LOADING ? (
                     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "Center", width: "100%" }}>
                       <CircularProgress size="1rem" color="inherit" />
@@ -150,7 +150,7 @@ const DatasetOverviewMainSection = () => {
             {/* No of Rows  */}
             <Grid item xs={6}>
               <Paper elevation={0}>
-                <Box height="12.5rem" sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
+                <Box height="24vh" sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
 
                   {datasetOverviewState.basic_info_req_status === REQUEST_STATUS_LOADING ? (
                     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "Center", width: "100%" }}>
@@ -174,7 +174,7 @@ const DatasetOverviewMainSection = () => {
             {/* No of Columns  */}
             <Grid item xs={6}>
               <Paper elevation={0}>
-                <Box height="12.5rem" sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
+                <Box height="24vh" sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
 
                   {datasetOverviewState.basic_info_req_status === REQUEST_STATUS_LOADING ? (
                     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "Center", width: "100%" }}>
