@@ -149,19 +149,21 @@ const DataCorrelationMainSection = () => {
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Paper elevation={0} sx={{ py: "0.02rem" }}>
-                                < Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mx: 2 ,mt:1}} >
-                                    <Typography variant="h6" sx={{ fontWeight: "bold", }} > Select Columns </Typography>
-                                    <Checkbox edge="end" checked={selectAll} onChange={handleSelectAllColumns}  />
-                                </Box>
-                                {dataCorrelationState.num_cols_req_status === REQUEST_STATUS_LOADING ? (
-                                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "77vh" }}>
-                                        <CircularProgress size="1rem" color="inherit" />
+                                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", height: "89vh" }}>
+                                    < Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 1,mx:2, width:"90%" }} >
+                                        <Typography variant="h6" sx={{ fontWeight: "bold", }} > Select Columns </Typography>
+                                        <Checkbox edge="end" checked={selectAll} onChange={handleSelectAllColumns} />
                                     </Box>
-                                ) : (
-                                    <CoulmnCheckList handleCheckToggle={handleCheckToggle} checkedColumns={checkedColumns}  />
-                                )}
-                                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", m: 1, mt: 2 }}>
-                                    <Button variant="contained" onClick={handleSubmit} disabled={checkedColumns.length < 2} fullWidth>Submit</Button>
+                                    {dataCorrelationState.num_cols_req_status === REQUEST_STATUS_LOADING ? (
+                                        <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", flexGrow:1 }}>
+                                            <CircularProgress size="1rem" color="inherit" />
+                                        </Box>
+                                    ) : (
+                                        <CoulmnCheckList handleCheckToggle={handleCheckToggle} checkedColumns={checkedColumns} />
+                                    )}
+                                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", m: 1,width:"90%" }}>
+                                        <Button variant="contained" onClick={handleSubmit} disabled={checkedColumns.length < 2} fullWidth>Submit</Button>
+                                    </Box>
                                 </Box>
                             </Paper>
                         </Grid>
@@ -171,7 +173,7 @@ const DataCorrelationMainSection = () => {
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Paper elevation={0} sx={{ pt: 0 }}>
-                                <Box height="90vh">
+                                <Box height="89vh">
                                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" TabIndicatorProps={{ sx: { backgroundColor: dataCorrelationState.n_numerical_columns < 2 && "gray" } }} >
                                             <Tab disabled={dataCorrelationState.n_numerical_columns < 2} label={<Typography variant="body1" sx={{ fontSize: "1.1rem", fontWeight: "bold", textTransform: "none", }} > Correlation Value </Typography>} value="one" />
@@ -181,13 +183,13 @@ const DataCorrelationMainSection = () => {
                                     </Box>
                                     <TabPanel value={value} index="one" >
                                         {dataCorrelationState.corr_matrix_req_status === REQUEST_STATUS_LOADING ? (
-                                            <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "83vh" }}>
+                                            <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "82vh" }}>
                                                 <CircularProgress size="2rem" color="inherit" />
                                             </Box>
                                         ) : (
                                             // If No of Numerical Columns is less than 2, then show the below message
                                             dataCorrelationState.n_numerical_columns < 2 ? (
-                                                <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "83vh" }}>
+                                                <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "82vh" }}>
                                                     <Box>
                                                         <Typography variant="h4" align="center" sx={{ fontWeight: "bold" }} > No Content to Show </Typography>
                                                         <Typography variant="h6" align="center"> You Should have atleast 2 Numerical Columns in Dataset</Typography>
@@ -203,7 +205,7 @@ const DataCorrelationMainSection = () => {
                                     </TabPanel>
                                     <TabPanel value={value} index="three" >
                                         {dataCorrelationState.heatmap_req_status === REQUEST_STATUS_LOADING ? (
-                                            <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "83vh" }}>
+                                            <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", height: "82vh" }}>
                                                 <CircularProgress size="2rem" color="inherit" />
                                             </Box>
                                         ) : (

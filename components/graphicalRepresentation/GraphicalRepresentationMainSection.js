@@ -19,7 +19,7 @@ import { AiFillBoxPlot as BoxPlotIcon } from 'react-icons/ai';
 
 // Actions from Redux State
 import { getNumericalColumnsInfo, getCategoricalColumnsInfo, resetGraphState, resetRequestStatus } from '/store/graphicalRepresentationSlice';
-import {setOpenMenuItem} from "/store/globalStateSlice";
+import { setOpenMenuItem } from "/store/globalStateSlice";
 
 // Constants
 import { REQUEST_STATUS_FAILED, CUSTOM_ERROR_MESSAGE, GRAPHICAL_REPRESENTATION } from '/constants/Constants';
@@ -123,11 +123,13 @@ const GraphsMainSection = () => {
 
                 {/* Select Graph Type */}
                 <Grid item xs={2}>
-                    <Grid container spacing={2}>
+                    <Grid container height="100%">
                         <Grid item xs={12}>
-                            <Paper elevation={0} sx={{ py: "0.1rem" }}>
-                                <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2, my: 1 }} > Select Graph Type </Typography>
-                                <SelectGraphType setTabName={setGraphType} seletedTabName={graphType} />
+                            <Paper elevation={0} sx={{ py: "0.1rem",height:"100%" }} >
+                                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                                    <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2, my: 1 }} > Select Graph Type </Typography>
+                                    <SelectGraphType setTabName={setGraphType} seletedTabName={graphType} />
+                                </Box>
                             </Paper>
                         </Grid>
                     </Grid>
@@ -138,7 +140,7 @@ const GraphsMainSection = () => {
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Paper elevation={0} sx={{ pt: 0 }}>
-                                <Box height="90vh">
+                                <Box height="89vh">
                                     <TabPanel value={graphType} index="line" >
                                         < GraphContainerTab title="Line Plot" TabIcon={LinePlotIcon} nColumns={1} graphType={graphType} column1={column1} column2={column2} setColumn1={setColumn1} setColumn2={setColumn2} />
                                     </TabPanel>

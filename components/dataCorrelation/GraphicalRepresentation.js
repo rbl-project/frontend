@@ -44,7 +44,7 @@ const GraphicalRepresentation = () => {
     }, [checkedColumns]);
 
     return (
-        <Box sx={{ height: "83vh", width: "100%", px: 2, py: 2, }} >
+        <Box sx={{ height: "82vh", width: "100%", px: 2, py: 2, }} >
             {/* Show Scatter Plot Tab Content when 2 or More Columns are selected */}
             {dataCorrelationState.checked_columns.length < 2 ?
                 (

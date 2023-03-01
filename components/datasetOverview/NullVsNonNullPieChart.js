@@ -47,6 +47,7 @@ const NullVsNonNullPieChart = ({ data }) => (
         ]
       ]
     }}
+    enableArcLinkLabels={false}
     arcLinkLabelsSkipAngle={10}
     arcLinkLabelsTextOffset={10}
     arcLinkLabelsTextColor={{ theme: 'labels.text.fill' }}
@@ -100,7 +101,7 @@ const NullVsNonNullPieChart = ({ data }) => (
         translateX: 50,
         translateY: 50,
         itemsSpacing: 10,
-        itemWidth: 210,
+        itemWidth: 200,
         itemHeight: 18,
         itemTextColor: '#999',
         itemDirection: 'left-to-right',

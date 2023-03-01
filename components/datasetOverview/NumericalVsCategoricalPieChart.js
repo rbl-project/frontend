@@ -21,6 +21,7 @@ const NumericalVsCategoricalPieChart = ({ data }) => (
         ]
       ]
     }}
+    enableArcLinkLabels={false}
     arcLinkLabelsSkipAngle={10}
     arcLinkLabelsTextOffset={10}
     arcLinkLabelsTextColor={{ theme: 'labels.text.fill' }}
@@ -70,10 +71,10 @@ const NumericalVsCategoricalPieChart = ({ data }) => (
         anchor: 'bottom',
         direction: 'row',
         justify: false,
-        translateX: 50,
+        translateX: 30,
         translateY: 50,
-        itemsSpacing: 10,
-        itemWidth: 210,
+        itemsSpacing: 5,
+        itemWidth: 200,
         itemHeight: 18,
         itemTextColor: '#999',
         itemDirection: 'left-to-right',

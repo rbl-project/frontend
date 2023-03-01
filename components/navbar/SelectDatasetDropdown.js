@@ -1,7 +1,7 @@
 import React from 'react'
 import { styled } from '@mui/material/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 
 // Redux Actions
 import { setOpenModal, setCloseModal } from '/store/globalStateSlice';
@@ -34,10 +34,12 @@ const DatasetSelectButton = () => {
 
     return (
         <>
-            <ColorButton variant="outlined" size="large" align="left" onClick={handleClickOpen} disableElevation={true} fullWidth={true} endIcon={<KeyboardArrowDownIcon fontSize='large' />} sx={{
-                mr: 2, textTransform: "none", height: 30, my: "auto", minWidth: 120, justifyContent: "space-between", px: 1
+            <ColorButton variant="outlined" size="large" align="left" onClick={handleClickOpen} disableElevation={true} fullWidth={true} endIcon={<KeyboardArrowDownIcon fontSize='large' sx={{m:0}} />} sx={{
+                mr: 2, textTransform: "none", height: 30, my: "auto", minWidth: 120,maxWidth:240, justifyContent: "space-between", px: 1
             }}>
+                < Typography sx={{overflow:"hidden",textOverflow:"ellipsis"}}>
                 {datasetState.selectedDataset === null ? "No Detaset Available" : datasetState.selectedDataset}
+                </Typography>
             </ColorButton>
 
             < SelectDatasetModal open={isModalOpen} handleModalClose={handleClose} />
