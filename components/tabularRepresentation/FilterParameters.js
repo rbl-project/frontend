@@ -95,15 +95,15 @@ const FilterParameters = ({ filterQuery, setFilterQuery }) => {
                     </Tooltip>
                 </Typography>
 
-                <Typography variant='h6' sx={{ fontWeight: "bold", my: 1, fontSize: "15px", textAlign: "center" }} >
+                <Typography variant='h6' sx={{ fontSize: "14px", }} >
                     Rows
                 </Typography>
 
                 {/* Row Start Index */}
-                <Box sx={{ mt: "0.8rem", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Box sx={{ width: "100%", display: "flex", alignItems: "center", }}>
                     {/* Select Rows start Dropdown  */}
                     <Box sx={{ mr: 1 }}>
-                        <Typography>From: </Typography>
+                        <Typography sx={{ fontSize: "13px", }}>From: </Typography>
                     </Box>
                     <Box sx={{ mr: 2 }}>
                         <Button onClick={() => {
@@ -130,10 +130,10 @@ const FilterParameters = ({ filterQuery, setFilterQuery }) => {
                 </Box>
 
                 {/* Row End Index */}
-                <Box sx={{ mt: "0.8rem", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Box sx={{ mt: "0.8rem", width: "100%", display: "flex", alignItems: "center", }}>
                     {/* Select Rows start Dropdown  */}
                     <Box sx={{ mr: 1 }}>
-                        <Typography>To: </Typography>
+                        <Typography sx={{ fontSize: "13px", }}>To: </Typography>
                     </Box>
                     <Box sx={{ mr: 2 }}>
 
@@ -164,7 +164,7 @@ const FilterParameters = ({ filterQuery, setFilterQuery }) => {
                     </Box>
                 </Box>
 
-                <Typography variant='h6' sx={{ fontWeight: "bold", my: 1, fontSize: "15px", textAlign: "center" }} >
+                <Typography variant='h6' sx={{  my: 1, fontSize: "14px"}} >
                     Columns
                 </Typography>
 
