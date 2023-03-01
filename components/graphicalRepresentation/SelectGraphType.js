@@ -19,7 +19,7 @@ import SelectGraphTypeItem from './SelectGraphTypeItem';
 
 const SelectGraphType = ({setTabName, seletedTabName,}) => {
   return (
-    <List sx={{width:"95%",mx:"auto",height:"84vh"}}>
+    <List sx={{width:"95%",mx:"auto",flexGrow:1}}>
         <SelectGraphTypeItem value="line" name="Line Plot" ItemIcon={LinePlotIcon} setTabName={setTabName} seletedTabName={seletedTabName} columnType={NUMERICAL} nColumns={1} />
         <SelectGraphTypeItem value="scatter" name="Scatter Plot" ItemIcon={ScatterPlotIcon} setTabName={setTabName} seletedTabName={seletedTabName} columnType={NUMERICAL} nColumns={2} />
         <SelectGraphTypeItem value="bar" name="Bar Graph" ItemIcon={BarGraphIcon} setTabName={setTabName} seletedTabName={seletedTabName} columnType={CATEGORICAL} nColumns={1} />

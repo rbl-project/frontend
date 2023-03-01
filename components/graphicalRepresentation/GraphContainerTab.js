@@ -147,7 +147,7 @@ const GraphContainerTab = ({ title, nColumns, graphType, column1, column2, setCo
             </Box>
 
             {/* Graph Container */}
-            <Box sx={{ height: "76vh", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Box sx={{ height: "75vh", width: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
 
                 {graphicalRepresentationState.graph_req_status === REQUEST_STATUS_LOADING ? (
                     // Loading Spinner

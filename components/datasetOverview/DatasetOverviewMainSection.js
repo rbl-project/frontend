@@ -135,13 +135,13 @@ const DatasetOverviewMainSection = () => {
             {/* Dataset Name */}
             <Grid item xs={12}>
               <Paper elevation={0} style={{ border: "2px solid blue" }} >
-                <Box height="5vh" sx={{ display: "flex", alignItems: "center", ml: 2 }} >
+                <Box height="5vh" sx={{ display: "flex", alignItems: "center", mx: 1, }} >
                   {datasetOverviewState.basic_info_req_status === REQUEST_STATUS_LOADING ? (
                     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "Center", width: "100%" }}>
                       <CircularProgress size="1rem" color="inherit" />
                     </Box>
                   ) : (
-                    <Typography variant="h5" sx={{ fontWeight: "bold", color: "blue" }} >{datasetOverviewState.dataset_name}</Typography>
+                    <Typography variant="h5" sx={{ fontWeight: "bold", color: "blue",overflow:"hidden",textOverflow:"ellipsis"}} >{datasetOverviewState.dataset_name}</Typography>
                   )}
                 </Box>
               </Paper>
@@ -220,7 +220,7 @@ const DatasetOverviewMainSection = () => {
             {/* Numerical vs Categorical Pie Chart */}
             <Grid item xs={6}>
               <Paper elevation={0} sx={{ pt: 1 }}>
-                <Box height="40vh">
+                <Box height="40vh" width="100%">
                   <Typography variant="h6" sx={{ fontWeight: "bold", ml: 2, mt: 1, color: "primary" }} > Numerical vs Categorical Distribution </Typography>
 
                   {datasetOverviewState.graph_rep_req_status === REQUEST_STATUS_LOADING ? (

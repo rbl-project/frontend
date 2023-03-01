@@ -10,7 +10,7 @@ const ColumnCheckList = ({ checkedColumns, handleCheckToggle }) => {
   const columns = dataCorrelationState.numerical_columns;
 
   return (
-    <List dense sx={{ width: '100%', height: "77vh", px: 1, overflow: "auto", bgcolor: 'background.paper', "&::-webkit-scrollbar": { width: "0.6rem", borderRadius: "2rem" }, "&::-webkit-scrollbar-track": { bgcolor: "#f1f1f1" }, "&::-webkit-scrollbar-thumb": { bgcolor: "#c1c1c1", borderRadius: "3rem" } }}>
+    <List dense sx={{ width: '100%', flexGrow:1, px: 1, overflow: "auto", bgcolor: 'background.paper', "&::-webkit-scrollbar": { width: "0.6rem", borderRadius: "2rem" }, "&::-webkit-scrollbar-track": { bgcolor: "#f1f1f1" }, "&::-webkit-scrollbar-thumb": { bgcolor: "#c1c1c1", borderRadius: "3rem" } }}>
       {columns.map((value) => {
         const labelId = `checkbox-list-secondary-label-${value}`;
         return (
