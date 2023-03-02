@@ -42,7 +42,7 @@ const SelectGraphTypeItem = ({ value, name, ItemIcon, setTabName, seletedTabName
         <ThemeProvider theme={theme}>
             < Tooltip title={isDisabled ? `You need at least ${nColumns} ${columnType} Column${nColumns > 1 ? "s" : ""} to use plot Graph` : ""} >
                 <ListItem key={value} disablePadding sx={{ display: 'block' }} >
-                    <ListItemButton sx={{ px: "auto", justifyContent: "initial", borderRadius: 3, }} selected={isSelected} disabled={isDisabled} onClick={clickHandler} >
+                    <ListItemButton sx={{ px: "auto", justifyContent: "initial", borderRadius: 2, }} selected={isSelected} disabled={isDisabled} onClick={clickHandler} >
                         <ListItemIcon sx={{ minWidth: 0, mr: 1, justifyContent: 'center', color: isSelected ? "white" : "black", }} >
                             <ItemIcon fontSize={value === "box" ? "1.5rem" : "medium"} />
                         </ListItemIcon>
