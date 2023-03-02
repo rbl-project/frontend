@@ -87,7 +87,7 @@ const FilterParameters = ({ filterQuery, setFilterQuery }) => {
 
                 <Typography
                     variant='h6'
-                    sx={{ fontWeight: "bold", my: 1, fontSize: "1rem" }}
+                    sx={{ fontWeight: "bold", my: 1, fontSize: "1.1rem" }}
                 >
                     Filter Parameters
                     <Tooltip arrow title="Filtering will be performed on above searched and sorted data">
@@ -130,7 +130,7 @@ const FilterParameters = ({ filterQuery, setFilterQuery }) => {
                 </Box>
 
                 {/* Row End Index */}
-                <Box sx={{ mt: "0.8rem", width: "100%", display: "flex", alignItems: "center", }}>
+                <Box sx={{ mt: "", width: "100%", display: "flex", alignItems: "center", }}>
                     {/* Select Rows start Dropdown  */}
                     <Box sx={{ mr: 1 }}>
                         <Typography sx={{ fontSize: "13px", }}>To: </Typography>

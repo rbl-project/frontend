@@ -3,7 +3,7 @@ import { List, ListItem, ListItemButton, ListItemText, Checkbox, Divider, Toolti
 import { useSelector } from 'react-redux';
 
 
-const ColumnCheckList = ({ checkedColumns, handleCheckToggle }) => {
+const ColumnCheckList = ({ checkedColumns, handleCheckToggle, }) => {
 
   // Redux state
   const dataCorrelationState = useSelector((state) => state.dataCorrelation);

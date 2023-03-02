@@ -91,7 +91,7 @@ const SearchParameters = ({ searchQuery, setSearchQuery }) => {
 
                 <Typography
                     variant='h6'
-                    sx={{ fontWeight: "bold", my: 1, fontSize: "1rem" }}
+                    sx={{ fontWeight: "bold", my: 1, fontSize: "1.1rem" }}
                 >
                     Search Parameters
                     <Tooltip arrow title="Only for columns with less than 100 unique values">

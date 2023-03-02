@@ -6,6 +6,7 @@ import {
     Button,
     Divider,
     CircularProgress,
+    Typography
 } from "@mui/material";
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -176,7 +177,7 @@ const TabularRepresentationMainSection = () => {
                                         </Paper>
                                     ) : (
                                         <MUIDataTable
-                                            title={"Result"}
+                                            title={<Typography variant="h6" sx={{ fontWeight: 600 }}>Result</Typography>}
                                             data={data_rows}
                                             columns={data_columns}
                                             options={options}

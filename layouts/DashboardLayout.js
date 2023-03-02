@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import "react-toastify/dist/ReactToastify.css";
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import { ToastContainer } from 'react-toastify';
 import { useSelector, useDispatch } from "react-redux";
 
@@ -15,12 +15,16 @@ import Sidebar from '../components/sidebar/Sidebar';
 // Redux Actions
 import { setOpenModal, setModalTabIndex } from '/store/globalStateSlice';
 
+// Constants
+import { REQUEST_STATUS_LOADING } from '/constants/Constants';
+
 
 const DashboardLayout = ({ children }) => {
 
     // Redux State
     const dispatch = useDispatch();
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
+    const datasetRequestStatus = useSelector((state) => state.dataset.requestStatus);
     const isNoDataset = selectedDataset === null || selectedDataset === undefined || selectedDataset === "";
 
     const clickHandler = () => {
@@ -40,6 +44,13 @@ const DashboardLayout = ({ children }) => {
             < Sidebar />
             <Box sx={{ mt: 8, mb: 2, width: "100%", px: 2, overflow: "hidden" }}>
                 {
+                    // Loading Screen
+                    datasetRequestStatus === REQUEST_STATUS_LOADING ? (
+                        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%", width: "100%", bgcolor: "rgba(255, 255, 255,1)" }} >
+                            <CircularProgress size="3rem" color='inherit' />
+                        </Box>
+                    ) :
+
                     // If no dataset is selected, show the no dataset component
                     isNoDataset ?
                         (<Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%", width: "100%", bgcolor: "rgba(255, 255, 255,1)" }} >

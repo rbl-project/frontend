@@ -10,7 +10,7 @@ import {
 import * as API from "../api";
 
 const initialState = {
-    requestStatus: REQUEST_STATUS_IDLE,
+    requestStatus: REQUEST_STATUS_LOADING,
     datasetUploadStatus: REQUEST_STATUS_IDLE,
     availableDatasets: [],
     selectedDataset: null,
