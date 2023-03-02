@@ -28,7 +28,8 @@ const CorrelationMatrix = () => {
                                             bgcolor: !column.included && "#f1f1f1",
                                             boxShadow: column.included && 0,
                                             border: "1px solid #c1c1c1",
-                                            overflow: "hidden", textOverflow: "ellipsis"
+                                            overflow: "hidden", textOverflow: "ellipsis",
+                                            whiteSpace: "nowrap"
                                         }}
                                     >
                                         {column.label}

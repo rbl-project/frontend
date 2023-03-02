@@ -66,6 +66,12 @@ const DataCorrelationMainSection = () => {
             newCheckedColumns.splice(currentIndex, 1);
         }
 
+        if(newCheckedColumns.length === dataCorrelationState.numerical_columns.length){
+            setSelectAll(true);
+        }else{
+            setSelectAll(false);
+        }
+
         setCheckedColumns(newCheckedColumns);
     };
 
@@ -152,7 +158,7 @@ const DataCorrelationMainSection = () => {
                                 <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", height: "89vh" }}>
                                     < Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 1,mx:2, width:"90%" }} >
                                         <Typography variant="h6" sx={{ fontWeight: "bold", }} > Select Columns </Typography>
-                                        <Checkbox edge="end" checked={selectAll} onChange={handleSelectAllColumns} />
+                                        <Checkbox edge="end" checked={selectAll} onChange={handleSelectAllColumns} disabled={dataCorrelationState.numerical_columns.length < 2} />
                                     </Box>
                                     {dataCorrelationState.num_cols_req_status === REQUEST_STATUS_LOADING ? (
                                         <Box sx={{ display: "flex", justifyContent: "center", alignItems: " center", width: "100%", flexGrow:1 }}>

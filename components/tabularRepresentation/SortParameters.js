@@ -66,7 +66,7 @@ const SortParameters = ({ sortQuery, setSortQuery }) => {
 
                 <Typography
                     variant='h6'
-                    sx={{ fontWeight: "bold", my: 1, fontSize: "1rem" }}
+                    sx={{ fontWeight: "bold", my: 1, fontSize: "1.1rem" }}
                 >
                     Sort Parameters
                     <Tooltip arrow title="Sorting will be performed on above searched data">
