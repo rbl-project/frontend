@@ -18,7 +18,7 @@ const ColumnCard = ({ allColumns=false, columnName }) => {
             Column Name
           </Typography>
           <Typography sx={{ fontSize: "0.85rem", my: 1 }}>
-            Missing Value: 'null'
+            Missing Value: &apos;null&apos;
           </Typography>
           <Box sx={{ width: "100%", height: "4vh", borderRadius: 10 }}>
             <MissingValuePercentageBar />
