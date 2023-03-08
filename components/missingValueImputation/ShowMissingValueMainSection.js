@@ -20,7 +20,7 @@ const ShowMissingValueMainSection = () => {
         <Paper elevation={0}>
             <Box sx={{ minHeight: "89vh", flexGrow: 1, width: "100%", display: "flex", flexDirection: "column", p:2,pt:1}}>
                 <Box>
-                    <Typography variant="h6" sx={{fontWeight:"bold"}}>Missing Value Distribution</Typography>
+                    <Typography variant="h6" sx={{fontWeight:"bold"}}>Missing Value Count</Typography>
                     <Divider sx={{ my: 1 }} />
                 </Box>
 
@@ -52,22 +52,22 @@ const ShowMissingValueMainSection = () => {
                     <Box sx={{ flexGrow: 1, width: "100%" }}>
                         <Grid container spacing={3}>
                             <Grid item xs={3}>
-                                <ColumnCard allColumns={true} />
+                                <ColumnCard allColumns={true} columnName="all-columns" />
                             </Grid>
                             <Grid item xs={3}>
-                                <ColumnCard />
+                                <ColumnCard columnName="column-a" />
                             </Grid>
                             <Grid item xs={3}>
-                                <ColumnCard />
+                                <ColumnCard columnName="column-b" />
                             </Grid>
                             <Grid item xs={3}>
-                                <ColumnCard />
+                                <ColumnCard columnName="column-c" />
                             </Grid>
                             <Grid item xs={3}>
-                                <ColumnCard />
+                                <ColumnCard columnName="column-d" />
                             </Grid>
                             <Grid item xs={3}>
-                                <ColumnCard />
+                                <ColumnCard columnName="column-e" />
                             </Grid>
                         </Grid>
                     </Box>

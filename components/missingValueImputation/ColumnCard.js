@@ -1,24 +1,31 @@
 import * as React from 'react';
-import { Card, CardActions, CardContent, Box, Typography } from '@mui/material';
+import Link from 'next/link';
+import { Card, Box, Typography } from '@mui/material';
+
+// Constants
+import { MISSING_VALUE_IMPUTATION_PATH } from '/constants/Constants';
 
 // Components
 import MissingValuePercentageBar from './MissingValuePercentageBar';
 
-const ColumnCard = ({allColumns}) => {
+
+const ColumnCard = ({ allColumns=false, columnName }) => {
   return (
-    <Card sx={{ width: "100%",backgroundColor:allColumns?"#dff0fa":"#eeeeee", borderRadius:3,}} elevation={0} >
-      <Box sx={{p:2,pt:1}} >
-        <Typography variant='h6' gutterBottom sx={{overflow:"hidden",textOverflow:"ellipsis",whiteSpace: "nowrap"}}>
-          Column Name
-        </Typography>
-        <Typography sx={{ fontSize: "0.85rem",my:1 }}>
-          Missing Value: 'null'
-        </Typography>
-        <Box sx={{ width: "100%", height: "4vh",borderRadius:10 }}>
-          <MissingValuePercentageBar />
+    <Link href={`${MISSING_VALUE_IMPUTATION_PATH}/${columnName}`} >
+      <Card sx={{ width: "100%", backgroundColor: allColumns ? "#dff0fa" : "#eeeeee", borderRadius: 3, cursor: "pointer" }} elevation={0} >
+        <Box sx={{ p: 2, pt: 1 }} >
+          <Typography variant='h6' gutterBottom sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            Column Name
+          </Typography>
+          <Typography sx={{ fontSize: "0.85rem", my: 1 }}>
+            Missing Value: 'null'
+          </Typography>
+          <Box sx={{ width: "100%", height: "4vh", borderRadius: 10 }}>
+            <MissingValuePercentageBar />
+          </Box>
         </Box>
-      </Box>
-    </Card>
+      </Card>
+    </Link >
   );
 }
 
