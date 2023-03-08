@@ -33,6 +33,8 @@ export const MISSING_VALUE_IMPUTATION = "Missing Value Imputation";
 export const NUMERICAL_ENCODING = "Numerical Encoding";
 export const MISSING_VALUE_IMPUTATION_PATH = DATA_PREPROCESSING_PATH + "/missing-value-imputation";
 export const NUMERICAL_ENCODING_PATH = DATA_PREPROCESSING_PATH + "/numerical-encoding";
+export const DATA_CLEANING = "Data Cleaning";
+export const DATA_CLEANING_PATH = DATA_PREPROCESSING_PATH + "/data-cleaning";
 
 
 // Feature Engineering Functions
