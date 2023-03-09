@@ -10,9 +10,7 @@ const data = [
     {
         "id": "",
         "Correct Values": 50,
-        "Correct ValuesColor": "green",
         "Missing Values": 50,
-        "Missing ValuesColor": "red",
     }
 ]
 
