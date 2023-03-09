@@ -158,6 +158,7 @@ const FindAndReplaceSection = () => {
                                                                 >{
                                                                         findReplaceQuery[col].map((item) => (
                                                                             <Chip
+                                                                                key={item['find']}
                                                                                 sx={{ m: 0.5 }}
                                                                                 label={<Typography>{item['find']} &#8594; {item['replace']}</Typography>}
                                                                                 onDelete={() => {
