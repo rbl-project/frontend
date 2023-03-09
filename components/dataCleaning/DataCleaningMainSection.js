@@ -19,7 +19,7 @@ import {
 import { styled } from '@mui/material/styles';
 
 // components
-import DropRowsAndColumnSection from './DropRowColumn';
+import DropRowsAndColumnSection from './DropRowColumnComponents/DropRowColumn';
 import ChangeDataTypeSection from './ChangeDataTypes';
 import FindAndReplaceSection from './FindAndReplace';
 import RenameColumnSection from './RenameColumn';
