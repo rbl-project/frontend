@@ -55,7 +55,7 @@ const SidebarItem = ({ itemKey, path, name, open, isSelect, ItemIcon }) => {
                                 <ItemIcon />
                             </ListItemIcon>
                         </Tooltip>
-                        <ListItemText primary={name} sx={{ opacity: open ? 1 : 0 }} />
+                        <ListItemText primaryTypographyProps={{fontSize: '15px'}}  primary={name} sx={{ opacity: open ? 1 : 0 }} />
                     </ListItemButton>
                 </Link>
             </ListItem>
