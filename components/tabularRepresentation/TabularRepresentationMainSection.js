@@ -44,6 +44,16 @@ const TabularRepresentationMainSection = () => {
             dispatch(getColumnInfo({ dataset_name: selectedDataset }));
             dispatch(getTabularRepresentation({ dataset_name: selectedDataset }));
         }
+        setSearchQuery({
+            "categorical_col": {},
+            "numerical_col": {}
+        })
+        setSortQuery({})
+        setFilterQuery({
+            "columns": [], // if filtercolumn length is 0 then consider all the columnns
+            "row_start": 0,
+            "row_end": tabularRepresentationState.n_rows
+        })
     }, [selectedDataset])
 
     // Setting Open Menu Item When Page Loads or Refreshes
