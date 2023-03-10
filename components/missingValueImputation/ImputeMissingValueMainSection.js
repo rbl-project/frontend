@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Box, Paper, Typography, Divider, Tooltip, Button, TextField, } from '@mui/material';
+import { Box, Paper, Typography, Divider, Tooltip, Button, TextField, Grid } from '@mui/material';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MUIDataTable from "mui-datatables";
 
 // components
@@ -13,37 +12,13 @@ import MissingValuePercentageCircle from './MissingValuePercentageCircle';
 import ApplyChangesIcon from '@mui/icons-material/Done';
 import RevertChangesIcon from '@mui/icons-material/Replay';
 
-// Overriding Existing Styles
-const theme = createTheme({
-  components: {
-    MuiTableBody: {
-      styleOverrides: {
-        root: {
-          // backgroundColor: "#FF0000",
-          "&::-webkit-scrollbar": {
-            width: "0.6rem",
-            height: "0.6rem",
-            borderRadius: "2rem"
-          },
-          "&::-webkit-scrollbar-track": {
-            bgcolor: "#f1f1f1"
-          },
-          "&::-webkit-scrollbar-thumb": {
-            bgcolor: "#c1c1c1",
-            borderRadius: "3rem"
-          }
-        }
-      }
-    }
-  }
-})
 
 const table_options = {
   selectableRowsHideCheckboxes: true,
   selectableRowsOnClick: false,
   rowsPerPage: 12,
   elevation: 0,
-  tableBodyHeight: '74vh',
+  tableBodyHeight: '64vh',
   fixedHeader: true,
   download: false,
   print: false,
@@ -107,10 +82,9 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
 
         {/* Heading  */}
         <Box>
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems:"center" }}>
-
-            <Typography variant="h6" sx={{ fontWeight: "bold",mr:1 }} > Missing Value Imputation - {columnName} </Typography>
-            <MissingValuePercentageCircle  />
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            {/* <MissingValuePercentageCircle value={30} /> */}
+            <Typography variant="h6" sx={{ fontWeight: "bold", }} > Missing Value Imputation - {columnName} </Typography>
             <Box sx={{ flexGrow: 1 }} />
             <Tooltip title="Once You Click on this Button, All the Changes will be made into Original Dataset Permanently">
               <Button variant="contained" color='success' size="small">Save Changes</Button>
@@ -119,188 +93,200 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
           < Divider sx={{ my: 1 }} />
         </Box>
 
-        {/* Missing Value and Imputation Dropdowns */}
-        <Box sx={{ display: "flex", mt: 3, alignItems: "flex-start" }}>
+        {/* Main Section  */}
+        < Grid container spacing={5} sx={{ px: 2 }}>
 
-          {/* Missing Value Dropdown */}
-          <Box sx={{ width: "20vw", mr: 2 }}>
-            <Autocomplete
-              size='small'
-              value={missingValue}
+          {/* Left Side */}
+          <Grid item xs={3}>
+            <Box sx={{ display: "flex", flexDirection: "column", }}>
 
-              onChange={(event, newValue) => {
-                // When the user Types and Directly Presses Enter
-                if (typeof newValue === 'string') {
-                  console.log(newValue);
-                  setMissingValue({
-                    title: newValue,
-                    value: newValue,
-                  });
-                }
-                // When User Types and Creates a New Value 
-                else if (newValue && newValue.inputValue) {
-                  setMissingValue({
-                    title: newValue.inputValue,
-                    value: newValue.inputValue,
-                  });
-                }
-                // When User Selects an Existing Value or Clears the Input
-                else {
-                  setMissingValue(newValue);
-                }
-              }}
+              {/* Missing Value Percentage  */}
+              < Box sx={{ height: "35vh" }} >
+                < MissingValuePercentagePie value={30} />
+              </Box>
+              < Typography variant="caption" sx={{ textAlign: "center", mt: 1, fontWeight: 500, textTransform: "uppercase" }} > Missing Value Percentage </Typography>
+              < Divider sx={{ my: 1 }} />
 
-              filterOptions={(options, params) => {
-                const filtered = filter(options, params);
+              {/* Missing Value Dropdown */}
+              <Box sx={{ mt: 3 }}>
+                <Autocomplete
+                  size='small'
+                  value={missingValue}
 
-                const { inputValue } = params;
-                // Suggest the creation of a new value
-                const isExisting = options.some((option) => inputValue === option.title);
-                if (inputValue !== '' && !isExisting) {
-                  filtered.push({
-                    inputValue,
-                    title: `Add "${inputValue}"`,
-                  });
-                }
+                  onChange={(event, newValue) => {
+                    // When the user Types and Directly Presses Enter
+                    if (typeof newValue === 'string') {
+                      console.log(newValue);
+                      setMissingValue({
+                        title: newValue,
+                        value: newValue,
+                      });
+                    }
+                    // When User Types and Creates a New Value 
+                    else if (newValue && newValue.inputValue) {
+                      setMissingValue({
+                        title: newValue.inputValue,
+                        value: newValue.inputValue,
+                      });
+                    }
+                    // When User Selects an Existing Value or Clears the Input
+                    else {
+                      setMissingValue(newValue);
+                    }
+                  }}
 
-                return filtered;
-              }}
+                  filterOptions={(options, params) => {
+                    const filtered = filter(options, params);
 
-              selectOnFocus
-              clearOnBlur
-              handleHomeEndKeys
-              id="free-solo-with-text-demo"
-              options={MissingValueOptions}
+                    const { inputValue } = params;
+                    // Suggest the creation of a new value
+                    const isExisting = options.some((option) => inputValue === option.title);
+                    if (inputValue !== '' && !isExisting) {
+                      filtered.push({
+                        inputValue,
+                        title: `Add "${inputValue}"`,
+                      });
+                    }
 
-              getOptionLabel={(option) => {
-                // Value selected with enter, right from the input
-                if (typeof option === 'string') {
-                  return option;
-                }
-                // Add "xxx" option created dynamically
-                if (option.inputValue) {
-                  return option.inputValue;
-                }
-                // Regular option
-                return option.title;
-              }}
+                    return filtered;
+                  }}
 
-              renderOption={(props, option) => <li {...props}>{option.title}</li>}
-              freeSolo
-              renderInput={(params) => (
-                <TextField {...params} label="Missing Value" />
-              )}
-            />
-          </Box>
+                  selectOnFocus
+                  clearOnBlur
+                  handleHomeEndKeys
+                  id="free-solo-with-text-demo"
+                  options={MissingValueOptions}
 
-          {/* Handle Missing Value Dropdown */}
-          <Box sx={{ width: "20vw", mr: 3 }}>
-            <Autocomplete
-              size='small'
-              value={handleMissingValueBy}
+                  getOptionLabel={(option) => {
+                    // Value selected with enter, right from the input
+                    if (typeof option === 'string') {
+                      return option;
+                    }
+                    // Add "xxx" option created dynamically
+                    if (option.inputValue) {
+                      return option.inputValue;
+                    }
+                    // Regular option
+                    return option.title;
+                  }}
 
-              onChange={(event, newValue) => {
-                // When the user Types and Directly Presses Enter
-                if (typeof newValue === 'string') {
-                  console.log(newValue);
-                  setHandleMissingValueBy({
-                    title: newValue,
-                    value: newValue,
-                  });
-                }
-                // When User Types and Creates a New Value 
-                else if (newValue && newValue.inputValue) {
-                  setHandleMissingValueBy({
-                    title: newValue.inputValue,
-                    value: newValue.inputValue,
-                  });
-                }
-                // When User Selects an Existing Value or Clears the Input
-                else {
-                  setHandleMissingValueBy(newValue);
-                }
-              }}
+                  renderOption={(props, option) => <li {...props}>{option.title}</li>}
+                  freeSolo
+                  renderInput={(params) => (
+                    <TextField {...params} label="Missing Value" />
+                  )}
+                />
+              </Box>
 
-              filterOptions={(options, params) => {
-                const filtered = filter(options, params);
+              {/* Handle Missing Value Dropdown */}
+              <Box sx={{ mt: 2 }}>
+                <Autocomplete
+                  size='small'
+                  value={handleMissingValueBy}
 
-                const { inputValue } = params;
-                // Suggest the creation of a new value
-                const isExisting = options.some((option) => inputValue === option.title);
-                if (inputValue !== '' && !isExisting) {
-                  filtered.push({
-                    inputValue,
-                    title: `Impute "${inputValue}"`,
-                  });
-                }
+                  onChange={(event, newValue) => {
+                    // When the user Types and Directly Presses Enter
+                    if (typeof newValue === 'string') {
+                      console.log(newValue);
+                      setHandleMissingValueBy({
+                        title: newValue,
+                        value: newValue,
+                      });
+                    }
+                    // When User Types and Creates a New Value 
+                    else if (newValue && newValue.inputValue) {
+                      setHandleMissingValueBy({
+                        title: newValue.inputValue,
+                        value: newValue.inputValue,
+                      });
+                    }
+                    // When User Selects an Existing Value or Clears the Input
+                    else {
+                      setHandleMissingValueBy(newValue);
+                    }
+                  }}
 
-                return filtered;
-              }}
+                  filterOptions={(options, params) => {
+                    const filtered = filter(options, params);
 
-              selectOnFocus
-              clearOnBlur
-              handleHomeEndKeys
-              id="free-solo-with-text-demo2"
-              options={MissingValueHandleOptions}
-              getOptionDisabled={(option) => option.disabled}
-              getOptionLabel={(option) => {
-                // Value selected with enter, right from the input
-                if (typeof option === 'string') {
-                  return option;
-                }
-                // Add "xxx" option created dynamically
-                if (option.inputValue) {
-                  return option.inputValue;
-                }
-                // Regular option
-                return option.title;
-              }}
+                    const { inputValue } = params;
+                    // Suggest the creation of a new value
+                    const isExisting = options.some((option) => inputValue === option.title);
+                    if (inputValue !== '' && !isExisting) {
+                      filtered.push({
+                        inputValue,
+                        title: `Impute "${inputValue}"`,
+                      });
+                    }
 
-              renderOption={(props, option) => <li {...props}>{option.title}</li>}
-              freeSolo
-              renderInput={(params) => (
-                <TextField {...params} label="Operation" />
-              )}
-            />
-          </Box>
+                    return filtered;
+                  }}
 
-          {/* Apply Chnage Button */}
-          <Box sx={{ mr: 1 }}>
-            < Tooltip title="Apply Changes" >
-              <Button aria-label="Apply Changes" variant="contained">
-                <ApplyChangesIcon />
-              </Button>
-            </Tooltip>
-          </Box>
+                  selectOnFocus
+                  clearOnBlur
+                  handleHomeEndKeys
+                  id="free-solo-with-text-demo2"
+                  options={MissingValueHandleOptions}
+                  getOptionDisabled={(option) => option.disabled}
+                  getOptionLabel={(option) => {
+                    // Value selected with enter, right from the input
+                    if (typeof option === 'string') {
+                      return option;
+                    }
+                    // Add "xxx" option created dynamically
+                    if (option.inputValue) {
+                      return option.inputValue;
+                    }
+                    // Regular option
+                    return option.title;
+                  }}
 
-          {/* Revert Chnage Button */}
-          <Box sx={{ mr: 1 }}>
-            < Tooltip title="Revert Changes" >
-              <Button aria-label="Revert Changes" variant="contained" color='error'>
-                <RevertChangesIcon />
-              </Button>
-            </Tooltip>
-          </Box>
+                  renderOption={(props, option) => <li {...props}>{option.title}</li>}
+                  freeSolo
+                  renderInput={(params) => (
+                    <TextField {...params} label="Operation" />
+                  )}
+                />
+              </Box>
 
+              {/* Apply Chnage Button */}
+              <Box sx={{ mt: 3 }}>
+                < Tooltip title="Apply Changes will not modify Original Dataset" >
+                  <Button aria-label="Apply Changes" variant="contained" fullWidth endIcon={<ApplyChangesIcon />}>
+                    Apply Changes
+                  </Button>
+                </Tooltip>
+              </Box>
 
+              {/* Revert Chnage Button */}
+              <Box sx={{ mt: 2 }}>
+                {/* < Tooltip title="Revert Changes" > */}
+                  <Button aria-label="Revert Changes" variant="contained" color='error' fullWidth endIcon={<RevertChangesIcon />}>
+                    Revert Changes
+                  </Button>
+                {/* </Tooltip> */}
+              </Box>
 
+            </Box>
+          </Grid>
 
-        </Box>
+          { /* Right Side */}
+          <Grid item xs={9}>
+            {/* Show Result */}
+            <Box >
+              <MUIDataTable
+                title={<Typography variant="h6" >Result</Typography>}
+                data={table_data}
+                columns={table_columns}
+                options={table_options}
+              />
+            </Box>
+          </Grid>
 
-        {/* Show Result */}
-        <Box sx={{ mt: 1 }}>
-          < ThemeProvider theme={theme} >
-            <MUIDataTable
-              title={<Typography variant="h6" >Result</Typography>}
-              data={table_data}
-              columns={table_columns}
-              options={table_options}
-            />
-          </ThemeProvider>
-        </Box>
+        </Grid>
 
       </Paper>
-    </Box>
+    </Box >
   )
 }
 

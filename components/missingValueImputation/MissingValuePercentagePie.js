@@ -13,13 +13,13 @@ const data = [
     },
 ];
 
-const MissingValuePercentagePie = ({  }) => (
+const MissingValuePercentagePie = ({ value }) => (
     <ResponsivePie
         data={data}
-        margin={{ top:10, right: 5, bottom: 5, left: 5 }}
-        startAngle={270}
-        endAngle={450}
-        innerRadius={0.7}
+        margin={{ top:10, right: 10, bottom: 10, left: 10 }}
+        startAngle={0}
+        endAngle={360}
+        innerRadius={0.6}
         padAngle={0.7}
         cornerRadius={3}
         activeOuterRadiusOffset={8}
@@ -34,6 +34,7 @@ const MissingValuePercentagePie = ({  }) => (
                 ]
             ]
         }}
+        arcLabel={(d)=>`${d.value}%`}
         enableArcLinkLabels={false}
         arcLinkLabelsSkipAngle={10}
         arcLinkLabelsTextOffset={10}
