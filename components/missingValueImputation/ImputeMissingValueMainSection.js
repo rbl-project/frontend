@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Paper, Typography, Divider, Tooltip, Button, TextField, Grid } from '@mui/material';
+import { Box, Paper, Typography, Divider, Tooltip, Button, TextField, Grid, Chip } from '@mui/material';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import MUIDataTable from "mui-datatables";
 
@@ -11,6 +11,10 @@ import MissingValuePercentageCircle from './MissingValuePercentageCircle';
 // icons
 import ApplyChangesIcon from '@mui/icons-material/Done';
 import RevertChangesIcon from '@mui/icons-material/Replay';
+import StringIcon from '@mui/icons-material/TextFieldsOutlined';
+import NumberIcon from '@mui/icons-material/Numbers';
+import BooleanIcon from '@mui/icons-material/ToggleOffOutlined';
+import { RxValueNone as NullIcon } from "react-icons/rx"
 
 
 const table_options = {
@@ -55,7 +59,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
   const filter = createFilterOptions();
 
   // Options for Missing Value Dropdown
-  const MissingValueOptions = [{ title: 'null', value: null }]
+  const MissingValueOptions = [{ title: 'null', value: "null" }]
   // Options for Handle Missing Value Dropdown
   const MissingValueHandleOptions = [
     { title: 'Impute Mean', value: 'mean' },
@@ -65,15 +69,111 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
     { title: 'Drop Column', value: 'drop-column', disabled: columnName === 'all-columns' ? true : false },
   ]
 
-  // State for Missing Value Dropdown
+  // State for Missing Value Input Color
+  const [missingValueInputColor, setMissingValueInputColor] = useState('black');
+
+  // State for Missing Value Text Data Type and Icon
+  const [missingValueTextDataType, setMissingValueTextDataType] = useState("string");
+  const [missingValueTextDataTypeIcon, setMissingValueTextDataTypeIcon] = useState(< StringIcon />);
+
+  // State for Missing Value Dropdown and Handle Missing Value By Dropdown
   const [missingValue, setMissingValue] = useState({ title: 'null', value: null });
-  // State for Fill Missing Value Dropdown
   const [handleMissingValueBy, setHandleMissingValueBy] = useState({ title: 'Mean', value: 'mean' });
 
-  // Click Handler for Submit Button
-  const handleSubmit = () => {
-    console.log(missingValue, handleMissingValueBy);
+  // Function to detect if a string is a number or string or boolean or null
+  const getDataType = (value) => {
+    if (value.toLowerCase() === 'null') {
+      return 'null';
+    }
+    else if (value === 'true' || value === 'false' || value === 'True' || value === 'False') {
+      return 'boolean';
+    }
+    else if (isNaN(value) === false && value.trim() !== '') {
+      return 'number';
+    }
+    else {
+      return 'string';
+    }
   }
+
+  // Function to Get Text Color of Missing Value Dropdown Input
+  const getMissingValueInputColor = (value) => {
+    if (getDataType(value) === 'string') {
+      return 'black';
+    }
+    else {
+      return 'blue';
+    }
+  }
+
+  // Function to Get Text Data Type Icon of Missing Value Dropdown Input
+  const getMissingValueInputDataTypeIcon = (dataType) => {
+    if (dataType === 'string') {
+      return < StringIcon />;
+    }
+    else if (dataType === 'number') {
+      return < NumberIcon />;
+    }
+    else if (dataType === 'boolean') {
+      return < BooleanIcon />;
+    }
+    else if (dataType === 'null') {
+      return < NullIcon />;
+    }
+  }
+
+
+
+  // Function to Change Data Type of Missing Value Dropdown Input
+  const changeDataType = (value) => {
+    if (getDataType(value) === 'string') {
+      setMissingValueTextDataType('string');
+      setMissingValueTextDataTypeIcon(< StringIcon />);
+    }
+    else if (getDataType(value) === 'number') {
+      if (missingValueTextDataType === 'string') {
+        setMissingValueTextDataType('number');
+        setMissingValueInputColor('blue');
+        setMissingValueTextDataTypeIcon(< NumberIcon />);
+      }
+      else {
+        setMissingValueTextDataType('string');
+        setMissingValueInputColor('black');
+        setMissingValueTextDataTypeIcon(< StringIcon />);
+      }
+    }
+    else if (getDataType(value) === 'boolean') {
+      if (missingValueTextDataType === 'string') {
+        setMissingValueTextDataType('boolean');
+        setMissingValueInputColor('blue');
+        setMissingValueTextDataTypeIcon(< BooleanIcon />);
+      }
+      else {
+        setMissingValueTextDataType('string');
+        setMissingValueInputColor('black');
+        setMissingValueTextDataTypeIcon(< StringIcon />);
+      }
+    }
+    else if (getDataType(value) === 'null') {
+      if (missingValueTextDataType === 'string') {
+        setMissingValueTextDataType('null');
+        setMissingValueInputColor('blue');
+        setMissingValueTextDataTypeIcon(< NullIcon />);
+      }
+      else {
+        setMissingValueTextDataType('string');
+        setMissingValueInputColor('black');
+        setMissingValueTextDataTypeIcon(< StringIcon />);
+      }
+    }
+  }
+
+  // Click Handler for Missing Value Dropdown Helper Text
+  const handleMissingValueTextDataTypeChange = () => {
+    changeDataType(missingValue.value);
+  }
+
+
 
 
   return (
@@ -105,6 +205,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                 < MissingValuePercentagePie value={30} />
               </Box>
               < Typography variant="caption" sx={{ textAlign: "center", mt: 1, fontWeight: 500, textTransform: "uppercase" }} > Missing Value Percentage </Typography>
+
               < Divider sx={{ my: 1 }} />
 
               {/* Missing Value Dropdown */}
@@ -113,10 +214,26 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                   size='small'
                   value={missingValue}
 
+                  onInputChange={(event, newInputValue, reason) => {
+
+                    if (reason === 'input' || reason === 'reset') {
+                      let dataType = getDataType(newInputValue);
+                      setMissingValueTextDataType(dataType);
+                      setMissingValueInputColor(getMissingValueInputColor(newInputValue));
+                      setMissingValueTextDataTypeIcon(getMissingValueInputDataTypeIcon(dataType));
+                    }
+                    else {
+                      setMissingValueInputColor('black');
+                      setMissingValueTextDataType("string");
+                      setMissingValueTextDataTypeIcon(< StringIcon />);
+                    }
+
+                  }}
+
                   onChange={(event, newValue) => {
                     // When the user Types and Directly Presses Enter
                     if (typeof newValue === 'string') {
-                      console.log(newValue);
+
                       setMissingValue({
                         title: newValue,
                         value: newValue,
@@ -137,17 +254,15 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
 
                   filterOptions={(options, params) => {
                     const filtered = filter(options, params);
-
                     const { inputValue } = params;
                     // Suggest the creation of a new value
                     const isExisting = options.some((option) => inputValue === option.title);
                     if (inputValue !== '' && !isExisting) {
                       filtered.push({
-                        inputValue,
-                        title: `Add "${inputValue}"`,
+                        inputValue: inputValue,
+                        title: `Add "${inputValue}"`
                       });
                     }
-
                     return filtered;
                   }}
 
@@ -170,10 +285,11 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                     return option.title;
                   }}
 
-                  renderOption={(props, option) => <li {...props}>{option.title}</li>}
+                  renderOption={(props, option) => <li {...props}> <Typography>{`${option.title}`}</Typography> </li>}
                   freeSolo
                   renderInput={(params) => (
-                    <TextField {...params} label="Missing Value" />
+                    <TextField {...params} label="Missing Value" InputProps={{ ...params.InputProps, style: { color: missingValueInputColor } }} helperText={<Chip label={missingValueTextDataType} clickable size='small' icon={missingValueTextDataTypeIcon} onClick={handleMissingValueTextDataTypeChange} />} FormHelperTextProps={{ sx: { ml: 0 } }} />
+
                   )}
                 />
               </Box>
@@ -187,7 +303,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                   onChange={(event, newValue) => {
                     // When the user Types and Directly Presses Enter
                     if (typeof newValue === 'string') {
-                      console.log(newValue);
+
                       setHandleMissingValueBy({
                         title: newValue,
                         value: newValue,
@@ -208,7 +324,6 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
 
                   filterOptions={(options, params) => {
                     const filtered = filter(options, params);
-
                     const { inputValue } = params;
                     // Suggest the creation of a new value
                     const isExisting = options.some((option) => inputValue === option.title);
@@ -218,7 +333,6 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                         title: `Impute "${inputValue}"`,
                       });
                     }
-
                     return filtered;
                   }}
 
@@ -261,9 +375,9 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
               {/* Revert Chnage Button */}
               <Box sx={{ mt: 2 }}>
                 {/* < Tooltip title="Revert Changes" > */}
-                  <Button aria-label="Revert Changes" variant="contained" color='error' fullWidth endIcon={<RevertChangesIcon />}>
-                    Revert Changes
-                  </Button>
+                <Button aria-label="Revert Changes" variant="contained" color='error' fullWidth endIcon={<RevertChangesIcon />}>
+                  Revert Changes
+                </Button>
                 {/* </Tooltip> */}
               </Box>
 
