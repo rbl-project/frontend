@@ -80,10 +80,10 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
 
   // Function to Get Data Type, Color and Icon for Input Text
   const getInputTextParameters = (value) => {
-    if (value.toLowerCase() === NULL_DATA_TYPE) {
+    if (['null','Null','NULL'].includes(value)) {
       return { color: BLUE_COLOR, dataType: NULL_DATA_TYPE, icon: <NullIcon /> }
     }
-    else if (value === 'true' || value === 'false' || value === 'True' || value === 'False') {
+    else if (['true','false','True','False','TRUE','FALSE'].includes(value)) {
       return { color: BLUE_COLOR, dataType: BOOLEAN_DATA_TYPE, icon: <BooleanIcon /> }
     }
     else if (isNaN(value) === false && value.trim() !== '') {
