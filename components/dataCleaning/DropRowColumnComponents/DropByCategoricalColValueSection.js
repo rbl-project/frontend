@@ -27,6 +27,9 @@ import {
 
 import { styled } from '@mui/material/styles';
 
+// API Endpoints
+import * as API from "/api";
+
 // icons
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -71,7 +74,8 @@ const DropByCategoricalColValueSection = ({ dropByCategoricalQuery, setDropByCat
     const [dropColumn, setDropColumn] = useState('');
     const [dropValue, setDropValue] = useState([]);
 
-    const [categoricalColValuesOptions, setCategoricalColValuesOptions] = useState([]);
+    // const [categoricalColValuesOptions, setCategoricalColValuesOptions] = useState([]);
+    const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
 
     const handleDropColSubmit = () => {
         console.log("Drop Column: ", dropColumn);
@@ -86,6 +90,28 @@ const DropByCategoricalColValueSection = ({ dropByCategoricalQuery, setDropByCat
 
         console.log("Drop Query: ", dropByCategoricalQuery);
     }
+
+    // +=======================================================================================
+
+    const [inputValue, setInputValue] = React.useState('');
+    const [options, setOptions] = React.useState([]);
+
+    useEffect(() => {
+        let data = {
+            "dataset_name": selectedDataset,
+            "column_name":dropColumn,
+            "search_value":inputValue
+        }
+
+        API.searchCategoricalValues(data).then((res) => {
+            let newOptions = res.data['data']['search_result']
+            setOptions(newOptions)
+        }).catch((err) => {
+            console.log(err);
+        })
+
+    }, [inputValue, dropValue])
+
     return (
         <>
             {/* Drop Rows by Column Values Input */}
@@ -102,10 +128,9 @@ const DropByCategoricalColValueSection = ({ dropByCategoricalQuery, setDropByCat
                             options={dataCleaningState.categorical_columns}
                             size="small"
                             value={dropColumn}
-                            // sx={{ width: "130px", padding: "0px" }}
                             onChange={(e, value, reason) => {
                                 setDropColumn(value)
-                                setCategoricalColValuesOptions(dataCleaningState.categorical_column_values[value])
+                                // setCategoricalColValuesOptions(dataCleaningState.categorical_column_values[value])
                             }}
                             renderInput={(params) => <TextField sx={{}} {...params} label="Categorical Column" />}
                         />
@@ -122,10 +147,19 @@ const DropByCategoricalColValueSection = ({ dropByCategoricalQuery, setDropByCat
                             fullWidth={true}
                             filterSelectedOptions={true}
                             id="combo-box-demo"
-                            options={categoricalColValuesOptions}
+                            // options={categoricalColValuesOptions}
+                            filterOptions={(x) => x}
+                            options={options}
                             size="small"
                             value={dropValue}
-                            onChange={(e, value, reason) => setDropValue(value)}
+                            // onChange={(e, value, reason) => setDropValue(value)}
+                            onChange={(event, newValue) => {
+                                setOptions(newValue ? [newValue, ...options] : options);
+                                setDropValue(newValue)
+                            }}
+                            onInputChange={(event, newInputValue) => {
+                                setInputValue(newInputValue);
+                            }}
                             renderInput={(params) => <TextField sx={{}} {...params} label="Value" />}
                         />
                     </FormControl>

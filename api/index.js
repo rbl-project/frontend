@@ -40,6 +40,7 @@ export const renameDataset = (formData) => API.post("/rename-dataset",formData);
 export const getNumericalColumnsInfo = (formData) => API.post("/get-numerical-columns-info",formData);
 export const getCategoricalColumnsInfo = (formData) => API.post("/get-categorical-columns-info",formData);
 export const getColumnInfo = (formData) => API.post("/get-columns-info",formData);
+export const searchCategoricalValues = (formData) => API.post("/search-categorical-value", formData)
 
 // Dataset Overview APIs
 export const getBasicInformation = (formData) => API.post("/basic-information",formData);
