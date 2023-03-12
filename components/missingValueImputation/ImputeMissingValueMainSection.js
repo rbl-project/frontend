@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react';BOOLEAN_DATA_TYPE
 import { Box, Paper, Typography, Divider, Tooltip, Button, TextField, Grid, Chip } from '@mui/material';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import MUIDataTable from "mui-datatables";
 
 // components
-import MissingValuePercentageBar from './MissingValuePercentageBar';
 import MissingValuePercentagePie from './MissingValuePercentagePie';
-import MissingValuePercentageCircle from './MissingValuePercentageCircle';
 
 // icons
 import ApplyChangesIcon from '@mui/icons-material/Done';
@@ -14,7 +12,10 @@ import RevertChangesIcon from '@mui/icons-material/Replay';
 import StringIcon from '@mui/icons-material/TextFieldsOutlined';
 import NumberIcon from '@mui/icons-material/Numbers';
 import BooleanIcon from '@mui/icons-material/ToggleOffOutlined';
-import { RxValueNone as NullIcon } from "react-icons/rx"
+import { RxValueNone as NullIcon } from "react-icons/rx";
+
+// Constants
+import { NUMBER_DATA_TYPE,STRING_DATA_TYPE, NULL_DATA_TYPE, BOOLEAN_DATA_TYPE, BLACK_COLOR, BLUE_COLOR } from '/constants/Constants';
 
 
 const table_options = {
@@ -59,7 +60,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
   const filter = createFilterOptions();
 
   // Options for Missing Value Dropdown
-  const MissingValueOptions = [{ title: 'null', value: "null" }]
+  const MissingValueOptions = [{ title: NULL_DATA_TYPE, value: NULL_DATA_TYPE }]
   // Options for Handle Missing Value Dropdown
   const MissingValueHandleOptions = [
     { title: 'Impute Mean', value: 'mean' },
@@ -69,101 +70,61 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
     { title: 'Drop Column', value: 'drop-column', disabled: columnName === 'all-columns' ? true : false },
   ]
 
-  // State for Missing Value Input Color
-  const [missingValueInputColor, setMissingValueInputColor] = useState('black');
-
-  // State for Missing Value Text Data Type and Icon
-  const [missingValueTextDataType, setMissingValueTextDataType] = useState("string");
-  const [missingValueTextDataTypeIcon, setMissingValueTextDataTypeIcon] = useState(< StringIcon />);
-
   // State for Missing Value Dropdown and Handle Missing Value By Dropdown
-  const [missingValue, setMissingValue] = useState({ title: 'null', value: null });
+  const [missingValue, setMissingValue] = useState({ title: NULL_DATA_TYPE, value: null });
   const [handleMissingValueBy, setHandleMissingValueBy] = useState({ title: 'Mean', value: 'mean' });
 
-  // Function to detect if a string is a number or string or boolean or null
-  const getDataType = (value) => {
-    if (value.toLowerCase() === 'null') {
-      return 'null';
+  // State for Missing Value Text DataType, Missing Value Text Input Color and Missing Value Text Input Icon
+  const [missingValueInputState, setMissingValueInputState] = useState({ color: BLACK_COLOR, dataType: STRING_DATA_TYPE, icon: <StringIcon /> });
+
+
+  // Function to Get Data Type, Color and Icon for Input Text
+  const getInputTextParameters = (value) => {
+    if (value.toLowerCase() === NULL_DATA_TYPE) {
+      return { color: BLUE_COLOR, dataType: NULL_DATA_TYPE, icon: <NullIcon /> }
     }
     else if (value === 'true' || value === 'false' || value === 'True' || value === 'False') {
-      return 'boolean';
+      return { color: BLUE_COLOR, dataType: BOOLEAN_DATA_TYPE, icon: <BooleanIcon /> }
     }
     else if (isNaN(value) === false && value.trim() !== '') {
-      return 'number';
+      return { color: BLUE_COLOR, dataType: NUMBER_DATA_TYPE, icon: <NumberIcon /> }
     }
     else {
-      return 'string';
+      return { color: BLACK_COLOR, dataType: STRING_DATA_TYPE, icon: <StringIcon /> }
     }
   }
-
-  // Function to Get Text Color of Missing Value Dropdown Input
-  const getMissingValueInputColor = (value) => {
-    if (getDataType(value) === 'string') {
-      return 'black';
-    }
-    else {
-      return 'blue';
-    }
-  }
-
-  // Function to Get Text Data Type Icon of Missing Value Dropdown Input
-  const getMissingValueInputDataTypeIcon = (dataType) => {
-    if (dataType === 'string') {
-      return < StringIcon />;
-    }
-    else if (dataType === 'number') {
-      return < NumberIcon />;
-    }
-    else if (dataType === 'boolean') {
-      return < BooleanIcon />;
-    }
-    else if (dataType === 'null') {
-      return < NullIcon />;
-    }
-  }
-
 
 
   // Function to Change Data Type of Missing Value Dropdown Input
   const changeDataType = (value) => {
-    if (getDataType(value) === 'string') {
-      setMissingValueTextDataType('string');
-      setMissingValueTextDataTypeIcon(< StringIcon />);
+
+    const {color,dataType,icon} = getInputTextParameters(value);
+
+    if ( dataType === STRING_DATA_TYPE) {
+      setMissingValueInputState({ color: BLACK_COLOR, dataType: STRING_DATA_TYPE, icon: < StringIcon /> });
     }
-    else if (getDataType(value) === 'number') {
-      if (missingValueTextDataType === 'string') {
-        setMissingValueTextDataType('number');
-        setMissingValueInputColor('blue');
-        setMissingValueTextDataTypeIcon(< NumberIcon />);
+    else if ( dataType === NUMBER_DATA_TYPE) {
+      if (missingValueInputState.dataType=== STRING_DATA_TYPE) {
+        setMissingValueInputState({ color: BLUE_COLOR, dataType: NUMBER_DATA_TYPE, icon: < NumberIcon /> });
       }
       else {
-        setMissingValueTextDataType('string');
-        setMissingValueInputColor('black');
-        setMissingValueTextDataTypeIcon(< StringIcon />);
+        setMissingValueInputState({ color: BLACK_COLOR, dataType: STRING_DATA_TYPE, icon: < StringIcon /> });
       }
     }
-    else if (getDataType(value) === 'boolean') {
-      if (missingValueTextDataType === 'string') {
-        setMissingValueTextDataType('boolean');
-        setMissingValueInputColor('blue');
-        setMissingValueTextDataTypeIcon(< BooleanIcon />);
+    else if (dataType === BOOLEAN_DATA_TYPE) {
+      if (missingValueInputState.dataType=== STRING_DATA_TYPE) {
+        setMissingValueInputState({ color: BLUE_COLOR, dataType: BOOLEAN_DATA_TYPE, icon: < BooleanIcon /> });
       }
       else {
-        setMissingValueTextDataType('string');
-        setMissingValueInputColor('black');
-        setMissingValueTextDataTypeIcon(< StringIcon />);
+        setMissingValueInputState({ color: BLACK_COLOR, dataType: STRING_DATA_TYPE, icon: < StringIcon /> });
       }
     }
-    else if (getDataType(value) === 'null') {
-      if (missingValueTextDataType === 'string') {
-        setMissingValueTextDataType('null');
-        setMissingValueInputColor('blue');
-        setMissingValueTextDataTypeIcon(< NullIcon />);
+    else if ( dataType === NULL_DATA_TYPE) {
+      if (missingValueInputState.dataType=== STRING_DATA_TYPE) {
+        setMissingValueInputState({ color: BLUE_COLOR, dataType: NULL_DATA_TYPE, icon: < NullIcon /> });
       }
       else {
-        setMissingValueTextDataType('string');
-        setMissingValueInputColor('black');
-        setMissingValueTextDataTypeIcon(< StringIcon />);
+        setMissingValueInputState({ color: BLACK_COLOR, dataType: STRING_DATA_TYPE, icon: < StringIcon /> });
       }
     }
   }
@@ -172,8 +133,6 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
   const handleMissingValueTextDataTypeChange = () => {
     changeDataType(missingValue.value);
   }
-
-
 
 
   return (
@@ -215,24 +174,18 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                   value={missingValue}
 
                   onInputChange={(event, newInputValue, reason) => {
-
                     if (reason === 'input' || reason === 'reset') {
-                      let dataType = getDataType(newInputValue);
-                      setMissingValueTextDataType(dataType);
-                      setMissingValueInputColor(getMissingValueInputColor(newInputValue));
-                      setMissingValueTextDataTypeIcon(getMissingValueInputDataTypeIcon(dataType));
+                      const { color, dataType, icon } = getInputTextParameters(newInputValue);
+                      setMissingValueInputState({ color, dataType, icon });
                     }
                     else {
-                      setMissingValueInputColor('black');
-                      setMissingValueTextDataType("string");
-                      setMissingValueTextDataTypeIcon(< StringIcon />);
+                      setMissingValueInputState({ color: BLACK_COLOR, dataType: STRING_DATA_TYPE, icon: < StringIcon /> });
                     }
-
                   }}
 
                   onChange={(event, newValue) => {
                     // When the user Types and Directly Presses Enter
-                    if (typeof newValue === 'string') {
+                    if (typeof newValue === STRING_DATA_TYPE) {
 
                       setMissingValue({
                         title: newValue,
@@ -274,7 +227,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
 
                   getOptionLabel={(option) => {
                     // Value selected with enter, right from the input
-                    if (typeof option === 'string') {
+                    if (typeof option === STRING_DATA_TYPE) {
                       return option;
                     }
                     // Add "xxx" option created dynamically
@@ -288,7 +241,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                   renderOption={(props, option) => <li {...props}> <Typography>{`${option.title}`}</Typography> </li>}
                   freeSolo
                   renderInput={(params) => (
-                    <TextField {...params} label="Missing Value" InputProps={{ ...params.InputProps, style: { color: missingValueInputColor } }} helperText={<Chip label={missingValueTextDataType} clickable size='small' icon={missingValueTextDataTypeIcon} onClick={handleMissingValueTextDataTypeChange} />} FormHelperTextProps={{ sx: { ml: 0 } }} />
+                    <TextField {...params} label="Missing Value" InputProps={{ ...params.InputProps, style: { color: missingValueInputState.color } }} helperText={<Chip label={missingValueInputState.dataType} clickable size='small' icon={missingValueInputState.icon} onClick={handleMissingValueTextDataTypeChange} />} FormHelperTextProps={{ sx: { ml: 0 } }} />
 
                   )}
                 />
@@ -302,7 +255,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
 
                   onChange={(event, newValue) => {
                     // When the user Types and Directly Presses Enter
-                    if (typeof newValue === 'string') {
+                    if (typeof newValue === STRING_DATA_TYPE) {
 
                       setHandleMissingValueBy({
                         title: newValue,
@@ -344,7 +297,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                   getOptionDisabled={(option) => option.disabled}
                   getOptionLabel={(option) => {
                     // Value selected with enter, right from the input
-                    if (typeof option === 'string') {
+                    if (typeof option === STRING_DATA_TYPE) {
                       return option;
                     }
                     // Add "xxx" option created dynamically
