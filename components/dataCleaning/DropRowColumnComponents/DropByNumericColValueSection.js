@@ -75,10 +75,11 @@ const DropByNumericColValueSection = ({ dropByNumericalQuery, setDropByNumerical
 
     const handleDropColNumericalSubmit = () => {
         // append serachColumn as key and searchValue as value in searchQuery object
-        console.log(dropQuery_temp);
         let dropQuery_temp = dropByNumericalQuery;
         dropQuery_temp[dropColumnNumerical] = [dropNumericalFromValue, dropNumericalToValue];
         setDropByNumericalQuery(dropQuery_temp);
+
+        console.log(dropByNumericalQuery);
 
         setDropColumnNumerical('');
         setDropNumericalToValue('');
@@ -105,6 +106,7 @@ const DropByNumericColValueSection = ({ dropByNumericalQuery, setDropByNumerical
                                 setDropColumnNumerical(value)
                             }}
                             renderInput={(params) => <TextField sx={{}} {...params} label="Numerical Column" />}
+                            sx={parseInt(dropNumericalToValue) < parseInt(dropNumericalFromValue) ? { paddingBottom: "25px" } : {}}
                         />
                     </FormControl>
                 </Box>
@@ -112,13 +114,35 @@ const DropByNumericColValueSection = ({ dropByNumericalQuery, setDropByNumerical
 
                 <Box>
                     <FormControl fullWidth size="small" sx={{ flexDirection: 'row' }}>
-                        <TextField placeholder='From' inputProps={{ inputMode: 'numeric' }} size='small' onChange={(e) => setDropNumericalFromValue(e.target.value)} value={dropNumericalFromValue} sx={{ mr: 2 }} />
-                        <TextField placeholder='To' inputProps={{ inputMode: 'numeric' }} size='small' onChange={(e) => setDropNumericalToValue(e.target.value)} value={dropNumericalToValue} />
+                        <TextField 
+                            disabled={dropColumnNumerical.length != 0 ? false: true} 
+                            placeholder='From' type="number" 
+                            inputProps={{ inputMode: 'numeric' }} 
+                            size='small' 
+                            onChange={(e) => setDropNumericalFromValue(e.target.value)} 
+                            value={dropNumericalFromValue} sx={{ mr: 2 }} 
+                        />
+                        <TextField 
+                            disabled={dropColumnNumerical.length != 0 ? false: true} 
+                            placeholder='To' 
+                            type="number" 
+                            inputProps={{ inputMode: 'numeric' }} 
+                            size='small' 
+                            onChange={(e) => setDropNumericalToValue(e.target.value)} 
+                            value={dropNumericalToValue} 
+                            error={parseInt(dropNumericalToValue) < parseInt(dropNumericalFromValue)}
+                            helperText={((parseInt(dropNumericalToValue) < parseInt(dropNumericalFromValue)) ? "To value must be greater than From" : "")}
+                        />
                     </FormControl>
                 </Box>
 
-                <Box sx={{ ml: "1rem" }}>
-                    <Button variant='outlined' disabled={(dropColumnNumerical.length != 0 && dropNumericalFromValue != null && dropNumericalToValue != null) ? false : true} onClick={handleDropColNumericalSubmit} >
+                <Box sx={parseInt(dropNumericalToValue) < parseInt(dropNumericalFromValue) ? { paddingBottom: "25px", ml: '1rem' } : { ml: '1rem'}}>
+                    <Button 
+                        variant='outlined' 
+                        disabled={(dropColumnNumerical.length != 0 && dropNumericalFromValue != null && dropNumericalToValue != null) ? false : true} 
+                        onClick={handleDropColNumericalSubmit} 
+                        
+                    >
                         <FileDownloadDoneIcon />
                     </Button>
                 </Box>
