@@ -17,10 +17,17 @@ const initialState = {
     all_columns: [],
     n_rows: 0,
     n_cols: 0,
+    message: null,
+    success_message: null,
 }
 
 export const getColumnInfo = createAsyncThunk('/get-categorical-columns', async (formData) => {
     const response = await API.getColumnInfo(formData);
+    return response.data;
+});
+
+export const renameColumn = createAsyncThunk('/rename-column', async (formData) => {
+    const response = await API.renameColumn(formData);
     return response.data;
 });
 
@@ -30,7 +37,7 @@ const dataCleaningSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-        // categorical columns
+        //  columns info
         .addCase( getColumnInfo.pending, (state, action) => {
             state.requestStatus = REQUEST_STATUS_LOADING;
         })
@@ -51,6 +58,25 @@ const dataCleaningSlice = createSlice({
             }
         })
         .addCase( getColumnInfo.rejected, (state, action) => {
+            state.requestStatus = REQUEST_STATUS_FAILED;
+            state.message = CUSTOM_ERROR_MESSAGE;
+        })
+
+        //  rename column
+        .addCase( renameColumn.pending, (state, action) => {
+            state.requestStatus = REQUEST_STATUS_LOADING;
+        })
+        .addCase( renameColumn.fulfilled, (state, action) => { // action.payload is the response.data
+            if (action.payload.status) {
+                state.requestStatus = REQUEST_STATUS_SUCCEEDED;
+                state.success_message = action.payload.data.msg;
+            }
+            else {
+                state.requestStatus = REQUEST_STATUS_FAILED;
+                state.message = action.payload.error; // error sent by us from our backend
+            }
+        })
+        .addCase( renameColumn.rejected, (state, action) => {
             state.requestStatus = REQUEST_STATUS_FAILED;
             state.message = CUSTOM_ERROR_MESSAGE;
         })

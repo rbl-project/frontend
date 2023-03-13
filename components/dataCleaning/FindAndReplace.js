@@ -31,8 +31,11 @@ import { styled } from '@mui/material/styles';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
+// constans
+import { FIND_AND_REPLACE_API_TASK_TYPE } from '../../constants/Constants';
 
-const FindAndReplaceSection = () => {
+
+const FindAndReplaceSection = ({ setApiTaskType }) => {
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     // REdux state
     const dataCleaningState = useSelector((state) => state.dataCleaning);
@@ -71,6 +74,10 @@ const FindAndReplaceSection = () => {
         setFind('');
         setReplace('');
     }
+
+    useEffect(() => {
+        setApiTaskType(FIND_AND_REPLACE_API_TASK_TYPE)
+    }, [])
 
     return (
         <>

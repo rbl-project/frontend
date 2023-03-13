@@ -29,11 +29,20 @@ import ReplayIcon from '@mui/icons-material/Replay';
 import DoneIcon from '@mui/icons-material/Done';
 
 // actions
-import { getColumnInfo } from "/store/dataCleaningSlice";
+import { getColumnInfo, renameColumn } from "/store/dataCleaningSlice";
 import { setOpenMenuItem } from "/store/globalStateSlice";
 
 // constant
-import { DATA_CLEANING } from "/constants/Constants";
+import { 
+    DATA_CLEANING,
+    DROP_BY_CATEGORICAL_VALUE_API_TASK_TYPE,
+    DROP_BY_NUMERICAL_RANGE_API_TASK_TYPE,
+    DROP_BY_COLUMN_NAME_API_TASK_TYPE,
+    DROP_BY_ROW_INDEX_API_TASK_TYPE,
+    RENAME_COLUMN_API_TASK_TYPE,
+    CHANGE_DATA_TYPE_API_TASK_TYPE,
+    FIND_AND_REPLACE_API_TASK_TYPE,
+} from '../../constants/Constants';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -70,6 +79,10 @@ const DataCleaningMainSection = () => {
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     const selectedMenuItem = useSelector((state) => state.global.openMenuItem);
 
+    const [apiTaskType, setApiTaskType] = useState("");
+
+    const [renameColumnQuery, setRenameColumnQuery] = useState({})
+
     const [value, setValue] = useState(0);
 
     // Calling backend APIs
@@ -85,6 +98,35 @@ const DataCleaningMainSection = () => {
             dispatch(setOpenMenuItem(DATA_CLEANING));
         }
     }, []);
+
+    const applyChanges = () => {
+        console.log(apiTaskType);
+        if(apiTaskType === DROP_BY_CATEGORICAL_VALUE_API_TASK_TYPE) {
+            console.log("drop by categorical value");
+        } else if(apiTaskType === DROP_BY_NUMERICAL_RANGE_API_TASK_TYPE) {
+            console.log("drop by numerical range");
+        } else if(apiTaskType === DROP_BY_COLUMN_NAME_API_TASK_TYPE) {
+            console.log("drop by column name");
+        } else if(apiTaskType === DROP_BY_ROW_INDEX_API_TASK_TYPE) { 
+            console.log("drop by row index");
+        } else if(apiTaskType === CHANGE_DATA_TYPE_API_TASK_TYPE) {
+            console.log("change data type");
+        }
+        else if(apiTaskType === RENAME_COLUMN_API_TASK_TYPE) {
+            dispatch(renameColumn({ 
+                dataset_name: selectedDataset, 
+                col_name_change_info: renameColumnQuery 
+            }))
+        } else if (apiTaskType === FIND_AND_REPLACE_API_TASK_TYPE) {
+            console.log("find and replace");
+        } else {
+            console.log("No API Task Type");
+        }
+    }
+
+    const saveChanges = () => {
+        
+    }
 
     // temp
     const columns = ["Name", "Company", "City", "State"];
@@ -147,18 +189,18 @@ const DataCleaningMainSection = () => {
                                 <ChangeDataTypeSection />
                             </TabPanel>
                             <TabPanel value={value} index={2}>
-                                <FindAndReplaceSection />
+                                <FindAndReplaceSection setApiTaskType={setApiTaskType} />
                             </TabPanel>
                             <TabPanel value={value} index={3}>
-                                <RenameColumnSection />
+                                <RenameColumnSection setApiTaskType={setApiTaskType} renameColumnQuery={renameColumnQuery} setRenameColumnQuery={setRenameColumnQuery} />
                             </TabPanel>
 
                             {/* Fotter Buttons */}
                             <Box sx={{ width: '100%', textAlign: 'end' }}>
-                                <Button variant="contained" color="primary" sx={{ m: 1 }}>
-                                    <DoneIcon />
+                                <Button variant="contained" color="primary" sx={{ m: 1 }} onClick={applyChanges}>
+                                    <DoneIcon /> 
                                 </Button>
-                                <Button variant="contained" color='warning' sx={{ m: 1 }}>
+                                <Button variant="contained" color='warning' sx={{ m: 1 }} onClick={saveChanges}>
                                     <ReplayIcon />
                                 </Button>
                             </Box>

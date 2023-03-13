@@ -31,7 +31,10 @@ import { styled } from '@mui/material/styles';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
-const RenameColumnSection = () => {
+// constants
+import { RENAME_COLUMN_API_TASK_TYPE } from "/constants/Constants";
+
+const RenameColumnSection = ({setApiTaskType, renameColumnQuery, setRenameColumnQuery}) => {
     // REdux state
     const dataCleaningState = useSelector((state) => state.dataCleaning);
 
@@ -39,18 +42,16 @@ const RenameColumnSection = () => {
     const [column, setColumn] = useState('');
     const [newName, setNewName] = useState('');
 
-    // const renameColumnQuery = {
-    //     "column_name": "new_column_name"
-    // }
-    const [renameColumnQuery, setRenameColumnQuery] = useState({})
-
     const handleSubmit = () => {
         setRenameColumnQuery({ ...renameColumnQuery, [column]: newName });
         setColumn('');
         setNewName('');
         console.log(renameColumnQuery);
-
     }
+
+    useEffect(() => {
+        setApiTaskType(RENAME_COLUMN_API_TASK_TYPE)
+    }, [])
 
     return (
         <>

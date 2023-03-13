@@ -41,6 +41,8 @@ export const getNumericalColumnsInfo = (formData) => API.post("/get-numerical-co
 export const getCategoricalColumnsInfo = (formData) => API.post("/get-categorical-columns-info",formData);
 export const getColumnInfo = (formData) => API.post("/get-columns-info",formData);
 export const searchCategoricalValues = (formData) => API.post("/search-categorical-value", formData)
+export const saveChanges = (formData) => API.post("/save-changes",formData);
+export const revertChanges = (formData) => API.post("/revert-changes",formData);
 
 // Dataset Overview APIs
 export const getBasicInformation = (formData) => API.post("/basic-information",formData);
@@ -59,3 +61,6 @@ export const generateGraph = (formData) => API.post("/generate-graph",formData);
 
 // Tabular Representation APIs
 export const getTabularRepresentation = (formData) => API.post("/filtered-tabular-representation",formData);
+
+// Data Cleaning APIs
+export const renameColumn = (formData) => API.post("/rename-column",formData);
