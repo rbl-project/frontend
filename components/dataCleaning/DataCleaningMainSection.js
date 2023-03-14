@@ -29,7 +29,7 @@ import ReplayIcon from '@mui/icons-material/Replay';
 import DoneIcon from '@mui/icons-material/Done';
 
 // actions
-import { getColumnInfo, renameColumn } from "/store/dataCleaningSlice";
+import { getColumnInfo, renameColumn, findAndReplace } from "/store/dataCleaningSlice";
 import { saveChanges, revertChanges } from "/store/datasetUpdateSlice";
 import { setOpenMenuItem } from "/store/globalStateSlice";
 import { resetRequestStatus as resetDataCleaningRequestStatus } from "/store/dataCleaningSlice";
@@ -47,6 +47,7 @@ import {
     FIND_AND_REPLACE_API_TASK_TYPE,
     REQUEST_STATUS_SUCCEEDED,
     REQUEST_STATUS_FAILED,
+    REQUEST_STATUS_LOADING
 } from '/constants/Constants';
 
 import { toast } from 'react-toastify';
@@ -92,6 +93,7 @@ const DataCleaningMainSection = () => {
     const [apiTaskType, setApiTaskType] = useState("");
 
     const [renameColumnQuery, setRenameColumnQuery] = useState({})
+    const [findReplaceQuery, setFindReplaceQuery] = useState({})
 
     const [value, setValue] = useState(0);
 
@@ -123,8 +125,12 @@ const DataCleaningMainSection = () => {
                 draggable: false,
                 theme: "light",
             });
+
             setRenameColumnQuery({});
+            setFindReplaceQuery({});
+            
             dispatch(resetDataCleaningRequestStatus());
+            
             if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
                 dispatch(getColumnInfo({ dataset_name: selectedDataset }));
             }
@@ -146,7 +152,7 @@ const DataCleaningMainSection = () => {
 
     // toaster for dataset state
     useEffect(() => {
-        if (datasetUpdateState.requestStatus === REQUEST_STATUS_SUCCEEDED) {
+        if (datasetUpdateState.revertChangesRequestStatus === REQUEST_STATUS_SUCCEEDED || datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_SUCCEEDED) {
             toast.success(datasetUpdateState.message, {
                 position: "bottom-right",
                 autoClose: false,
@@ -159,8 +165,11 @@ const DataCleaningMainSection = () => {
             });
             setRenameColumnQuery({});
             dispatch(resetDatasetRequestStatus());
+            if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
+                dispatch(getColumnInfo({ dataset_name: selectedDataset }));
+            }
 
-        } else if (datasetUpdateState.requestStatus === REQUEST_STATUS_FAILED) {
+        } else if (datasetUpdateState.revertChangesRequestStatus === REQUEST_STATUS_FAILED || datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_FAILED) {
             toast.error(datasetUpdateState.message, {
                 position: "bottom-right",
                 autoClose: false,
@@ -203,9 +212,10 @@ const DataCleaningMainSection = () => {
                 col_name_change_info: renameColumnQuery
             }))
         } else if (apiTaskType === FIND_AND_REPLACE_API_TASK_TYPE) {
-
-            console.log("find and replace");
-
+            dispatch(findAndReplace({
+                dataset_name: selectedDataset,
+                find_relace_info: findReplaceQuery
+            }))
         } else {
 
             console.log("No API Task Type");
@@ -254,8 +264,6 @@ const DataCleaningMainSection = () => {
         }
     };
 
-    console.log("Main Component");
-
     return (
         <Box>
             <Grid container spacing={2}>
@@ -275,35 +283,59 @@ const DataCleaningMainSection = () => {
                                     <Button
                                         variant='contained'
                                         color='success'
-                                        sx={{ float: 'right' }}
+                                        sx={{ float: 'right', width: '8.7rem' }}
                                         onClick={saveDatasetChanges}
                                     >
-                                        Save Changes
+                                        {
+                                            datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_LOADING
+                                            ? <CircularProgress size={20} sx={{color: "white"}} />
+                                            : "Save Changes"
+                                        }
                                     </Button>
                                 </Box>
                             </Box>
 
                             {/* Tab Panels */}
                             <TabPanel value={value} index={0}>
-                                <DropRowsAndColumnSection />
+                                <DropRowsAndColumnSection 
+                                    setApiTaskType={setApiTaskType} 
+                                />
                             </TabPanel>
                             <TabPanel value={value} index={1}>
-                                <ChangeDataTypeSection />
+                                <ChangeDataTypeSection 
+                                    setApiTaskType={setApiTaskType} 
+                                />
                             </TabPanel>
                             <TabPanel value={value} index={2}>
-                                <FindAndReplaceSection setApiTaskType={setApiTaskType} />
+                                <FindAndReplaceSection 
+                                    setApiTaskType={setApiTaskType}
+                                    findReplaceQuery={findReplaceQuery}
+                                    setFindReplaceQuery={setFindReplaceQuery}
+                                />
                             </TabPanel>
                             <TabPanel value={value} index={3}>
-                                <RenameColumnSection value={value} setApiTaskType={setApiTaskType} renameColumnQuery={renameColumnQuery} setRenameColumnQuery={setRenameColumnQuery} />
+                                <RenameColumnSection 
+                                    setApiTaskType={setApiTaskType} 
+                                    renameColumnQuery={renameColumnQuery} 
+                                    setRenameColumnQuery={setRenameColumnQuery} 
+                                />
                             </TabPanel>
 
                             {/* Fotter Buttons */}
                             <Box sx={{ width: '100%', textAlign: 'end' }}>
                                 <Button variant="contained" color="primary" sx={{ m: 1 }} onClick={applyDataChanges}>
-                                    <DoneIcon />
+                                    {
+                                        dataCleaningState.requestStatus === REQUEST_STATUS_LOADING 
+                                        ? <CircularProgress size={20} sx={{color: 'white'}} /> 
+                                        : <DoneIcon />
+                                    }
                                 </Button>
                                 <Button variant="contained" color='warning' sx={{ m: 1 }} onClick={revertDatasetChanges}>
-                                    <ReplayIcon />
+                                    {
+                                        datasetUpdateState.revertChangesRequestStatus === REQUEST_STATUS_LOADING 
+                                        ? <CircularProgress size={20} sx={{color: 'white'}} /> 
+                                        : <ReplayIcon />
+                                    }
                                 </Button>
                             </Box>
                         </Box>

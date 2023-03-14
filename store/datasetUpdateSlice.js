@@ -10,7 +10,8 @@ import {
 import * as API from "../api";
 
 const initialState = {
-    requestStatus: REQUEST_STATUS_LOADING,
+    saveChangesRequestStatus: REQUEST_STATUS_IDLE,
+    revertChangesRequestStatus: REQUEST_STATUS_IDLE,
     message: null
 }
 
@@ -29,8 +30,8 @@ const datasetUpdateSlice = createSlice({
     initialState: initialState,
     reducers: {
         resetRequestStatus:(state,action) => {
-            state.requestStatus = REQUEST_STATUS_IDLE;
-            state.datasetUploadStatus = REQUEST_STATUS_IDLE;
+            state.revertChangesRequestStatus = REQUEST_STATUS_IDLE;
+            state.saveChangesRequestStatus = REQUEST_STATUS_IDLE;
             state.message = null;
         }
     },
@@ -39,39 +40,39 @@ const datasetUpdateSlice = createSlice({
             
             // Save Changes
             .addCase(saveChanges.pending, (state, action) => {
-                state.requestStatus = REQUEST_STATUS_LOADING;
+                state.saveChangesRequestStatus = REQUEST_STATUS_LOADING;
             })
             .addCase(saveChanges.fulfilled, (state, action) => { // action.payload is the response.data
                 if (action.payload.status) {
-                    state.requestStatus = REQUEST_STATUS_SUCCEEDED;
+                    state.saveChangesRequestStatus = REQUEST_STATUS_SUCCEEDED;
                     state.message = action.payload.data.msg;
                 }
                 else {
-                    state.requestStatus = REQUEST_STATUS_FAILED;
+                    state.saveChangesRequestStatus = REQUEST_STATUS_FAILED;
                     state.message = action.payload.error; // error sent by us from our backend
                 }
             })
             .addCase(saveChanges.rejected, (state, action) => {
-                state.requestStatus = REQUEST_STATUS_FAILED;
+                state.saveChangesRequestStatus = REQUEST_STATUS_FAILED;
                 state.message = CUSTOM_ERROR_MESSAGE; // unknow error in request
             })
 
             // revert Changes
             .addCase(revertChanges.pending, (state, action) => {
-                state.requestStatus = REQUEST_STATUS_LOADING;
+                state.revertChangesRequestStatus = REQUEST_STATUS_LOADING;
             })
             .addCase(revertChanges.fulfilled, (state, action) => { // action.payload is the response.data
                 if (action.payload.status) {
-                    state.requestStatus = REQUEST_STATUS_SUCCEEDED;
+                    state.revertChangesRequestStatus = REQUEST_STATUS_SUCCEEDED;
                     state.message = action.payload.data.msg;
                 }
                 else {
-                    state.requestStatus = REQUEST_STATUS_FAILED;
+                    state.revertChangesRequestStatus = REQUEST_STATUS_FAILED;
                     state.message = action.payload.error; // error sent by us from our backend
                 }
             })
             .addCase(revertChanges.rejected, (state, action) => {
-                state.requestStatus = REQUEST_STATUS_FAILED;
+                state.revertChangesRequestStatus = REQUEST_STATUS_FAILED;
                 state.message = CUSTOM_ERROR_MESSAGE; // unknow error in request
             })
     }

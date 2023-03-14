@@ -30,6 +30,11 @@ export const renameColumn = createAsyncThunk('/rename-column', async (formData) 
     return response.data;
 });
 
+export const findAndReplace = createAsyncThunk('/find-and-replace', async (formData) => {
+    const response = await API.findAndReplace(formData);
+    return response.data;
+});
+
 const dataCleaningSlice = createSlice({
     name: "dataCleaning",
     initialState: initialState,
@@ -82,6 +87,25 @@ const dataCleaningSlice = createSlice({
             }
         })
         .addCase( renameColumn.rejected, (state, action) => {
+            state.requestStatus = REQUEST_STATUS_FAILED;
+            state.message = CUSTOM_ERROR_MESSAGE;
+        })
+
+        // find and replace
+        .addCase( findAndReplace.pending, (state, action) => {
+            state.requestStatus = REQUEST_STATUS_LOADING;
+        })
+        .addCase( findAndReplace.fulfilled, (state, action) => { // action.payload is the response.data
+            if (action.payload.status) {
+                state.requestStatus = REQUEST_STATUS_SUCCEEDED;
+                state.message = action.payload.data.msg;
+            }
+            else {
+                state.requestStatus = REQUEST_STATUS_FAILED;
+                state.message = action.payload.error; // error sent by us from our backend
+            }
+        })
+        .addCase( findAndReplace.rejected, (state, action) => {
             state.requestStatus = REQUEST_STATUS_FAILED;
             state.message = CUSTOM_ERROR_MESSAGE;
         })

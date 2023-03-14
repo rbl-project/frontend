@@ -64,3 +64,4 @@ export const getTabularRepresentation = (formData) => API.post("/filtered-tabula
 
 // Data Cleaning APIs
 export const renameColumn = (formData) => API.post("/rename-column",formData);
+export const findAndReplace = (formData) => API.post("/find-and-replace",formData);

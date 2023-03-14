@@ -22,7 +22,7 @@ import {
     TableBody,
     Chip,
     Link,
-    Tooltip
+    Tooltip,
 } from '@mui/material';
 
 import { styled } from '@mui/material/styles';

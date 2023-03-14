@@ -34,13 +34,14 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 // constants
 import { RENAME_COLUMN_API_TASK_TYPE } from "/constants/Constants";
 
-const RenameColumnSection = ({value, setApiTaskType, renameColumnQuery, setRenameColumnQuery}) => {
+const RenameColumnSection = ({ setApiTaskType, renameColumnQuery, setRenameColumnQuery}) => {
     // REdux state
     const dataCleaningState = useSelector((state) => state.dataCleaning);
 
     // Local state
     const [column, setColumn] = useState('');
     const [newName, setNewName] = useState('');
+    const [columnOptions, setColumnOptions] = useState(dataCleaningState.all_columns);
 
     const handleSubmit = () => {
         setRenameColumnQuery({ ...renameColumnQuery, [column]: newName });
@@ -52,6 +53,11 @@ const RenameColumnSection = ({value, setApiTaskType, renameColumnQuery, setRenam
     useEffect(() => {
         setApiTaskType(RENAME_COLUMN_API_TASK_TYPE)
     }, [])
+
+    useEffect(() => {
+        setColumnOptions(dataCleaningState.all_columns);
+    }, [dataCleaningState.all_columns])
+
 
 
     return (
@@ -67,7 +73,7 @@ const RenameColumnSection = ({value, setApiTaskType, renameColumnQuery, setRenam
                                 fullWidth={true}
                                 filterSelectedOptions={true}
                                 id="combo-box-demo"
-                                options={dataCleaningState.all_columns}
+                                options={columnOptions}
                                 size="small"
                                 value={column}
                                 onChange={(e, value, reason) => {

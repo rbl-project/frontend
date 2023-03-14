@@ -34,16 +34,19 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 // constans
 import { FIND_AND_REPLACE_API_TASK_TYPE } from '../../constants/Constants';
 
+// others
+import * as API from "/api/index";
 
-const FindAndReplaceSection = ({ setApiTaskType }) => {
-    const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
+const FindAndReplaceSection = ({ setApiTaskType, findReplaceQuery, setFindReplaceQuery }) => {
     // REdux state
     const dataCleaningState = useSelector((state) => state.dataCleaning);
+    const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
 
     // Local state
     const [column, setColumn] = useState('');
     const [find, setFind] = useState('');
     const [replace, setReplace] = useState('');
+    const [columnOptions, setColumnOptions] = useState(dataCleaningState.all_columns);
 
     // const findReplaceQuery = {
     //     "column_name": [
@@ -57,7 +60,7 @@ const FindAndReplaceSection = ({ setApiTaskType }) => {
     //         }
     //     ]
     // }
-    const [findReplaceQuery, setFindReplaceQuery] = useState({})
+    // const [findReplaceQuery, setFindReplaceQuery] = useState({})
 
     const handleSubmit = () => {
         let query = findReplaceQuery;
@@ -79,6 +82,29 @@ const FindAndReplaceSection = ({ setApiTaskType }) => {
         setApiTaskType(FIND_AND_REPLACE_API_TASK_TYPE)
     }, [])
 
+    useEffect(() => {
+        setColumnOptions(dataCleaningState.all_columns);
+    }, [dataCleaningState.all_columns])
+
+
+    const [inputValue, setInputValue] = React.useState('');
+    const [colValueOptions, setColValueOptions] = React.useState([]);
+
+    useEffect(() => {
+        let data = {
+            "dataset_name": selectedDataset,
+            "column_name": column,
+            "search_value": inputValue
+        }
+        API.searchCategoricalValues(data).then((res) => {
+            let newOptions = res.data['data']['search_result']
+            setColValueOptions(newOptions)
+        }).catch((err) => {
+            console.log(err);
+        })
+
+    }, [inputValue])
+
     return (
         <>
             <Box sx={{ width: '100%' }}>
@@ -92,7 +118,7 @@ const FindAndReplaceSection = ({ setApiTaskType }) => {
                                 fullWidth={true}
                                 filterSelectedOptions={true}
                                 id="combo-box-demo"
-                                options={dataCleaningState.all_columns}
+                                options={columnOptions}
                                 size="small"
                                 value={column}
                                 // sx={{ width: "130px", padding: "0px" }}
@@ -108,8 +134,29 @@ const FindAndReplaceSection = ({ setApiTaskType }) => {
                 <Box sx={{ mt: "0.8rem", width: "100%", display: "flex", alignItems: "center", justifyContent: "start" }}>
                     <Box>
                         <FormControl fullWidth size="small" sx={{ flexDirection: 'row' }}>
-                            <TextField  placeholder='Find' size='small' onChange={(e) => setFind(e.target.value)} value={find} sx={{ width: "14vw", mr: 2 }} />
-                            <TextField placeholder='Replace' size='small' onChange={(e) => setReplace(e.target.value)} value={replace} sx={{ width: "14vw" }} />
+                            <Autocomplete
+                                disableClearable
+                                fullWidth={true}
+                                filterSelectedOptions={true}
+                                id="combo-box-demo"
+                                // options={categoricalColValuesOptions}
+                                sx={{width: "13.6rem"}}
+                                filterOptions={(x) => x}
+                                options={colValueOptions}
+                                size="small"
+                                value={find}
+                                // onChange={(e, value, reason) => setDropValue(value)}
+                                onChange={(event, newValue) => {
+                                    setColValueOptions(newValue ? [newValue, ...colValueOptions] : colValueOptions);
+                                    setFind(newValue)
+                                }}
+                                onInputChange={(event, newInputValue) => {
+                                    setInputValue(newInputValue);
+                                }}
+                                renderInput={(params) => <TextField sx={{}} {...params} label="Value" />}
+                            />
+                            {/* <TextField  placeholder='Find' size='small' onChange={(e) => setFind(e.target.value)} value={find} sx={{ width: "14vw", mr: 2 }} /> */}
+                            <TextField placeholder='Replace' size='small' onChange={(e) => setReplace(e.target.value)} value={replace} sx={{ width: "14vw", ml: 2 }} />
                         </FormControl>
                     </Box>
 
@@ -173,7 +220,7 @@ const FindAndReplaceSection = ({ setApiTaskType }) => {
                                                                                         ...findReplaceQuery,
                                                                                         [col]: findReplaceQuery[col].filter((obj) => obj['find'] != item['find'] && obj['replace'] != item['replace'])
                                                                                     })
-                                                                                    if(findReplaceQuery[col].length == 1) {
+                                                                                    if (findReplaceQuery[col].length == 1) {
                                                                                         let temp = { ...findReplaceQuery };
                                                                                         delete temp[col];
                                                                                         setFindReplaceQuery(temp);
