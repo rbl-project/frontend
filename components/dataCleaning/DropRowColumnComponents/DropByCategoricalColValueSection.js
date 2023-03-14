@@ -143,7 +143,6 @@ const DropByCategoricalColValueSection = ({ dropByCategoricalQuery, setDropByCat
                         <Autocomplete
                             multiple
                             disableClearable
-                            disableCloseOnSelect
                             fullWidth={true}
                             filterSelectedOptions={true}
                             id="combo-box-demo"

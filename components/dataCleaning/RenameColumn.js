@@ -34,7 +34,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 // constants
 import { RENAME_COLUMN_API_TASK_TYPE } from "/constants/Constants";
 
-const RenameColumnSection = ({setApiTaskType, renameColumnQuery, setRenameColumnQuery}) => {
+const RenameColumnSection = ({value, setApiTaskType, renameColumnQuery, setRenameColumnQuery}) => {
     // REdux state
     const dataCleaningState = useSelector((state) => state.dataCleaning);
 
@@ -52,6 +52,7 @@ const RenameColumnSection = ({setApiTaskType, renameColumnQuery, setRenameColumn
     useEffect(() => {
         setApiTaskType(RENAME_COLUMN_API_TASK_TYPE)
     }, [])
+
 
     return (
         <>

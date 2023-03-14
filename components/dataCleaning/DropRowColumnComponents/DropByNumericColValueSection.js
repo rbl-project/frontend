@@ -31,41 +31,6 @@ import { styled } from '@mui/material/styles';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
-const TabPanel = ({ children, value, index, ...other }) => {
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-            height="100%"
-        >
-            {value === index && (
-                <Box sx={{ pt: 1, height: "100%" }}>
-                    {children}
-                </Box>
-            )}
-        </div>
-    );
-}
-
-const ListItem = styled('li')(({ theme }) => ({
-    margin: theme.spacing(0.5),
-}));
-
-const ToolTipText = styled('p')(({ theme }) => ({
-    color: "white",
-    backgroundColor: "grey",
-    borderRadius: "50%",
-    padding: "0px 8px",
-    display: "inline-block",
-    fontSize: "15px",
-    fontWeight: "bold",
-    cursor: "pointer",
-    marginLeft: "0.5rem"
-}))
-
 const DropByNumericColValueSection = ({ dropByNumericalQuery, setDropByNumericalQuery, dataCleaningState }) => {
 
     const [dropColumnNumerical, setDropColumnNumerical] = useState('');
@@ -102,7 +67,7 @@ const DropByNumericColValueSection = ({ dropByNumericalQuery, setDropByNumerical
                             size="small"
                             value={dropColumnNumerical}
                             // sx={{ width: "130px", padding: "0px" }}
-                            onChange={(e, value, reason) => {
+                            onChange={(e, value) => {
                                 setDropColumnNumerical(value)
                             }}
                             renderInput={(params) => <TextField sx={{}} {...params} label="Numerical Column" />}

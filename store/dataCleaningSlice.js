@@ -18,7 +18,6 @@ const initialState = {
     n_rows: 0,
     n_cols: 0,
     message: null,
-    success_message: null,
 }
 
 export const getColumnInfo = createAsyncThunk('/get-categorical-columns', async (formData) => {
@@ -34,12 +33,18 @@ export const renameColumn = createAsyncThunk('/rename-column', async (formData) 
 const dataCleaningSlice = createSlice({
     name: "dataCleaning",
     initialState: initialState,
-    reducers: {},
+    reducers: {
+        resetRequestStatus:(state,action) => {
+            state.requestStatus = REQUEST_STATUS_IDLE;
+            state.message = null;
+        },
+    },
     extraReducers: (builder) => {
         builder
         //  columns info
         .addCase( getColumnInfo.pending, (state, action) => {
             state.requestStatus = REQUEST_STATUS_LOADING;
+            state.message = null;
         })
         .addCase( getColumnInfo.fulfilled, (state, action) => { // action.payload is the response.data
             if (action.payload.status) {
@@ -69,7 +74,7 @@ const dataCleaningSlice = createSlice({
         .addCase( renameColumn.fulfilled, (state, action) => { // action.payload is the response.data
             if (action.payload.status) {
                 state.requestStatus = REQUEST_STATUS_SUCCEEDED;
-                state.success_message = action.payload.data.msg;
+                state.message = action.payload.data.msg;
             }
             else {
                 state.requestStatus = REQUEST_STATUS_FAILED;
@@ -82,5 +87,7 @@ const dataCleaningSlice = createSlice({
         })
     }
 })
+
+export const { resetRequestStatus } = dataCleaningSlice.actions;
 
 export default dataCleaningSlice.reducer;

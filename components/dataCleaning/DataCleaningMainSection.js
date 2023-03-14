@@ -30,10 +30,13 @@ import DoneIcon from '@mui/icons-material/Done';
 
 // actions
 import { getColumnInfo, renameColumn } from "/store/dataCleaningSlice";
+import { saveChanges, revertChanges } from "/store/datasetUpdateSlice";
 import { setOpenMenuItem } from "/store/globalStateSlice";
+import { resetRequestStatus as resetDataCleaningRequestStatus } from "/store/dataCleaningSlice";
+import { resetRequestStatus as resetDatasetRequestStatus } from "/store/datasetUpdateSlice";
 
 // constant
-import { 
+import {
     DATA_CLEANING,
     DROP_BY_CATEGORICAL_VALUE_API_TASK_TYPE,
     DROP_BY_NUMERICAL_RANGE_API_TASK_TYPE,
@@ -42,7 +45,11 @@ import {
     RENAME_COLUMN_API_TASK_TYPE,
     CHANGE_DATA_TYPE_API_TASK_TYPE,
     FIND_AND_REPLACE_API_TASK_TYPE,
-} from '../../constants/Constants';
+    REQUEST_STATUS_SUCCEEDED,
+    REQUEST_STATUS_FAILED,
+} from '/constants/Constants';
+
+import { toast } from 'react-toastify';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -54,7 +61,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 const TabPanel = ({ children, value, index, ...other }) => {
-    
+
     return (
         <div
             role="tabpanel"
@@ -74,10 +81,13 @@ const TabPanel = ({ children, value, index, ...other }) => {
 }
 
 const DataCleaningMainSection = () => {
-    
+
     const dispatch = useDispatch();
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     const selectedMenuItem = useSelector((state) => state.global.openMenuItem);
+    const dataCleaningState = useSelector((state) => state.dataCleaning);
+    const datasetUpdateState = useSelector((state) => state.datasetUpdate);
+
 
     const [apiTaskType, setApiTaskType] = useState("");
 
@@ -99,53 +109,136 @@ const DataCleaningMainSection = () => {
         }
     }, []);
 
-    const applyChanges = () => {
-        console.log(apiTaskType);
-        if(apiTaskType === DROP_BY_CATEGORICAL_VALUE_API_TASK_TYPE) {
-            console.log("drop by categorical value");
-        } else if(apiTaskType === DROP_BY_NUMERICAL_RANGE_API_TASK_TYPE) {
-            console.log("drop by numerical range");
-        } else if(apiTaskType === DROP_BY_COLUMN_NAME_API_TASK_TYPE) {
-            console.log("drop by column name");
-        } else if(apiTaskType === DROP_BY_ROW_INDEX_API_TASK_TYPE) { 
-            console.log("drop by row index");
-        } else if(apiTaskType === CHANGE_DATA_TYPE_API_TASK_TYPE) {
-            console.log("change data type");
+
+    // toaster for dataCleaning state
+    useEffect(() => {
+        if (dataCleaningState.requestStatus === REQUEST_STATUS_SUCCEEDED) {
+            toast.success(dataCleaningState.message, {
+                position: "bottom-right",
+                autoClose: false,
+                hideProgressBar: false,
+                autoClose: 2000,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "light",
+            });
+            setRenameColumnQuery({});
+            dispatch(resetDataCleaningRequestStatus());
+            if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
+                dispatch(getColumnInfo({ dataset_name: selectedDataset }));
+            }
+
+        } else if (dataCleaningState.requestStatus === REQUEST_STATUS_FAILED) {
+            toast.error(dataCleaningState.message, {
+                position: "bottom-right",
+                autoClose: false,
+                hideProgressBar: false,
+                autoClose: 2000,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "light",
+            });
+            dispatch(resetDataCleaningRequestStatus());
         }
-        else if(apiTaskType === RENAME_COLUMN_API_TASK_TYPE) {
-            dispatch(renameColumn({ 
-                dataset_name: selectedDataset, 
-                col_name_change_info: renameColumnQuery 
+    }, [dataCleaningState.message])
+
+    // toaster for dataset state
+    useEffect(() => {
+        if (datasetUpdateState.requestStatus === REQUEST_STATUS_SUCCEEDED) {
+            toast.success(datasetUpdateState.message, {
+                position: "bottom-right",
+                autoClose: false,
+                hideProgressBar: false,
+                autoClose: 2000,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "light",
+            });
+            setRenameColumnQuery({});
+            dispatch(resetDatasetRequestStatus());
+
+        } else if (datasetUpdateState.requestStatus === REQUEST_STATUS_FAILED) {
+            toast.error(datasetUpdateState.message, {
+                position: "bottom-right",
+                autoClose: false,
+                hideProgressBar: false,
+                autoClose: 2000,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "light",
+            });
+            dispatch(resetDatasetRequestStatus());
+        }
+    }, [datasetUpdateState.message])
+
+    const applyDataChanges = () => {
+        
+        if (apiTaskType === DROP_BY_CATEGORICAL_VALUE_API_TASK_TYPE) {
+            console.log("drop by categorical value");
+
+        } else if (apiTaskType === DROP_BY_NUMERICAL_RANGE_API_TASK_TYPE) {
+
+            console.log("drop by numerical range");
+
+        } else if (apiTaskType === DROP_BY_COLUMN_NAME_API_TASK_TYPE) {
+
+            console.log("drop by column name");
+
+        } else if (apiTaskType === DROP_BY_ROW_INDEX_API_TASK_TYPE) {
+
+            console.log("drop by row index");
+
+        } else if (apiTaskType === CHANGE_DATA_TYPE_API_TASK_TYPE) {
+
+            console.log("change data type");
+
+        }
+        else if (apiTaskType === RENAME_COLUMN_API_TASK_TYPE) {
+            dispatch(renameColumn({
+                dataset_name: selectedDataset,
+                col_name_change_info: renameColumnQuery
             }))
         } else if (apiTaskType === FIND_AND_REPLACE_API_TASK_TYPE) {
+
             console.log("find and replace");
+
         } else {
+
             console.log("No API Task Type");
+
         }
     }
 
-    const saveChanges = () => {
-        
+    const saveDatasetChanges = () => {
+        dispatch(saveChanges({ dataset_name: selectedDataset }));
+    }
+
+    const revertDatasetChanges = () => {
+        dispatch(revertChanges({ dataset_name: selectedDataset }));
     }
 
     // temp
     const columns = ["Name", "Company", "City", "State"];
 
     const data = [
-    ["Joe James", "Test Corp", "Yonkers", "NY"],
-    ["John Walsh", "Test Corp", "Hartford", "CT"],
-    ["Bob Herm", "Test Corp", "Tampa", "FL"],
-    ["James Houston", "Test Corp", "Dallas", "TX"],
-    ["James Houston", "Test Corp", "Dallas", "TX"],
-    ["James Houston", "Test Corp", "Dallas", "TX"],
-    ["James Houston", "Test Corp", "Dallas", "TX"],
-    ["James Houston", "Test Corp", "Dallas", "TX"],
-    ["James Houston", "Test Corp", "Dallas", "TX"],
-    ["James Houston", "Test Corp", "Dallas", "TX"],
-    ["James Houston", "Test Corp", "Dallas", "TX"],
-    ["James Houston", "Test Corp", "Dallas", "TX"],
-    ["James Houston", "Test Corp", "Dallas", "TX"],
-    ["James Houston", "Test Corp", "Dallas", "TX"]
+        ["Joe James", "Test Corp", "Yonkers", "NY"],
+        ["John Walsh", "Test Corp", "Hartford", "CT"],
+        ["Bob Herm", "Test Corp", "Tampa", "FL"],
+        ["James Houston", "Test Corp", "Dallas", "TX"],
+        ["James Houston", "Test Corp", "Dallas", "TX"],
+        ["James Houston", "Test Corp", "Dallas", "TX"],
+        ["James Houston", "Test Corp", "Dallas", "TX"],
+        ["James Houston", "Test Corp", "Dallas", "TX"],
+        ["James Houston", "Test Corp", "Dallas", "TX"],
+        ["James Houston", "Test Corp", "Dallas", "TX"],
+        ["James Houston", "Test Corp", "Dallas", "TX"],
+        ["James Houston", "Test Corp", "Dallas", "TX"],
+        ["James Houston", "Test Corp", "Dallas", "TX"],
+        ["James Houston", "Test Corp", "Dallas", "TX"]
     ];
 
     const options = {
@@ -160,6 +253,8 @@ const DataCleaningMainSection = () => {
             }
         }
     };
+
+    console.log("Main Component");
 
     return (
         <Box>
@@ -177,7 +272,14 @@ const DataCleaningMainSection = () => {
                                 </Tabs>
                                 <Box>
                                     {/* Will be diabled if no changes are applied */}
-                                    <Button variant='contained' color='success' sx={{ float: 'right' }}>Save Changes</Button>
+                                    <Button
+                                        variant='contained'
+                                        color='success'
+                                        sx={{ float: 'right' }}
+                                        onClick={saveDatasetChanges}
+                                    >
+                                        Save Changes
+                                    </Button>
                                 </Box>
                             </Box>
 
@@ -192,27 +294,27 @@ const DataCleaningMainSection = () => {
                                 <FindAndReplaceSection setApiTaskType={setApiTaskType} />
                             </TabPanel>
                             <TabPanel value={value} index={3}>
-                                <RenameColumnSection setApiTaskType={setApiTaskType} renameColumnQuery={renameColumnQuery} setRenameColumnQuery={setRenameColumnQuery} />
+                                <RenameColumnSection value={value} setApiTaskType={setApiTaskType} renameColumnQuery={renameColumnQuery} setRenameColumnQuery={setRenameColumnQuery} />
                             </TabPanel>
 
                             {/* Fotter Buttons */}
                             <Box sx={{ width: '100%', textAlign: 'end' }}>
-                                <Button variant="contained" color="primary" sx={{ m: 1 }} onClick={applyChanges}>
-                                    <DoneIcon /> 
+                                <Button variant="contained" color="primary" sx={{ m: 1 }} onClick={applyDataChanges}>
+                                    <DoneIcon />
                                 </Button>
-                                <Button variant="contained" color='warning' sx={{ m: 1 }} onClick={saveChanges}>
+                                <Button variant="contained" color='warning' sx={{ m: 1 }} onClick={revertDatasetChanges}>
                                     <ReplayIcon />
                                 </Button>
                             </Box>
                         </Box>
 
-                         <Divider sx={{mt: 2}}/>
+                        <Divider sx={{ mt: 2 }} />
 
                         <MUIDataTable
                             data={data}
                             columns={columns}
                             options={options}
-                            />
+                        />
                     </Item>
                 </Grid>
                 {/* <Grid item xs={12} >

@@ -31,25 +31,6 @@ import { styled } from '@mui/material/styles';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
-const TabPanel = ({ children, value, index, ...other }) => {
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-            height="100%"
-        >
-            {value === index && (
-                <Box sx={{ pt: 1, height: "100%" }}>
-                    {children}
-                </Box>
-            )}
-        </div>
-    );
-}
-
 const ListItem = styled('li')(({ theme }) => ({
     margin: theme.spacing(0.5),
 }));
