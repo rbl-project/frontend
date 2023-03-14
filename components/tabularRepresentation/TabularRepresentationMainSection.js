@@ -13,8 +13,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import MUIDataTable from "mui-datatables";
 import { ToastContainer, toast } from 'react-toastify';
 
-// icons
-
 // actions
 import { getColumnInfo, getTabularRepresentation } from "/store/tabularRepresentationSlice";
 import { setOpenMenuItem } from "/store/globalStateSlice";

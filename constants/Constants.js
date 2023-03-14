@@ -16,6 +16,17 @@ export const CATEGORICAL = "Categorical";
 
 export const DRAWER_WIDTH = 300;
 
+// Data Types
+export const NUMBER_DATA_TYPE = "number";
+export const STRING_DATA_TYPE = "string";
+export const DATE_DATA_TYPE = "date";
+export const BOOLEAN_DATA_TYPE = "boolean";
+export const NULL_DATA_TYPE = "null";
+
+// Colors
+export const BLACK_COLOR = "black";
+export const BLUE_COLOR = "blue";
+
 // EDA Functions
 export const EDA_PATH = "/dashboard/exploratory-data-analysis"
 export const DATASET_OVERVIEW = "Dataset Overview";

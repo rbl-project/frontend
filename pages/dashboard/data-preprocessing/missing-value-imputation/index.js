@@ -3,6 +3,7 @@ import Head from 'next/head'
 
 // Components
 import DashboardLayout from "/layouts/DashboardLayout";
+import ShowMissingValueMainSection from "/components/missingValueImputation/ShowMissingValueMainSection";
 
 const MissingValueImputation = () => {
   return (
@@ -11,7 +12,7 @@ const MissingValueImputation = () => {
         <title>Missing Value Imputation | DataX</title>
       </Head>
       <DashboardLayout>
-        <div>Missing Value Imputation</div>
+        <ShowMissingValueMainSection />
       </DashboardLayout>
     </>
   )
