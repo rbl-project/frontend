@@ -31,25 +31,34 @@ import { styled } from '@mui/material/styles';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
-const DropByNumericColValueSection = ({ dropByNumericalQuery, setDropByNumericalQuery, dataCleaningState }) => {
+// constants
+import { DROP_BY_NUMERICAL_RANGE_API_TASK_TYPE } from "/constants/Constants";
+
+const DropByNumericColValueSection = ({ setApiTaskType, dropByNumericalQuery, setDropByNumericalQuery }) => {
+
+    const dataCleaningState = useSelector(state => state.dataCleaning);
 
     const [dropColumnNumerical, setDropColumnNumerical] = useState('');
-    const [dropNumericalToValue, setDropNumericalToValue] = useState(undefined);
-    const [dropNumericalFromValue, setDropNumericalFromValue] = useState(undefined);
+    const [dropNumericalToValue, setDropNumericalToValue] = useState(null);
+    const [dropNumericalFromValue, setDropNumericalFromValue] = useState(null);
 
 
     const handleDropColNumericalSubmit = () => {
         // append serachColumn as key and searchValue as value in searchQuery object
+
         let dropQuery_temp = dropByNumericalQuery;
         dropQuery_temp[dropColumnNumerical] = [dropNumericalFromValue, dropNumericalToValue];
         setDropByNumericalQuery(dropQuery_temp);
 
-        console.log(dropByNumericalQuery);
-
         setDropColumnNumerical('');
-        setDropNumericalToValue('');
-        setDropNumericalFromValue('');
+        setDropNumericalToValue(null);
+        setDropNumericalFromValue(null);
+
     }
+
+    useEffect(() => {
+        setApiTaskType(DROP_BY_NUMERICAL_RANGE_API_TASK_TYPE)
+    }, [])
 
     return (
         <>
@@ -71,7 +80,7 @@ const DropByNumericColValueSection = ({ dropByNumericalQuery, setDropByNumerical
                                 setDropColumnNumerical(value)
                             }}
                             renderInput={(params) => <TextField sx={{}} {...params} label="Numerical Column" />}
-                            sx={parseInt(dropNumericalToValue) < parseInt(dropNumericalFromValue) ? { paddingBottom: "25px" } : {}}
+                            sx={parseFloat(dropNumericalToValue) < parseFloat(dropNumericalFromValue) ? { paddingBottom: "25px" } : {}}
                         />
                     </FormControl>
                 </Box>
@@ -81,22 +90,21 @@ const DropByNumericColValueSection = ({ dropByNumericalQuery, setDropByNumerical
                     <FormControl fullWidth size="small" sx={{ flexDirection: 'row' }}>
                         <TextField 
                             disabled={dropColumnNumerical.length != 0 ? false: true} 
-                            placeholder='From' type="number" 
-                            inputProps={{ inputMode: 'numeric' }} 
+                            placeholder='From' 
+                            type="number"
                             size='small' 
-                            onChange={(e) => setDropNumericalFromValue(e.target.value)} 
+                            onChange={(e) => setDropNumericalFromValue(parseFloat(e.target.value))} 
                             value={dropNumericalFromValue} sx={{ mr: 2 }} 
                         />
                         <TextField 
                             disabled={dropColumnNumerical.length != 0 ? false: true} 
                             placeholder='To' 
                             type="number" 
-                            inputProps={{ inputMode: 'numeric' }} 
                             size='small' 
-                            onChange={(e) => setDropNumericalToValue(e.target.value)} 
+                            onChange={(e) => setDropNumericalToValue(parseFloat(e.target.value))} 
                             value={dropNumericalToValue} 
-                            error={parseInt(dropNumericalToValue) < parseInt(dropNumericalFromValue)}
-                            helperText={((parseInt(dropNumericalToValue) < parseInt(dropNumericalFromValue)) ? "To value must be greater than From" : "")}
+                            error={parseFloat(dropNumericalToValue) < parseFloat(dropNumericalFromValue)}
+                            helperText={((parseFloat(dropNumericalToValue) < parseFloat(dropNumericalFromValue)) ? "To value must be greater than From" : "")}
                         />
                     </FormControl>
                 </Box>

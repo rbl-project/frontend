@@ -31,37 +31,30 @@ import { styled } from '@mui/material/styles';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
+// constants
+import { DROP_BY_COLUMN_NAME_API_TASK_TYPE } from "/constants/Constants";
+
 const ListItem = styled('li')(({ theme }) => ({
     margin: theme.spacing(0.5),
 }));
 
-const ToolTipText = styled('p')(({ theme }) => ({
-    color: "white",
-    backgroundColor: "grey",
-    borderRadius: "50%",
-    padding: "0px 8px",
-    display: "inline-block",
-    fontSize: "15px",
-    fontWeight: "bold",
-    cursor: "pointer",
-    marginLeft: "0.5rem"
-}))
-
-const DropByColNameSection = ({ dropByColNameQuery, setDropByColNameQuery, dataCleaningState }) => {
+const DropByColNameSection = ({ setApiTaskType, dropByColNameQuery, setDropByColNameQuery }) => {
 
     const [deleteColumnList, setDeleteColumnList] = useState([]);
+    const dataCleaningState = useSelector(state => state.dataCleaning);
 
     const handleDeleteColSubmit = () => {
-        console.log("Delete Column: ", deleteColumnList);
-
         let dropQuery_temp = dropByColNameQuery;
         dropQuery_temp.col_list = deleteColumnList;
         setDropByColNameQuery(dropQuery_temp);
 
         setDeleteColumnList([]);
-
-        console.log("Delete Column: ", dropByColNameQuery);
     }
+
+    useEffect(() => {
+        setApiTaskType(DROP_BY_COLUMN_NAME_API_TASK_TYPE)
+    }, [])
+
     return (
         <>
             {/* Drop Rows by Column Values Input */}
@@ -76,7 +69,7 @@ const DropByColNameSection = ({ dropByColNameQuery, setDropByColNameQuery, dataC
                             fullWidth={true}
                             filterSelectedOptions={true}
                             id="combo-box-demo"
-                            options={dataCleaningState.categorical_columns}
+                            options={dataCleaningState.all_columns}
                             size="small"
                             value={deleteColumnList}
                             onChange={(e, value, reason) => setDeleteColumnList(value)}
@@ -96,7 +89,7 @@ const DropByColNameSection = ({ dropByColNameQuery, setDropByColNameQuery, dataC
                 Current Selection
             </Typography>
             {
-                dropByColNameQuery['col_list'].length == 0 ?
+                (!dropByColNameQuery['col_list'] || dropByColNameQuery['col_list'].length == 0) ?
                     (
                         <></>
                     ) : (
@@ -124,7 +117,7 @@ const DropByColNameSection = ({ dropByColNameQuery, setDropByColNameQuery, dataC
                                                         }}
                                                         component="ul"
                                                     > {
-                                                            dropByColNameQuery['col_list'].map((val) => {
+                                                            dropByColNameQuery['col_list']?.map((val) => {
                                                                 return (
                                                                     <ListItem key={val}>
                                                                         <Chip

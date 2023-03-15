@@ -34,24 +34,8 @@ import * as API from "/api";
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
-const TabPanel = ({ children, value, index, ...other }) => {
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-            height="100%"
-        >
-            {value === index && (
-                <Box sx={{ pt: 1, height: "100%" }}>
-                    {children}
-                </Box>
-            )}
-        </div>
-    );
-}
+// constants
+import { DROP_BY_CATEGORICAL_VALUE_API_TASK_TYPE } from "/constants/Constants";
 
 const ListItem = styled('li')(({ theme }) => ({
     margin: theme.spacing(0.5),
@@ -69,17 +53,16 @@ const ToolTipText = styled('p')(({ theme }) => ({
     marginLeft: "0.5rem"
 }))
 
-const DropByCategoricalColValueSection = ({ dropByCategoricalQuery, setDropByCategoricalQuery, dataCleaningState }) => {
+const DropByCategoricalColValueSection = ({ setApiTaskType, dropByCategoricalQuery, setDropByCategoricalQuery }) => {
 
     const [dropColumn, setDropColumn] = useState('');
     const [dropValue, setDropValue] = useState([]);
 
     // const [categoricalColValuesOptions, setCategoricalColValuesOptions] = useState([]);
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
+    const dataCleaningState = useSelector((state) => state.dataCleaning);
 
     const handleDropColSubmit = () => {
-        console.log("Drop Column: ", dropColumn);
-        console.log("Drop Values: ", dropValue);
 
         let dropQuery_temp = dropByCategoricalQuery;
         dropQuery_temp[dropColumn] = dropValue;
@@ -87,8 +70,6 @@ const DropByCategoricalColValueSection = ({ dropByCategoricalQuery, setDropByCat
 
         setDropColumn('');
         setDropValue([]);
-
-        console.log("Drop Query: ", dropByCategoricalQuery);
     }
 
     // +=======================================================================================
@@ -111,6 +92,11 @@ const DropByCategoricalColValueSection = ({ dropByCategoricalQuery, setDropByCat
         })
 
     }, [inputValue, dropValue])
+
+    useEffect(() => {
+        setApiTaskType(DROP_BY_CATEGORICAL_VALUE_API_TASK_TYPE)
+    }, [])
+
 
     return (
         <>

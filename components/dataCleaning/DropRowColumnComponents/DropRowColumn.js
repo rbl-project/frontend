@@ -72,19 +72,28 @@ const ToolTipText = styled('p')(({ theme }) => ({
     marginLeft: "0.5rem"
 }))
 
-const DropRowsAndColumnSection = () => {
+const DropRowsAndColumnSection = ({
+    setApiTaskType,
+    dropByCategoricalQuery, setDropByCategoricalQuery,
+    dropByNumericalQuery, setDropByNumericalQuery,
+    dropByColNameQuery, setDropByColNameQuery,
+    dropByRowIndexQuery, setDropByRowIndexQuery
+}) => {
 
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
-    // REdux state
-    const dataCleaningState = useSelector((state) => state.dataCleaning);
 
     // local state
     const [value, setValue] = useState(0);
 
-    const [dropByCategoricalQuery, setDropByCategoricalQuery] = useState({});
-    const [dropByNumericalQuery, setDropByNumericalQuery] = useState({});
-    const [dropByColNameQuery, setDropByColNameQuery] = useState({ "col_list": [] });
-    const [dropByRowIndexQuery, setDropByRowIndexQuery] = useState({ "row_start": 0, "row_end": 0 });
+    // const [dropByCategoricalQuery, setDropByCategoricalQuery] = useState({});
+    // const [dropByNumericalQuery, setDropByNumericalQuery] = useState({});
+    // const [dropByColNameQuery, setDropByColNameQuery] = useState({ "col_list": [] });
+    // const [dropByRowIndexQuery, setDropByRowIndexQuery] = useState({ "row_start": 0, "row_end": 0 });
+
+    // setDropByRowIndexQuery({ "row_start": 0, "row_end": 0 });
+    useEffect(() => {
+        setDropByRowIndexQuery({ "row_start": 0, "row_end": 0 });
+    }, [])
 
     useEffect(() => {
         setDropByCategoricalQuery({});
@@ -109,30 +118,30 @@ const DropRowsAndColumnSection = () => {
                 {/* Tab Panels */}
                 <TabPanel value={value} index={0}>
                     <DropByCategoricalColValueSection
+                        setApiTaskType={setApiTaskType}
                         dropByCategoricalQuery={dropByCategoricalQuery}
                         setDropByCategoricalQuery={setDropByCategoricalQuery}
-                        dataCleaningState={dataCleaningState}
                     />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     <DropByNumericColValueSection
+                        setApiTaskType={setApiTaskType}
                         dropByNumericalQuery={dropByNumericalQuery}
                         setDropByNumericalQuery={setDropByNumericalQuery}
-                        dataCleaningState={dataCleaningState}
                     />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                     <DropByColNameSection
+                        setApiTaskType={setApiTaskType}
                         dropByColNameQuery={dropByColNameQuery}
                         setDropByColNameQuery={setDropByColNameQuery}
-                        dataCleaningState={dataCleaningState}
                     />
                 </TabPanel>
                 <TabPanel value={value} index={3}>
                     <DropByRowIndexSection
+                        setApiTaskType={setApiTaskType}
                         dropByRowIndexQuery={dropByRowIndexQuery}
                         setDropByRowIndexQuery={setDropByRowIndexQuery}
-                        dataCleaningState={dataCleaningState}
                     />
                 </TabPanel>
             </Box>

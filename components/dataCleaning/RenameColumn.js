@@ -47,7 +47,6 @@ const RenameColumnSection = ({ setApiTaskType, renameColumnQuery, setRenameColum
         setRenameColumnQuery({ ...renameColumnQuery, [column]: newName });
         setColumn('');
         setNewName('');
-        console.log(renameColumnQuery);
     }
 
     useEffect(() => {

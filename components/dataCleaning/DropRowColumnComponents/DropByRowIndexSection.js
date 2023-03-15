@@ -31,42 +31,12 @@ import { styled } from '@mui/material/styles';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
-const TabPanel = ({ children, value, index, ...other }) => {
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-            height="100%"
-        >
-            {value === index && (
-                <Box sx={{ pt: 1, height: "100%" }}>
-                    {children}
-                </Box>
-            )}
-        </div>
-    );
-}
+// constants
+import { DROP_BY_ROW_INDEX_API_TASK_TYPE } from '/constants/Constants';
 
-const ListItem = styled('li')(({ theme }) => ({
-    margin: theme.spacing(0.5),
-}));
+const DropByRowIndexSection = ({ setApiTaskType, dropByRowIndexQuery, setDropByRowIndexQuery }) => {
 
-const ToolTipText = styled('p')(({ theme }) => ({
-    color: "white",
-    backgroundColor: "grey",
-    borderRadius: "50%",
-    padding: "0px 8px",
-    display: "inline-block",
-    fontSize: "15px",
-    fontWeight: "bold",
-    cursor: "pointer",
-    marginLeft: "0.5rem"
-}))
-
-const DropByRowIndexSection = ({ dropByRowIndexQuery, setDropByRowIndexQuery, dataCleaningState }) => {
+    const dataCleaningState = useSelector(state => state.dataCleaning);
 
     const [startIndex, setStartIndex] = useState(0);
     const [endIndex, setEndIndex] = useState(0);
@@ -75,7 +45,7 @@ const DropByRowIndexSection = ({ dropByRowIndexQuery, setDropByRowIndexQuery, da
     const handleStartIndexChange = (event) => {
         setStartIndex(event.target.value);
         setDropByRowIndexQuery({
-            ...dropByRowIndexQuery, ["row_start"]: event.target.value
+            ...dropByRowIndexQuery, ["row_start"]: parseInt(event.target.value)
         })
     }
 
@@ -83,9 +53,13 @@ const DropByRowIndexSection = ({ dropByRowIndexQuery, setDropByRowIndexQuery, da
     const handleEndIndexChange = (event) => {
         setEndIndex(event.target.value);
         setDropByRowIndexQuery({
-            ...dropByRowIndexQuery, ["row_end"]: event.target.value
+            ...dropByRowIndexQuery, ["row_end"]: parseInt(event.target.value)
         })
     }
+
+    useEffect(() => {
+        setApiTaskType(DROP_BY_ROW_INDEX_API_TASK_TYPE)
+    }, [])
 
     return (
         <>
@@ -111,6 +85,7 @@ const DropByRowIndexSection = ({ dropByRowIndexQuery, setDropByRowIndexQuery, da
                 <Box sx={{ mr: 2 }}>
                     <TextField
                         size='small'
+                        type="number"
                         inputProps={{ inputMode: 'numeric' }}
                         value={startIndex}
                         onChange={handleStartIndexChange}
@@ -144,12 +119,13 @@ const DropByRowIndexSection = ({ dropByRowIndexQuery, setDropByRowIndexQuery, da
                 <Box sx={{ mr: 2 }}>
                     <TextField
                         size='small'
+                        type="number"
                         error={endIndex !== dataCleaningState.n_rows && (parseInt(endIndex) < parseInt(startIndex))}
                         helperText={(endIndex !== dataCleaningState.n_rows && (parseInt(endIndex) < parseInt(startIndex)) ? "End must be greater than start" : "")}
                         inputProps={{ inputMode: 'numeric' }}
                         value={endIndex}
                         onChange={handleEndIndexChange}
-                        style={endIndex === dataCleaningState.n_rows ? { padding: "6px 16px", WebkitTextFillColor: "rgba(0, 0, 0, 0.38)" } : { padding: "6px 16px" }} type="number" placeholder="Index" />
+                        style={endIndex === dataCleaningState.n_rows ? { padding: "6px 16px", WebkitTextFillColor: "rgba(0, 0, 0, 0.38)" } : { padding: "6px 16px" }}  placeholder="Index" />
 
                 </Box>
             </Box>

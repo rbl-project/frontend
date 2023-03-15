@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import MUIDataTable from "mui-datatables";
+import { toast } from 'react-toastify';
 
 // material-ui
 import {
@@ -29,7 +30,17 @@ import ReplayIcon from '@mui/icons-material/Replay';
 import DoneIcon from '@mui/icons-material/Done';
 
 // actions
-import { getColumnInfo, renameColumn, findAndReplace } from "/store/dataCleaningSlice";
+import { 
+    getColumnInfo, 
+    renameColumn, 
+    findAndReplace, 
+    changeDataType, 
+    dropByColValue,
+    dropByNumericalValue,
+    dropByColName,
+    dropByRowIndex
+} from "/store/dataCleaningSlice";
+
 import { saveChanges, revertChanges } from "/store/datasetUpdateSlice";
 import { setOpenMenuItem } from "/store/globalStateSlice";
 import { resetRequestStatus as resetDataCleaningRequestStatus } from "/store/dataCleaningSlice";
@@ -49,8 +60,6 @@ import {
     REQUEST_STATUS_FAILED,
     REQUEST_STATUS_LOADING
 } from '/constants/Constants';
-
-import { toast } from 'react-toastify';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -92,8 +101,13 @@ const DataCleaningMainSection = () => {
 
     const [apiTaskType, setApiTaskType] = useState("");
 
-    const [renameColumnQuery, setRenameColumnQuery] = useState({})
-    const [findReplaceQuery, setFindReplaceQuery] = useState({})
+    const [dropByCategoricalQuery, setDropByCategoricalQuery] = useState({});
+    const [dropByNumericalQuery, setDropByNumericalQuery] = useState({});
+    const [dropByColNameQuery, setDropByColNameQuery] = useState({});
+    const [changeDataTypeQuery, setChangeDataTypeQuery] = useState({});
+    const [renameColumnQuery, setRenameColumnQuery] = useState({});
+    const [findReplaceQuery, setFindReplaceQuery] = useState({});
+    const [dropByRowIndexQuery, setDropByRowIndexQuery] = useState({});
 
     const [value, setValue] = useState(0);
 
@@ -128,6 +142,11 @@ const DataCleaningMainSection = () => {
 
             setRenameColumnQuery({});
             setFindReplaceQuery({});
+            setChangeDataTypeQuery({});
+            setDropByCategoricalQuery({});
+            setDropByNumericalQuery({});
+            setDropByColNameQuery({});
+            setDropByRowIndexQuery({});
             
             dispatch(resetDataCleaningRequestStatus());
             
@@ -187,23 +206,34 @@ const DataCleaningMainSection = () => {
     const applyDataChanges = () => {
         
         if (apiTaskType === DROP_BY_CATEGORICAL_VALUE_API_TASK_TYPE) {
-            console.log("drop by categorical value");
+            dispatch(dropByColValue({
+                dataset_name: selectedDataset,
+                col_value_info: dropByCategoricalQuery
+            }))
 
         } else if (apiTaskType === DROP_BY_NUMERICAL_RANGE_API_TASK_TYPE) {
-
-            console.log("drop by numerical range");
+            dispatch(dropByNumericalValue({
+                dataset_name: selectedDataset,
+                col_value_info: dropByNumericalQuery
+            }))
 
         } else if (apiTaskType === DROP_BY_COLUMN_NAME_API_TASK_TYPE) {
-
-            console.log("drop by column name");
+            dispatch(dropByColName({
+                dataset_name: selectedDataset,
+                col_list_info: dropByColNameQuery
+            }))
 
         } else if (apiTaskType === DROP_BY_ROW_INDEX_API_TASK_TYPE) {
-
-            console.log("drop by row index");
+            dispatch(dropByRowIndex({
+                dataset_name: selectedDataset,
+                row_drop_info: dropByRowIndexQuery
+            }))
 
         } else if (apiTaskType === CHANGE_DATA_TYPE_API_TASK_TYPE) {
-
-            console.log("change data type");
+            dispatch(changeDataType({
+                dataset_name: selectedDataset,
+                col_data_type_change_info: changeDataTypeQuery
+            }))
 
         }
         else if (apiTaskType === RENAME_COLUMN_API_TASK_TYPE) {
@@ -211,11 +241,13 @@ const DataCleaningMainSection = () => {
                 dataset_name: selectedDataset,
                 col_name_change_info: renameColumnQuery
             }))
+
         } else if (apiTaskType === FIND_AND_REPLACE_API_TASK_TYPE) {
             dispatch(findAndReplace({
                 dataset_name: selectedDataset,
                 find_relace_info: findReplaceQuery
             }))
+
         } else {
 
             console.log("No API Task Type");
@@ -299,11 +331,25 @@ const DataCleaningMainSection = () => {
                             <TabPanel value={value} index={0}>
                                 <DropRowsAndColumnSection 
                                     setApiTaskType={setApiTaskType} 
+
+                                    dropByCategoricalQuery={dropByCategoricalQuery}
+                                    setDropByCategoricalQuery={setDropByCategoricalQuery}
+
+                                    dropByNumericalQuery={dropByNumericalQuery}
+                                    setDropByNumericalQuery={setDropByNumericalQuery}
+
+                                    dropByColNameQuery={dropByColNameQuery}
+                                    setDropByColNameQuery={setDropByColNameQuery}
+
+                                    dropByRowIndexQuery={dropByRowIndexQuery}
+                                    setDropByRowIndexQuery={setDropByRowIndexQuery}
                                 />
                             </TabPanel>
                             <TabPanel value={value} index={1}>
                                 <ChangeDataTypeSection 
-                                    setApiTaskType={setApiTaskType} 
+                                    setApiTaskType={setApiTaskType}
+                                    changeDataTypeQuery={changeDataTypeQuery}
+                                    setChangeDataTypeQuery={setChangeDataTypeQuery}
                                 />
                             </TabPanel>
                             <TabPanel value={value} index={2}>
@@ -330,7 +376,7 @@ const DataCleaningMainSection = () => {
                                         : <DoneIcon />
                                     }
                                 </Button>
-                                <Button variant="contained" color='warning' sx={{ m: 1 }} onClick={revertDatasetChanges}>
+                                <Button variant="contained" color='error' sx={{ m: 1 }} onClick={revertDatasetChanges}>
                                     {
                                         datasetUpdateState.revertChangesRequestStatus === REQUEST_STATUS_LOADING 
                                         ? <CircularProgress size={20} sx={{color: 'white'}} /> 

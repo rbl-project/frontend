@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux';
 
 // material-ui
@@ -24,39 +24,39 @@ import {
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
-const ChangeDataTypeSection = () => {
+// constants
+import { CHANGE_DATA_TYPE_API_TASK_TYPE } from '/constants/Constants';
+
+const ChangeDataTypeSection = ({ setApiTaskType, changeDataTypeQuery, setChangeDataTypeQuery }) => {
     // REdux state
     const dataCleaningState = useSelector((state) => state.dataCleaning);
 
+    const list_of_data_types = {
+        "int16": ["int32", "int64", "float32", "float64", "str"] ,
+        "int32": ["int64", "float32", "float64", "str"] ,
+        "int64": ["float32", "float64", "str"] ,
+        "float32": ["int16", "int32", "int64","float64", "str"] ,
+        "float64": ["int16", "int32", "int64","float32", "str"] ,
+        "str": [] ,
+        "object": ["int16", "int32", "int64", "float32", "float64", "str"] ,
+        "datetime64[ns]": [] ,
+        "bool": ["str"],
+        "unicode": []
+    }
+
     const [column, setColumn] = useState('');
     const [dataType, setDataType] = useState('');
-    const [changeDataTypeQuery, setChangeDataTypeQuery] = useState({})
-
-    const list_of_data_types = [
-        "int8",
-        "int16",
-        "int32",
-        "int64",
-        "uint8",
-        "uint16",
-        "uint32",
-        "uint64",
-        "float16",
-        "float32",
-        "float64",
-        "float128",
-        "object",
-        "datetime64[ns]",
-        "bool",
-        "unicode"
-    ]
+    const [dataTypeOptions, setDataTypeOptions] = useState(Object.keys(list_of_data_types));
 
     const handleSubmit = () => {
         setChangeDataTypeQuery({ ...changeDataTypeQuery, [column]: dataType });
         setColumn('');
         setDataType('');
-        console.log(changeDataTypeQuery);
     }
+
+    useEffect(() => {
+        setApiTaskType(CHANGE_DATA_TYPE_API_TASK_TYPE)
+    }, [])
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -76,6 +76,8 @@ const ChangeDataTypeSection = () => {
                             // sx={{ width: "130px", padding: "0px" }}
                             onChange={(e, value, reason) => {
                                 setColumn(value)
+                                setDataType(dataCleaningState.dtypes[value])
+                                setDataTypeOptions(list_of_data_types[dataCleaningState.dtypes[value]])
                             }}
                             renderInput={(params) => <TextField sx={{}} {...params} label="Categorical Column" />}
                         />
@@ -90,7 +92,7 @@ const ChangeDataTypeSection = () => {
                             fullWidth={true}
                             filterSelectedOptions={true}
                             id="combo-box-demo"
-                            options={list_of_data_types}
+                            options={dataTypeOptions}
                             size="small"
                             value={dataType}
                             // sx={{ width: "130px", padding: "0px" }}

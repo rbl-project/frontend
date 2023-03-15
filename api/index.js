@@ -63,5 +63,10 @@ export const generateGraph = (formData) => API.post("/generate-graph",formData);
 export const getTabularRepresentation = (formData) => API.post("/filtered-tabular-representation",formData);
 
 // Data Cleaning APIs
+export const dropByColValue = (formData) => API.post("/drop-by-column-value",formData);
+export const dropByNumericalValue = (formData) => API.post("/drop-by-numerical-value",formData);
+export const dropByColName = (formData) => API.post("/drop-by-column-name",formData);
+export const dropByRowIndex = (formData) => API.post("/drop-by-row-index",formData);
 export const renameColumn = (formData) => API.post("/rename-column",formData);
 export const findAndReplace = (formData) => API.post("/find-and-replace",formData);
+export const changeDataType = (formData) => API.post("/change-data-type",formData);
