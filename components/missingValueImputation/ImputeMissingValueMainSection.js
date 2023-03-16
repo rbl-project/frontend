@@ -1,5 +1,5 @@
 import React, { useState } from 'react'; BOOLEAN_DATA_TYPE
-import { Box, Paper, Typography, Divider, Tooltip, Button, TextField, Grid, Chip } from '@mui/material';
+import { Box, Paper, Typography, Divider, Tooltip, Button, TextField, Grid, Chip,IconButton } from '@mui/material';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import MUIDataTable from "mui-datatables";
 
@@ -96,7 +96,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
 
   // Function to Change Data Type of Text and return Color and Icon
   const handleChangeDataType = (value, cuurentDataType) => {
-    
+
     /* 
       CurrentDataType - DataType that user wants to give to Text. 
       For example, if user wants to change 'null' to 'string' then currentDataType is 'string' but its actualDataType is 'null'
@@ -180,12 +180,12 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
               < Box sx={{ height: "35vh" }} >
                 < MissingValuePercentagePie value={30} />
               </Box>
-              < Typography variant="caption" sx={{ textAlign: "center", mt: 1, fontWeight: 500, textTransform: "uppercase" }} > Missing Value Percentage </Typography>
+              < Typography variant="caption" sx={{ textAlign: "center", mt: 1, fontWeight: 500,}} > Missing Value: 'null' </Typography>
 
               < Divider sx={{ my: 1 }} />
 
               {/* Missing Value Dropdown */}
-              <Box sx={{ mt: 3 }}>
+              <Box sx={{ mt: 3, display:"flex", alignItems:"flex-start" }}>
                 <Autocomplete
                   selectOnFocus
                   clearOnBlur
@@ -193,6 +193,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                   freeSolo
                   id="missing-value-dropdown"
                   size='small'
+                  sx={{ width: "85%"}}
                   value={missingValue}
                   options={MissingValueOptions}
                   renderOption={(props, option) => <li {...props}> <Typography>{`${option.title}`}</Typography> </li>}
@@ -258,7 +259,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                     }
                     return filtered;
                   }}
-                 
+
                   getOptionLabel={(option) => {
                     // Value selected with enter, right from the input
                     if (typeof option === STRING_DATA_TYPE) {
@@ -272,6 +273,8 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                     return option.title;
                   }}
                 />
+
+                <Button variant='outlined' sx={{minWidth:"0.5rem",width:"13%",px:"0.5rem",py:"0.45rem",ml:"2%"}} ><ApplyChangesIcon /></Button>
               </Box>
 
               {/* Handle Missing Value Dropdown */}
@@ -305,7 +308,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                       FormHelperTextProps={{ sx: { ml: 0 } }}
                     />
                   )}
-                  
+
                   onInputChange={(event, newInputValue, reason) => {
                     console.log("onInputChange", reason, newInputValue);
                     if (reason === 'input') {
@@ -319,7 +322,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                       setHandleMissingValueInputState({ color: BLACK_COLOR, dataType: STRING_DATA_TYPE, icon: < StringIcon /> });
                     }
                   }}
-                  
+
                   onChange={(event, newValue) => {
                     // When the user Types and Directly Presses Enter
                     if (typeof newValue === STRING_DATA_TYPE) {
@@ -340,7 +343,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                       setHandleMissingValueBy(newValue);
                     }
                   }}
-                  
+
                   filterOptions={(options, params) => {
                     const filtered = filter(options, params);
                     const { inputValue } = params;
@@ -354,7 +357,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                     }
                     return filtered;
                   }}
-                  
+
                   getOptionLabel={(option) => {
                     // Value selected with enter, right from the input
                     if (typeof option === STRING_DATA_TYPE) {
@@ -367,7 +370,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                     // Regular option
                     return option.title;
                   }}
-                
+
                 />
               </Box>
 
