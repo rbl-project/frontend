@@ -15,7 +15,7 @@ const ColumnCard = ({ allColumns=false, columnName }) => {
       <Card sx={{ width: "100%", backgroundColor: allColumns ? "#dff0fa" : "#eeeeee", borderRadius: 3, cursor: "pointer" }} elevation={0} >
         <Box sx={{ p: 2, pt: 1 }} >
           <Typography variant='h6' gutterBottom sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-            Column Name
+            {columnName}
           </Typography>
           <Typography sx={{ fontSize: "0.85rem", my: 1 }}>
             Missing Value: &apos;null&apos;

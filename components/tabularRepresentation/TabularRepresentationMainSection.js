@@ -113,7 +113,7 @@ const TabularRepresentationMainSection = () => {
             "filter": filterQuery
         }
 
-        console.log(finalQuery);
+        // console.log(finalQuery);
         dispatch(getTabularRepresentation(finalQuery));
     }
 

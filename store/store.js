@@ -8,6 +8,7 @@ import datasetOverviewSlice from "./datasetOverviewSlice";
 import dataCorrelationSlice from "./dataCorrelationSlice";
 import graphicalRepresentationSlice from "./graphicalRepresentationSlice";
 import tabularRepresentationSlice from "./tabularRepresentationSlice";
+import missingValueImputationSlice from "./missingValueImputationSlice";
 
 const combineReducer = combineReducers({
     global:globalStateSlice,
@@ -17,6 +18,7 @@ const combineReducer = combineReducers({
     dataCorrelation:dataCorrelationSlice,
     graphicalRepresentation:graphicalRepresentationSlice,
     tabularRepresentation:tabularRepresentationSlice,
+    missingValueImputation:missingValueImputationSlice,
 });
 
 export const makeStore = () => configureStore({reducer:combineReducer});

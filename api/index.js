@@ -58,3 +58,6 @@ export const generateGraph = (formData) => API.post("/generate-graph",formData);
 
 // Tabular Representation APIs
 export const getTabularRepresentation = (formData) => API.post("/filtered-tabular-representation",formData);
+
+// Missing Value Imputation APIs
+export const getMissingValuePercentage = (formData) => API.post("/missing-value-percentage",formData);
