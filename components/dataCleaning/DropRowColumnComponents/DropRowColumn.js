@@ -85,12 +85,6 @@ const DropRowsAndColumnSection = ({
     // local state
     const [value, setValue] = useState(0);
 
-    // const [dropByCategoricalQuery, setDropByCategoricalQuery] = useState({});
-    // const [dropByNumericalQuery, setDropByNumericalQuery] = useState({});
-    // const [dropByColNameQuery, setDropByColNameQuery] = useState({ "col_list": [] });
-    // const [dropByRowIndexQuery, setDropByRowIndexQuery] = useState({ "row_start": 0, "row_end": 0 });
-
-    // setDropByRowIndexQuery({ "row_start": 0, "row_end": 0 });
     useEffect(() => {
         setDropByRowIndexQuery({ "row_start": 0, "row_end": 0 });
     }, [])

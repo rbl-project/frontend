@@ -41,17 +41,6 @@ const ListItem = styled('li')(({ theme }) => ({
     margin: theme.spacing(0.5),
 }));
 
-const ToolTipText = styled('p')(({ theme }) => ({
-    color: "white",
-    backgroundColor: "grey",
-    borderRadius: "50%",
-    padding: "0px 8px",
-    display: "inline-block",
-    fontSize: "15px",
-    fontWeight: "bold",
-    cursor: "pointer",
-    marginLeft: "0.5rem"
-}))
 
 const DropByCategoricalColValueSection = ({ setApiTaskType, dropByCategoricalQuery, setDropByCategoricalQuery }) => {
 
@@ -111,7 +100,7 @@ const DropByCategoricalColValueSection = ({ setApiTaskType, dropByCategoricalQue
                             fullWidth={true}
                             filterSelectedOptions={true}
                             id="combo-box-demo"
-                            options={dataCleaningState.categorical_columns}
+                            options={Object.keys(dataCleaningState.metadata).length > 0 ? dataCleaningState.metadata.categorical_column_list : []}
                             size="small"
                             value={dropColumn}
                             onChange={(e, value, reason) => {

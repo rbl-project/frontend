@@ -103,12 +103,12 @@ const DropByRowIndexSection = ({ setApiTaskType, dropByRowIndexQuery, setDropByR
                 <Box sx={{ mr: 2 }}>
 
                     <Button onClick={() => {
-                        setEndIndex(dataCleaningState.n_rows)
+                        setEndIndex(dataCleaningState.metadata.n_rows)
                         setDropByRowIndexQuery({
-                            ...dropByRowIndexQuery, ["row_end"]: dataCleaningState.n_rows
+                            ...dropByRowIndexQuery, ["row_end"]: dataCleaningState.metadata.n_rows
                         })
                     }}
-                        style={endIndex != dataCleaningState.n_rows && endIndex !== undefined ? { marginLeft: "1rem", color: "rgba(0, 0, 0, 0.26)", border: "1px solid rgba(0, 0, 0, 0.12)", padding: 0 } : { marginLeft: "1rem", padding: 0 }}
+                        style={endIndex != dataCleaningState.metadata.n_rows && endIndex !== undefined ? { marginLeft: "1rem", color: "rgba(0, 0, 0, 0.26)", border: "1px solid rgba(0, 0, 0, 0.12)", padding: 0 } : { marginLeft: "1rem", padding: 0 }}
                         variant="outlined">
                         End
                     </Button>
@@ -120,12 +120,12 @@ const DropByRowIndexSection = ({ setApiTaskType, dropByRowIndexQuery, setDropByR
                     <TextField
                         size='small'
                         type="number"
-                        error={endIndex !== dataCleaningState.n_rows && (parseInt(endIndex) < parseInt(startIndex))}
-                        helperText={(endIndex !== dataCleaningState.n_rows && (parseInt(endIndex) < parseInt(startIndex)) ? "End must be greater than start" : "")}
+                        error={endIndex !== dataCleaningState.metadata.n_rows && (parseInt(endIndex) < parseInt(startIndex))}
+                        helperText={(endIndex !== dataCleaningState.metadata.n_rows && (parseInt(endIndex) < parseInt(startIndex)) ? "End must be greater than start" : "")}
                         inputProps={{ inputMode: 'numeric' }}
                         value={endIndex}
                         onChange={handleEndIndexChange}
-                        style={endIndex === dataCleaningState.n_rows ? { padding: "6px 16px", WebkitTextFillColor: "rgba(0, 0, 0, 0.38)" } : { padding: "6px 16px" }}  placeholder="Index" />
+                        style={endIndex === dataCleaningState.metadata.n_rows ? { padding: "6px 16px", WebkitTextFillColor: "rgba(0, 0, 0, 0.38)" } : { padding: "6px 16px" }}  placeholder="Index" />
 
                 </Box>
             </Box>
@@ -134,7 +134,7 @@ const DropByRowIndexSection = ({ setApiTaskType, dropByRowIndexQuery, setDropByR
             <Typography variant="body2" sx={{ fontWeight: "bold", textAlign: 'start', mt: 3 }}>
                 Current Selection
             </Typography>
-
+            
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>

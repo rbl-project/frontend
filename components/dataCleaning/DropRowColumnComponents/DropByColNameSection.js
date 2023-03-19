@@ -69,7 +69,7 @@ const DropByColNameSection = ({ setApiTaskType, dropByColNameQuery, setDropByCol
                             fullWidth={true}
                             filterSelectedOptions={true}
                             id="combo-box-demo"
-                            options={dataCleaningState.all_columns}
+                            options={dataCleaningState.metadata?.column_list}
                             size="small"
                             value={deleteColumnList}
                             onChange={(e, value, reason) => setDeleteColumnList(value)}

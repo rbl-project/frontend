@@ -154,7 +154,7 @@ const DataCleaningMainSection = () => {
             setDropByCategoricalQuery({});
             setDropByNumericalQuery({});
             setDropByColNameQuery({});
-            setDropByRowIndexQuery({});
+            setDropByRowIndexQuery({ "row_start": 0, "row_end": 0 });
             setChangeColumnTypeQuery({});
 
             dispatch(resetDataCleaningRequestStatus());
