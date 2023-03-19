@@ -19,12 +19,18 @@ const initialState = {
     n_rows: 0,
     n_cols: 0,
     message: null,
+    metadata: {}
 }
 
 export const getColumnInfo = createAsyncThunk('/get-categorical-columns', async (formData) => {
     const response = await API.getColumnInfo(formData);
     return response.data;
 });
+
+export const getMetaData = createAsyncThunk('/get-metadata', async (formData) => {
+    const response = await API.getMetaData(formData);
+    return response.data;
+})
 
 export const dropByColValue = createAsyncThunk('/drop-by-column-value', async (formData) => {
     const response = await API.dropByColValue(formData);
@@ -61,6 +67,11 @@ export const changeDataType = createAsyncThunk('/change-data-type', async (formD
     return response.data;
 });
 
+export const changeColumnType = createAsyncThunk('/change-column-type', async (formData) => {
+    const response = await API.changeColumnType(formData);
+    return response.data;
+});
+
 const dataCleaningSlice = createSlice({
     name: "dataCleaning",
     initialState: initialState,
@@ -69,9 +80,30 @@ const dataCleaningSlice = createSlice({
             state.requestStatus = REQUEST_STATUS_IDLE;
             state.message = null;
         },
+        resetDatasetChangesStatus:(state,action) => {
+            state.datasetChangesStatus = false;
+        },
     },
     extraReducers: (builder) => {
         builder
+
+        //* get metadata
+        .addCase(getMetaData.pending, (state, action) => {
+            state.requestStatus = REQUEST_STATUS_LOADING;
+            state.message = null;
+        })
+        .addCase(getMetaData.fulfilled, (state, action) => {
+            if (action.payload.status) {
+                state.requestStatus = REQUEST_STATUS_SUCCEEDED;
+                state.message = null;
+                state.metadata = action.payload.data.metadata;
+            }
+        })
+        .addCase(getMetaData.rejected, (state, action) => {
+            state.requestStatus = REQUEST_STATUS_FAILED;
+            state.message = CUSTOM_ERROR_MESSAGE;
+        })
+
         //*  columns info
         .addCase( getColumnInfo.pending, (state, action) => {
             state.requestStatus = REQUEST_STATUS_LOADING;
@@ -107,6 +139,7 @@ const dataCleaningSlice = createSlice({
             if (action.payload.status) {
                 state.requestStatus = REQUEST_STATUS_SUCCEEDED;
                 state.message = action.payload.data.msg;
+                
             }
             else {
                 state.requestStatus = REQUEST_STATUS_FAILED;
@@ -126,6 +159,7 @@ const dataCleaningSlice = createSlice({
             if (action.payload.status) {
                 state.requestStatus = REQUEST_STATUS_SUCCEEDED;
                 state.message = action.payload.data.msg;
+                
             }
             else {
                 state.requestStatus = REQUEST_STATUS_FAILED;
@@ -145,6 +179,7 @@ const dataCleaningSlice = createSlice({
             if (action.payload.status) {
                 state.requestStatus = REQUEST_STATUS_SUCCEEDED;
                 state.message = action.payload.data.msg;
+                
             }
             else {
                 state.requestStatus = REQUEST_STATUS_FAILED;
@@ -164,6 +199,7 @@ const dataCleaningSlice = createSlice({
             if (action.payload.status) {
                 state.requestStatus = REQUEST_STATUS_SUCCEEDED;
                 state.message = action.payload.data.msg;
+                
             }
             else {
                 state.requestStatus = REQUEST_STATUS_FAILED;
@@ -184,6 +220,7 @@ const dataCleaningSlice = createSlice({
             if (action.payload.status) {
                 state.requestStatus = REQUEST_STATUS_SUCCEEDED;
                 state.message = action.payload.data.msg;
+                
             }
             else {
                 state.requestStatus = REQUEST_STATUS_FAILED;
@@ -203,6 +240,7 @@ const dataCleaningSlice = createSlice({
             if (action.payload.status) {
                 state.requestStatus = REQUEST_STATUS_SUCCEEDED;
                 state.message = action.payload.data.msg;
+                
             }
             else {
                 state.requestStatus = REQUEST_STATUS_FAILED;
@@ -222,6 +260,7 @@ const dataCleaningSlice = createSlice({
             if (action.payload.status) {
                 state.requestStatus = REQUEST_STATUS_SUCCEEDED;
                 state.message = action.payload.data.msg;
+                
             }
             else {
                 state.requestStatus = REQUEST_STATUS_FAILED;
@@ -233,9 +272,29 @@ const dataCleaningSlice = createSlice({
             state.message = CUSTOM_ERROR_MESSAGE;
         })
 
+        //* change column type
+        .addCase( changeColumnType.pending, (state, action) => {
+            state.requestStatus = REQUEST_STATUS_LOADING;
+        })
+        .addCase( changeColumnType.fulfilled, (state, action) => { // action.payload is the response.data
+            if (action.payload.status) {
+                state.requestStatus = REQUEST_STATUS_SUCCEEDED;
+                state.message = action.payload.data.msg;
+                
+            }
+            else {
+                state.requestStatus = REQUEST_STATUS_FAILED;
+                state.message = action.payload.error; // error sent by us from our backend
+            }
+        })
+        .addCase( changeColumnType.rejected, (state, action) => {
+            state.requestStatus = REQUEST_STATUS_FAILED;
+            state.message = CUSTOM_ERROR_MESSAGE;
+        })
+
     }
 })
 
-export const { resetRequestStatus } = dataCleaningSlice.actions;
+export const { resetRequestStatus, resetDatasetChangesStatus } = dataCleaningSlice.actions;
 
 export default dataCleaningSlice.reducer;

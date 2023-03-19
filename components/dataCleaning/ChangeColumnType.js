@@ -25,37 +25,25 @@ import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 // constants
-import { CHANGE_DATA_TYPE_API_TASK_TYPE } from '/constants/Constants';
+import { CHANGE_COLUMN_TYPE_API_TASK_TYPE, COLUMN_TYPE_OPTIONS } from '/constants/Constants';
 
-const ChangeDataTypeSection = ({ setApiTaskType, changeDataTypeQuery, setChangeDataTypeQuery }) => {
+const ChangeColumnType = ({ setApiTaskType, changeColumnTypeQuery, setChangeColumnTypeQuery }) => {
     // REdux state
     const dataCleaningState = useSelector((state) => state.dataCleaning);
 
-    const list_of_data_types = {
-        "int16": ["int32", "int64", "float32", "float64", "str"] ,
-        "int32": ["int64", "float32", "float64", "str"] ,
-        "int64": ["float32", "float64", "str"] ,
-        "float32": ["int16", "int32", "int64","float64", "str"] ,
-        "float64": ["int16", "int32", "int64","float32", "str"] ,
-        "str": [] ,
-        "object": ["int16", "int32", "int64", "float32", "float64", "str"] ,
-        "datetime64[ns]": [] ,
-        "bool": ["str"],
-        "unicode": []
-    }
-
     const [column, setColumn] = useState('');
-    const [dataType, setDataType] = useState('');
-    const [dataTypeOptions, setDataTypeOptions] = useState(Object.keys(list_of_data_types));
+    const [columnType, setColumnType] = useState('');
+    
+    const columnTypeOptions = COLUMN_TYPE_OPTIONS;
 
     const handleSubmit = () => {
-        setChangeDataTypeQuery({ ...changeDataTypeQuery, [column]: dataType });
+        setChangeColumnTypeQuery({ ...changeColumnTypeQuery, [column]: columnType });
         setColumn('');
-        setDataType('');
+        setColumnType('');
     }
 
     useEffect(() => {
-        setApiTaskType(CHANGE_DATA_TYPE_API_TASK_TYPE)
+        setApiTaskType(CHANGE_COLUMN_TYPE_API_TASK_TYPE)
     }, [])
 
     return (
@@ -73,13 +61,11 @@ const ChangeDataTypeSection = ({ setApiTaskType, changeDataTypeQuery, setChangeD
                             options={dataCleaningState.metadata?.column_list}
                             size="small"
                             value={column}
-                            // sx={{ width: "130px", padding: "0px" }}
                             onChange={(e, value, reason) => {
                                 setColumn(value)
-                                setDataType(dataCleaningState.metadata?.column_datatypes[value])
-                                setDataTypeOptions(list_of_data_types[dataCleaningState.metadata?.column_datatypes[value]])
+                                // setColumnType(dataCleaningState.dtypes[value])
                             }}
-                            renderInput={(params) => <TextField sx={{}} {...params} label="Columns" />}
+                            renderInput={(params) => <TextField sx={{}} {...params} label="Column" />}
                         />
                     </FormControl>
                 </Box>
@@ -92,20 +78,25 @@ const ChangeDataTypeSection = ({ setApiTaskType, changeDataTypeQuery, setChangeD
                             fullWidth={true}
                             filterSelectedOptions={true}
                             id="combo-box-demo"
-                            options={dataTypeOptions}
+                            disabled={(column.length != 0) ? false : true}
+                            options={columnTypeOptions}
                             size="small"
-                            value={dataType}
+                            value={
+                                (dataCleaningState.metadata?.categorical_column_list.includes(column)) 
+                                ? "Categorical" 
+                                : (dataCleaningState.metadata?.numerical_column_list.includes(column)) ? "Numerical" : ""
+                            }
                             // sx={{ width: "130px", padding: "0px" }}
                             onChange={(e, value, reason) => {
-                                setDataType(value)
+                                setColumnType(value)
                             }}
-                            renderInput={(params) => <TextField sx={{}} {...params} label="Data Type" />}
+                            renderInput={(params) => <TextField sx={{}} {...params} label="Column Type" />}
                         />
                     </FormControl>
                 </Box>
 
                 <Box sx={{ ml: "1rem" }}>
-                    <Button variant='outlined' disabled={(column.length != 0 && dataType.length != 0) ? false : true} onClick={handleSubmit} >
+                    <Button variant='outlined' disabled={(column.length != 0 && columnType.length != 0) ? false : true} onClick={handleSubmit} >
                         <FileDownloadDoneIcon />
                     </Button>
                 </Box>
@@ -117,7 +108,7 @@ const ChangeDataTypeSection = ({ setApiTaskType, changeDataTypeQuery, setChangeD
                 Current Selection
             </Typography>
             {
-                Object.keys(changeDataTypeQuery).length == 0 ?
+                Object.keys(changeColumnTypeQuery).length == 0 ?
                     (
                         <></>
                     ) : (
@@ -127,14 +118,14 @@ const ChangeDataTypeSection = ({ setApiTaskType, changeDataTypeQuery, setChangeD
                                     <TableHead>
                                         <TableRow>
                                             <TableCell>Column</TableCell>
-                                            <TableCell>Data Type</TableCell>
+                                            <TableCell>Column Type</TableCell>
                                             <TableCell>Action</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
                                         {/* Numerical */}
                                         {
-                                            Object.keys(changeDataTypeQuery).map((col) => (
+                                            Object.keys(changeColumnTypeQuery).map((col) => (
                                                 <TableRow
                                                     key={col}
                                                 >
@@ -157,7 +148,7 @@ const ChangeDataTypeSection = ({ setApiTaskType, changeDataTypeQuery, setChangeD
                                                             >
                                                                 <Chip
                                                                     sx={{ m: 0.5 }}
-                                                                    label={changeDataTypeQuery[col]}
+                                                                    label={changeColumnTypeQuery[col]}
                                                                 />
 
                                                             </Paper>
@@ -166,9 +157,9 @@ const ChangeDataTypeSection = ({ setApiTaskType, changeDataTypeQuery, setChangeD
                                                     <TableCell>
                                                         <Link href="#" underline="none">
                                                             <DeleteOutlineIcon onClick={() => {
-                                                                let temp = {...changeDataTypeQuery};
+                                                                let temp = {...changeColumnTypeQuery};
                                                                 delete temp[col];
-                                                                setChangeDataTypeQuery(temp);
+                                                                setChangeColumnTypeQuery(temp);
                                                             }} />
                                                         </Link>
                                                     </TableCell>
@@ -186,4 +177,4 @@ const ChangeDataTypeSection = ({ setApiTaskType, changeDataTypeQuery, setChangeD
     )
 }
 
-export default ChangeDataTypeSection;
+export default ChangeColumnType;

@@ -10,7 +10,7 @@ import {
     Typography,
     Button,
     Grid,
-    TextField,
+    Badge,
     Tabs,
     Tab,
     CircularProgress,
@@ -24,26 +24,29 @@ import DropRowsAndColumnSection from './DropRowColumnComponents/DropRowColumn';
 import ChangeDataTypeSection from './ChangeDataTypes';
 import FindAndReplaceSection from './FindAndReplace';
 import RenameColumnSection from './RenameColumn';
+import ChangeColumnType from './ChangeColumnType';
 
 // icons
 import ReplayIcon from '@mui/icons-material/Replay';
 import DoneIcon from '@mui/icons-material/Done';
 
 // actions
-import { 
-    getColumnInfo, 
-    renameColumn, 
-    findAndReplace, 
-    changeDataType, 
+import {
+    getColumnInfo,
+    renameColumn,
+    findAndReplace,
+    changeDataType,
     dropByColValue,
     dropByNumericalValue,
     dropByColName,
-    dropByRowIndex
+    dropByRowIndex,
+    getMetaData,
+    changeColumnType
 } from "/store/dataCleaningSlice";
 
 import { saveChanges, revertChanges } from "/store/datasetUpdateSlice";
 import { setOpenMenuItem } from "/store/globalStateSlice";
-import { resetRequestStatus as resetDataCleaningRequestStatus } from "/store/dataCleaningSlice";
+import { resetRequestStatus as resetDataCleaningRequestStatus, resetDatasetChangesStatus } from "/store/dataCleaningSlice";
 import { resetRequestStatus as resetDatasetRequestStatus } from "/store/datasetUpdateSlice";
 
 // constant
@@ -58,7 +61,9 @@ import {
     FIND_AND_REPLACE_API_TASK_TYPE,
     REQUEST_STATUS_SUCCEEDED,
     REQUEST_STATUS_FAILED,
-    REQUEST_STATUS_LOADING
+    REQUEST_STATUS_LOADING,
+    CHANGE_COLUMN_TYPE_API_TASK_TYPE
+
 } from '/constants/Constants';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -100,6 +105,7 @@ const DataCleaningMainSection = () => {
 
 
     const [apiTaskType, setApiTaskType] = useState("");
+    const [badgeInVisibilty, setBadgeInVisibilty] = React.useState(true);
 
     const [dropByCategoricalQuery, setDropByCategoricalQuery] = useState({});
     const [dropByNumericalQuery, setDropByNumericalQuery] = useState({});
@@ -108,6 +114,7 @@ const DataCleaningMainSection = () => {
     const [renameColumnQuery, setRenameColumnQuery] = useState({});
     const [findReplaceQuery, setFindReplaceQuery] = useState({});
     const [dropByRowIndexQuery, setDropByRowIndexQuery] = useState({});
+    const [changeColumnTypeQuery, setChangeColumnTypeQuery] = useState({})
 
     const [value, setValue] = useState(0);
 
@@ -115,6 +122,7 @@ const DataCleaningMainSection = () => {
     useEffect(() => {
         if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
             dispatch(getColumnInfo({ dataset_name: selectedDataset }));
+            dispatch(getMetaData({ dataset_name: selectedDataset }));
         }
     }, [selectedDataset])
 
@@ -147,9 +155,10 @@ const DataCleaningMainSection = () => {
             setDropByNumericalQuery({});
             setDropByColNameQuery({});
             setDropByRowIndexQuery({});
-            
+            setChangeColumnTypeQuery({});
+
             dispatch(resetDataCleaningRequestStatus());
-            
+
             if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
                 dispatch(getColumnInfo({ dataset_name: selectedDataset }));
             }
@@ -159,7 +168,6 @@ const DataCleaningMainSection = () => {
                 position: "bottom-right",
                 autoClose: false,
                 hideProgressBar: false,
-                autoClose: 2000,
                 closeOnClick: false,
                 pauseOnHover: false,
                 draggable: false,
@@ -204,7 +212,7 @@ const DataCleaningMainSection = () => {
     }, [datasetUpdateState.message])
 
     const applyDataChanges = () => {
-        
+
         if (apiTaskType === DROP_BY_CATEGORICAL_VALUE_API_TASK_TYPE) {
             dispatch(dropByColValue({
                 dataset_name: selectedDataset,
@@ -247,20 +255,28 @@ const DataCleaningMainSection = () => {
                 dataset_name: selectedDataset,
                 find_relace_info: findReplaceQuery
             }))
+        } else if (apiTaskType === CHANGE_COLUMN_TYPE_API_TASK_TYPE) {
+            dispatch(changeColumnType({
+                dataset_name: selectedDataset,
+                col_type_change_info: changeColumnTypeQuery
+            }))
 
         } else {
-
             console.log("No API Task Type");
-
         }
+
+        dispatch(getMetaData({ dataset_name: selectedDataset }));
     }
 
-    const saveDatasetChanges = () => {
-        dispatch(saveChanges({ dataset_name: selectedDataset }));
+    const saveDatasetChanges = async () => {
+        await dispatch(saveChanges({ dataset_name: selectedDataset }));
+        dispatch(getMetaData({ dataset_name: selectedDataset }));
+        resetDatasetChangesStatus();
     }
 
-    const revertDatasetChanges = () => {
-        dispatch(revertChanges({ dataset_name: selectedDataset }));
+    const revertDatasetChanges = async () => {
+        await dispatch(revertChanges({ dataset_name: selectedDataset }));
+        dispatch(getMetaData({ dataset_name: selectedDataset }));
     }
 
     // temp
@@ -306,31 +322,41 @@ const DataCleaningMainSection = () => {
                             <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'space-between' }}>
                                 <Tabs value={value} onChange={(event, newValue) => setValue(newValue)} aria-label="basic tabs example">
                                     <Tab label="Drop Rows & Columns" />
-                                    <Tab label="Changing Data Types" />
+                                    <Tab label="Change Data Types" />
                                     <Tab label="Find and Replace" />
                                     <Tab label="Rename Columns" />
+                                    <Tab label="Change Column Type" />
                                 </Tabs>
                                 <Box>
                                     {/* Will be diabled if no changes are applied */}
-                                    <Button
-                                        variant='contained'
-                                        color='success'
-                                        sx={{ float: 'right', width: '8.7rem' }}
-                                        onClick={saveDatasetChanges}
-                                    >
-                                        {
-                                            datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_LOADING
-                                            ? <CircularProgress size={20} sx={{color: "white"}} />
-                                            : "Save Changes"
-                                        }
-                                    </Button>
+                                    
+                                        <Button
+                                            variant='contained'
+                                            color='success'
+                                            sx={{ float: 'right', width:'10.1rem' }}
+                                            onClick={saveDatasetChanges}
+                                        >
+                                            {
+                                                datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_LOADING
+                                                    ? <CircularProgress size={24} sx={{ color: "white" }} />
+                                                    : <Typography>
+                                                        { 
+                                                            (dataCleaningState.metadata?.is_copy == true && dataCleaningState.metadata?.is_copy_modified == true) 
+                                                            ? <span> &#x2a; </span> 
+                                                            : null
+                                                        } 
+                                                            Save Changes
+                                                    </Typography>
+                                            }
+                                        </Button>
+                                    
                                 </Box>
                             </Box>
 
                             {/* Tab Panels */}
                             <TabPanel value={value} index={0}>
-                                <DropRowsAndColumnSection 
-                                    setApiTaskType={setApiTaskType} 
+                                <DropRowsAndColumnSection
+                                    setApiTaskType={setApiTaskType}
 
                                     dropByCategoricalQuery={dropByCategoricalQuery}
                                     setDropByCategoricalQuery={setDropByCategoricalQuery}
@@ -346,24 +372,31 @@ const DataCleaningMainSection = () => {
                                 />
                             </TabPanel>
                             <TabPanel value={value} index={1}>
-                                <ChangeDataTypeSection 
+                                <ChangeDataTypeSection
                                     setApiTaskType={setApiTaskType}
                                     changeDataTypeQuery={changeDataTypeQuery}
                                     setChangeDataTypeQuery={setChangeDataTypeQuery}
                                 />
                             </TabPanel>
                             <TabPanel value={value} index={2}>
-                                <FindAndReplaceSection 
+                                <FindAndReplaceSection
                                     setApiTaskType={setApiTaskType}
                                     findReplaceQuery={findReplaceQuery}
                                     setFindReplaceQuery={setFindReplaceQuery}
                                 />
                             </TabPanel>
                             <TabPanel value={value} index={3}>
-                                <RenameColumnSection 
-                                    setApiTaskType={setApiTaskType} 
-                                    renameColumnQuery={renameColumnQuery} 
-                                    setRenameColumnQuery={setRenameColumnQuery} 
+                                <RenameColumnSection
+                                    setApiTaskType={setApiTaskType}
+                                    renameColumnQuery={renameColumnQuery}
+                                    setRenameColumnQuery={setRenameColumnQuery}
+                                />
+                            </TabPanel>
+                            <TabPanel value={value} index={4}>
+                                <ChangeColumnType
+                                    setApiTaskType={setApiTaskType}
+                                    changeColumnTypeQuery={changeColumnTypeQuery}
+                                    setChangeColumnTypeQuery={setChangeColumnTypeQuery}
                                 />
                             </TabPanel>
 
@@ -371,16 +404,16 @@ const DataCleaningMainSection = () => {
                             <Box sx={{ width: '100%', textAlign: 'end' }}>
                                 <Button variant="contained" color="primary" sx={{ m: 1 }} onClick={applyDataChanges}>
                                     {
-                                        dataCleaningState.requestStatus === REQUEST_STATUS_LOADING 
-                                        ? <CircularProgress size={20} sx={{color: 'white'}} /> 
-                                        : <DoneIcon />
+                                        dataCleaningState.requestStatus === REQUEST_STATUS_LOADING
+                                            ? <CircularProgress size={24} sx={{ color: 'white' }} />
+                                            : <DoneIcon />
                                     }
                                 </Button>
                                 <Button variant="contained" color='error' sx={{ m: 1 }} onClick={revertDatasetChanges}>
                                     {
-                                        datasetUpdateState.revertChangesRequestStatus === REQUEST_STATUS_LOADING 
-                                        ? <CircularProgress size={20} sx={{color: 'white'}} /> 
-                                        : <ReplayIcon />
+                                        datasetUpdateState.revertChangesRequestStatus === REQUEST_STATUS_LOADING
+                                            ? <CircularProgress size={24} sx={{ color: 'white' }} />
+                                            : <ReplayIcon />
                                     }
                                 </Button>
                             </Box>

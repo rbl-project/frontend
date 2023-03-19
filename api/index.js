@@ -43,6 +43,7 @@ export const getColumnInfo = (formData) => API.post("/get-columns-info",formData
 export const searchCategoricalValues = (formData) => API.post("/search-categorical-value", formData)
 export const saveChanges = (formData) => API.post("/save-changes",formData);
 export const revertChanges = (formData) => API.post("/revert-changes",formData);
+export const getMetaData = (formData) => API.post('/get-metadata', formData);
 
 // Dataset Overview APIs
 export const getBasicInformation = (formData) => API.post("/basic-information",formData);
@@ -70,3 +71,4 @@ export const dropByRowIndex = (formData) => API.post("/drop-by-row-index",formDa
 export const renameColumn = (formData) => API.post("/rename-column",formData);
 export const findAndReplace = (formData) => API.post("/find-and-replace",formData);
 export const changeDataType = (formData) => API.post("/change-data-type",formData);
+export const changeColumnType = (formData) => API.post("/change-column-type",formData);

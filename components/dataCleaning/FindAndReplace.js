@@ -98,14 +98,14 @@ const FindAndReplaceSection = ({ setApiTaskType, findReplaceQuery, setFindReplac
                                 fullWidth={true}
                                 filterSelectedOptions={true}
                                 id="combo-box-demo"
-                                options={dataCleaningState.all_columns}
+                                options={dataCleaningState.metadata?.column_list}
                                 size="small"
                                 value={column}
                                 // sx={{ width: "130px", padding: "0px" }}
                                 onChange={(e, value, reason) => {
                                     setColumn(value)
                                 }}
-                                renderInput={(params) => <TextField sx={{}} {...params} label="Categorical Column" />}
+                                renderInput={(params) => <TextField sx={{}} {...params} label="Columns" />}
                             />
                         </FormControl>
                     </Box>
@@ -115,7 +115,7 @@ const FindAndReplaceSection = ({ setApiTaskType, findReplaceQuery, setFindReplac
                     <Box>
                         <FormControl fullWidth size="small" sx={{ flexDirection: 'row' }}>
                             {
-                                (column.length != 0 && dataCleaningState.categorical_columns.includes(column))
+                                (column.length != 0 && dataCleaningState.metadata?.categorical_column_list.includes(column))
                                     ? <Autocomplete
                                         disableClearable
                                         fullWidth={true}

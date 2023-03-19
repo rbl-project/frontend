@@ -41,7 +41,6 @@ const RenameColumnSection = ({ setApiTaskType, renameColumnQuery, setRenameColum
     // Local state
     const [column, setColumn] = useState('');
     const [newName, setNewName] = useState('');
-    const [columnOptions, setColumnOptions] = useState(dataCleaningState.all_columns);
 
     const handleSubmit = () => {
         setRenameColumnQuery({ ...renameColumnQuery, [column]: newName });
@@ -52,11 +51,6 @@ const RenameColumnSection = ({ setApiTaskType, renameColumnQuery, setRenameColum
     useEffect(() => {
         setApiTaskType(RENAME_COLUMN_API_TASK_TYPE)
     }, [])
-
-    useEffect(() => {
-        setColumnOptions(dataCleaningState.all_columns);
-    }, [dataCleaningState.all_columns])
-
 
 
     return (
@@ -72,7 +66,7 @@ const RenameColumnSection = ({ setApiTaskType, renameColumnQuery, setRenameColum
                                 fullWidth={true}
                                 filterSelectedOptions={true}
                                 id="combo-box-demo"
-                                options={columnOptions}
+                                options={dataCleaningState.metadata?.column_list}
                                 size="small"
                                 value={column}
                                 onChange={(e, value, reason) => {

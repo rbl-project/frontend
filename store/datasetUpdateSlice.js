@@ -12,7 +12,8 @@ import * as API from "../api";
 const initialState = {
     saveChangesRequestStatus: REQUEST_STATUS_IDLE,
     revertChangesRequestStatus: REQUEST_STATUS_IDLE,
-    message: null
+    message: null,
+    saveChangesStatus: true
 }
 
 export const saveChanges = createAsyncThunk('/save-changes', async (formData) => {
@@ -46,6 +47,7 @@ const datasetUpdateSlice = createSlice({
                 if (action.payload.status) {
                     state.saveChangesRequestStatus = REQUEST_STATUS_SUCCEEDED;
                     state.message = action.payload.data.msg;
+                    state.saveChangesStatus = true;
                 }
                 else {
                     state.saveChangesRequestStatus = REQUEST_STATUS_FAILED;

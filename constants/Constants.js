@@ -55,6 +55,8 @@ export const DROP_BY_ROW_INDEX_API_TASK_TYPE = "drop_by_row_index";
 export const CHANGE_DATA_TYPE_API_TASK_TYPE = "change_data_type";
 export const FIND_AND_REPLACE_API_TASK_TYPE = "find_and_replace";
 export const RENAME_COLUMN_API_TASK_TYPE = "rename_column";
+export const CHANGE_COLUMN_TYPE_API_TASK_TYPE = "change_column_type";
+export const COLUMN_TYPE_OPTIONS = ["Categorical", "Numerical"];
 
 // Feature Engineering Functions
 export const FEATURE_ENGINEERING_PATH = "/dashboard/feature-engineering"
