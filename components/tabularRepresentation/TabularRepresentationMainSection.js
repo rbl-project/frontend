@@ -13,8 +13,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import MUIDataTable from "mui-datatables";
 import { ToastContainer, toast } from 'react-toastify';
 
-// icons
-
 // actions
 import { getColumnInfo, getTabularRepresentation } from "/store/tabularRepresentationSlice";
 import { setOpenMenuItem } from "/store/globalStateSlice";
@@ -44,6 +42,16 @@ const TabularRepresentationMainSection = () => {
             dispatch(getColumnInfo({ dataset_name: selectedDataset }));
             dispatch(getTabularRepresentation({ dataset_name: selectedDataset }));
         }
+        setSearchQuery({
+            "categorical_col": {},
+            "numerical_col": {}
+        })
+        setSortQuery({})
+        setFilterQuery({
+            "columns": [], // if filtercolumn length is 0 then consider all the columnns
+            "row_start": 0,
+            "row_end": tabularRepresentationState.n_rows
+        })
     }, [selectedDataset])
 
     // Setting Open Menu Item When Page Loads or Refreshes

@@ -3,18 +3,19 @@ import Head from 'next/head'
 
 // Components
 import DashboardLayout from "/layouts/DashboardLayout";
+import DataCleaningMainSection from '/components/dataCleaning/DataCleaningMainSection';
 
-const MissingValueImputation = () => {
+const DatasetOverview = () => {
   return (
     <>
       <Head>
-        <title>Missing Value Imputation | DataX</title>
+        <title>Data Cleaning | DataX</title>
       </Head>
       <DashboardLayout>
-        <div>Missing Value Imputation</div>
+        <DataCleaningMainSection/>
       </DashboardLayout>
     </>
   )
 }
 
-export default MissingValueImputation;
+export default DatasetOverview;

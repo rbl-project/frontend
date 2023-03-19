@@ -16,6 +16,17 @@ export const CATEGORICAL = "Categorical";
 
 export const DRAWER_WIDTH = 300;
 
+// Data Types
+export const NUMBER_DATA_TYPE = "number";
+export const STRING_DATA_TYPE = "string";
+export const DATE_DATA_TYPE = "date";
+export const BOOLEAN_DATA_TYPE = "boolean";
+export const NULL_DATA_TYPE = "null";
+
+// Colors
+export const BLACK_COLOR = "black";
+export const BLUE_COLOR = "blue";
+
 // EDA Functions
 export const EDA_PATH = "/dashboard/exploratory-data-analysis"
 export const DATASET_OVERVIEW = "Dataset Overview";
@@ -33,7 +44,19 @@ export const MISSING_VALUE_IMPUTATION = "Missing Value Imputation";
 export const NUMERICAL_ENCODING = "Numerical Encoding";
 export const MISSING_VALUE_IMPUTATION_PATH = DATA_PREPROCESSING_PATH + "/missing-value-imputation";
 export const NUMERICAL_ENCODING_PATH = DATA_PREPROCESSING_PATH + "/numerical-encoding";
+export const DATA_CLEANING = "Data Cleaning";
+export const DATA_CLEANING_PATH = DATA_PREPROCESSING_PATH + "/data-cleaning";
 
+// Data Cleaning Constants
+export const DROP_BY_CATEGORICAL_VALUE_API_TASK_TYPE = "drop_by_categorical_value";
+export const DROP_BY_NUMERICAL_RANGE_API_TASK_TYPE = "drop_by_numerical_range";
+export const DROP_BY_COLUMN_NAME_API_TASK_TYPE = "drop_by_column_name";
+export const DROP_BY_ROW_INDEX_API_TASK_TYPE = "drop_by_row_index";
+export const CHANGE_DATA_TYPE_API_TASK_TYPE = "change_data_type";
+export const FIND_AND_REPLACE_API_TASK_TYPE = "find_and_replace";
+export const RENAME_COLUMN_API_TASK_TYPE = "rename_column";
+export const CHANGE_COLUMN_TYPE_API_TASK_TYPE = "change_column_type";
+export const COLUMN_TYPE_OPTIONS = ["Categorical", "Numerical"];
 
 // Feature Engineering Functions
 export const FEATURE_ENGINEERING_PATH = "/dashboard/feature-engineering"
