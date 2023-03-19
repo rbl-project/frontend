@@ -11,6 +11,7 @@ import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
 import DatasetIcon from '@mui/icons-material/Dataset';
 import TableChartIcon from '@mui/icons-material/TableChart';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
+import MissingValueImputationIcon from '@mui/icons-material/Troubleshoot';
 
 // Components
 import SidebarItem from './SidebarItem';
@@ -94,7 +95,7 @@ const Sidebar = () => {
             <hr style={{ borderColor: 'transparent', width: "100%", backgroundColor: "rgb(86 86 86)" }} />
             <List sx={{ mt: 0 }} >
                 <SidebarSubheader title="Data Preprocessing" open={open}></SidebarSubheader>
-                <SidebarItem itemKey={1} name={MISSING_VALUE_IMPUTATION} path={MISSING_VALUE_IMPUTATION_PATH} ItemIcon={InboxIcon} open={open} />
+                <SidebarItem itemKey={1} name={MISSING_VALUE_IMPUTATION} path={MISSING_VALUE_IMPUTATION_PATH} ItemIcon={MissingValueImputationIcon} open={open} />
                 <SidebarItem itemKey={2} name={NUMERICAL_ENCODING} path={NUMERICAL_ENCODING_PATH} ItemIcon={MailIcon} open={open} />
             </List>
 
