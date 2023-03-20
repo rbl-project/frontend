@@ -321,6 +321,7 @@ const GlobalDataRepresentationMainSection = () => {
                             {
                                 Object.keys(parameters['numerical_values']).map((col) => (
                                     <Stack
+                                        key={col}
                                         direction="row"
                                         justifyContent="flex-start"
                                         alignItems="center"
@@ -358,6 +359,7 @@ const GlobalDataRepresentationMainSection = () => {
                             {
                                 Object.keys(parameters['categorical_values']).map((col) => (
                                     <Stack
+                                        key={col}
                                         direction="row"
                                         justifyContent="flex-start"
                                         alignItems="center"
@@ -370,7 +372,7 @@ const GlobalDataRepresentationMainSection = () => {
                                         {
                                             parameters['categorical_values'][col].map((val) => {
                                                 return (
-                                                    <Item>
+                                                    <Item key={val}>
                                                         <Chip
                                                             label={val}
                                                             onDelete={async() => {
