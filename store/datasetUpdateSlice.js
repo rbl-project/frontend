@@ -12,8 +12,10 @@ import * as API from "../api";
 const initialState = {
     saveChangesRequestStatus: REQUEST_STATUS_IDLE,
     revertChangesRequestStatus: REQUEST_STATUS_IDLE,
+    fetchDatasetStatus: REQUEST_STATUS_IDLE,
     message: null,
-    saveChangesStatus: true
+    saveChangesStatus: true,
+    currentDatasetView: {}
 }
 
 export const saveChanges = createAsyncThunk('/save-changes', async (formData) => {
@@ -23,6 +25,11 @@ export const saveChanges = createAsyncThunk('/save-changes', async (formData) =>
 
 export const revertChanges = createAsyncThunk('/revert-changes', async (formData) => {
     const response = await API.revertChanges(formData);
+    return response.data ; // response.data is your entire object that is seen in postman as the response
+});
+
+export const globalDataRepresentation = createAsyncThunk('/global-data-representation', async (formData) => {
+    const response = await API.globalDataRepresentation(formData);
     return response.data ; // response.data is your entire object that is seen in postman as the response
 });
 
@@ -77,6 +84,26 @@ const datasetUpdateSlice = createSlice({
                 state.revertChangesRequestStatus = REQUEST_STATUS_FAILED;
                 state.message = CUSTOM_ERROR_MESSAGE; // unknow error in request
             })
+
+            // Global Data Representation
+            .addCase(globalDataRepresentation.pending, (state, action) => {
+                state.fetchDatasetStatus = REQUEST_STATUS_LOADING;
+            })
+            .addCase(globalDataRepresentation.fulfilled, (state, action) => { // action.payload is the response.data
+                if (action.payload.status) {
+                    state.fetchDatasetStatus = REQUEST_STATUS_SUCCEEDED;
+                    state.currentDatasetView = action.payload.data;
+                }
+                else {
+                    state.fetchDatasetStatus = REQUEST_STATUS_FAILED;
+                    state.message = action.payload.error; // error sent by us from our backend
+                }
+            })
+            .addCase(globalDataRepresentation.rejected, (state, action) => {
+                state.fetchDatasetStatus = REQUEST_STATUS_FAILED;
+                state.message = CUSTOM_ERROR_MESSAGE; // unknow error in request
+            })
+
     }
 
 });
