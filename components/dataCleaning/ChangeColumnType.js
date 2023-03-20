@@ -17,7 +17,8 @@ import {
     TableCell,
     TableBody,
     Chip,
-    Link} from '@mui/material';
+    Link
+} from '@mui/material';
 
 
 // icons

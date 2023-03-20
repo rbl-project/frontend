@@ -10,7 +10,6 @@ import {
     Typography,
     Button,
     Grid,
-    Badge,
     Tabs,
     Tab,
     CircularProgress,
@@ -105,7 +104,6 @@ const DataCleaningMainSection = () => {
 
 
     const [apiTaskType, setApiTaskType] = useState("");
-    const [badgeInVisibilty, setBadgeInVisibilty] = React.useState(true);
 
     const [dropByCategoricalQuery, setDropByCategoricalQuery] = useState({});
     const [dropByNumericalQuery, setDropByNumericalQuery] = useState({});
@@ -121,7 +119,7 @@ const DataCleaningMainSection = () => {
     // Calling backend APIs
     useEffect(() => {
         if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
-            dispatch(getColumnInfo({ dataset_name: selectedDataset }));
+            // dispatch(getColumnInfo({ dataset_name: selectedDataset }));
             dispatch(getMetaData({ dataset_name: selectedDataset }));
         }
     }, [selectedDataset])

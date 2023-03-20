@@ -7,29 +7,16 @@ import {
     Paper,
     Typography,
     Button,
-    Grid,
     TextField,
-    Tabs,
-    Tab,
-    CircularProgress,
-    Autocomplete,
-    FormControl,
     TableContainer,
     Table,
     TableHead,
     TableRow,
     TableCell,
-    TableBody,
-    Chip,
-    Link,
-    Tooltip
+    TableBody
 } from '@mui/material';
 
-import { styled } from '@mui/material/styles';
-
 // icons
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 // constants
 import { DROP_BY_ROW_INDEX_API_TASK_TYPE } from '/constants/Constants';
