@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
-import { List} from '@mui/material';
+import { List } from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
 import { useSelector } from 'react-redux';
 
@@ -12,13 +12,34 @@ import DatasetIcon from '@mui/icons-material/Dataset';
 import TableChartIcon from '@mui/icons-material/TableChart';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 import MissingValueImputationIcon from '@mui/icons-material/Troubleshoot';
+import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 
 // Components
 import SidebarItem from './SidebarItem';
 import SidebarSubheader from './SidebarSubheader';
 
 // Constants
-import { DRAWER_WIDTH, DATASET_OVERVIEW, DATASET_OVERVIEW_PATH, DATA_CORRELATION, DATA_CORRELATION_PATH, TABULAR_REPRESENTATION, TABULAR_REPRESENTATION_PATH ,GRAPHICAL_REPRESENTATION, GRAPHICAL_REPRESENTATION_PATH ,MISSING_VALUE_IMPUTATION, MISSING_VALUE_IMPUTATION_PATH ,NUMERICAL_ENCODING, NUMERICAL_ENCODING_PATH, EXPONENTIAL_TRANSFORMATION, EXPONENTIAL_TRANSFORMATION_PATH , LOGARITHMIC_TRANSFORMATION, LOGARITHMIC_TRANSFORMATION_PATH } from '/constants/Constants';
+import { 
+    DRAWER_WIDTH, 
+    DATASET_OVERVIEW, 
+    DATASET_OVERVIEW_PATH, 
+    DATA_CORRELATION, 
+    DATA_CORRELATION_PATH, 
+    TABULAR_REPRESENTATION, 
+    TABULAR_REPRESENTATION_PATH, 
+    GRAPHICAL_REPRESENTATION, 
+    GRAPHICAL_REPRESENTATION_PATH, 
+    MISSING_VALUE_IMPUTATION, 
+    MISSING_VALUE_IMPUTATION_PATH, 
+    NUMERICAL_ENCODING, 
+    NUMERICAL_ENCODING_PATH, 
+    EXPONENTIAL_TRANSFORMATION, 
+    EXPONENTIAL_TRANSFORMATION_PATH, 
+    LOGARITHMIC_TRANSFORMATION, 
+    LOGARITHMIC_TRANSFORMATION_PATH,
+    DATA_CLEANING,
+    DATA_CLEANING_PATH 
+} from '/constants/Constants';
 
 const drawerWidth = DRAWER_WIDTH;
 
@@ -87,8 +108,8 @@ const Sidebar = () => {
                 <SidebarSubheader title="Exploratory Data Analysis" open={open}></SidebarSubheader>
                 <SidebarItem itemKey={1} name={DATASET_OVERVIEW} path={DATASET_OVERVIEW_PATH} ItemIcon={DatasetIcon} open={open} />
                 <SidebarItem itemKey={2} name={DATA_CORRELATION} path={DATA_CORRELATION_PATH} ItemIcon={ScatterPlotIcon} open={open} />
-                <SidebarItem itemKey={2} name={TABULAR_REPRESENTATION} path={TABULAR_REPRESENTATION_PATH} ItemIcon={TableChartIcon} open={open} />
-                <SidebarItem itemKey={3} name={GRAPHICAL_REPRESENTATION} path={GRAPHICAL_REPRESENTATION_PATH} ItemIcon={AutoGraphIcon} open={open} />
+                <SidebarItem itemKey={3} name={TABULAR_REPRESENTATION} path={TABULAR_REPRESENTATION_PATH} ItemIcon={TableChartIcon} open={open} />
+                <SidebarItem itemKey={4} name={GRAPHICAL_REPRESENTATION} path={GRAPHICAL_REPRESENTATION_PATH} ItemIcon={AutoGraphIcon} open={open} />
             </List >
 
             {/* Data Preprocessing Functions */}
@@ -96,7 +117,7 @@ const Sidebar = () => {
             <List sx={{ mt: 0 }} >
                 <SidebarSubheader title="Data Preprocessing" open={open}></SidebarSubheader>
                 <SidebarItem itemKey={1} name={MISSING_VALUE_IMPUTATION} path={MISSING_VALUE_IMPUTATION_PATH} ItemIcon={MissingValueImputationIcon} open={open} />
-                <SidebarItem itemKey={2} name={NUMERICAL_ENCODING} path={NUMERICAL_ENCODING_PATH} ItemIcon={MailIcon} open={open} />
+                <SidebarItem itemKey={2} name={DATA_CLEANING} path={DATA_CLEANING_PATH} ItemIcon={CleaningServicesIcon} open={open} />
             </List>
 
             {/* Feature Engineering Functions */}
