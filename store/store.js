@@ -20,6 +20,7 @@ const combineReducer = combineReducers({
     dataCorrelation:dataCorrelationSlice,
     graphicalRepresentation:graphicalRepresentationSlice,
     tabularRepresentation:tabularRepresentationSlice,
+    missingValueImputation:missingValueImputationSlice,
     dataCleaning:dataCleaningSlice,
     datasetUpdate:datasetUpdateSlice,
 });

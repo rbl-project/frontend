@@ -55,16 +55,16 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
 
   // Options for Imputation Method Dropdown
   const MissingValueHandleOptions = [
-    { title: 'Drop All Rows', value: 'drop-rows' },
-    { title: columnName === 'all-columns' ? 'Drop Columns' : 'Drop Column', value: 'drop-column' },
+    { title: 'Drop All Rows', value: 'drop_rows' },
+    { title: columnName === 'All Columns' ? 'Drop Columns' : 'Drop Column', value: 'drop_column' },
     { title: 'Impute Mean', value: 'mean' },
     { title: 'Impute Median', value: 'median' },
     { title: 'Impute Mode', value: 'mode' },
-    { title: 'Impute Custom Value', value: 'custom-value', disabled: columnName === 'all-columns' ? true : false }
+    { title: 'Impute Custom Value', value: 'custom-value', disabled: columnName === 'All Columns' ? true : false }
   ]
 
   // State for Imputation Method Dropdown
-  const [ImputationMethod, setImputationMethod] = useState("drop-rows");
+  const [ImputationMethod, setImputationMethod] = useState("drop_rows");
   // State for Custom Value Input
   const [CustomValue, setCustomValue] = useState("");
 

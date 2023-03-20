@@ -18,7 +18,7 @@ const MissingValueImputation = () => {
         <title>Missing Value Imputation - {column_name} | DataX</title>
       </Head>
       <DashboardLayout>
-        <ImputeMissingValueMainSection columnName={column_name} />
+        <ImputeMissingValueMainSection columnName={decodeURIComponent(column_name)} />
       </DashboardLayout>
     </>
   )

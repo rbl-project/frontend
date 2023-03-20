@@ -10,8 +10,12 @@ import MissingValuePercentageBar from './MissingValuePercentageBar';
 
 
 const ColumnCard = ({ allColumns=false, columnName }) => {
+
+  // Convert column name to url encoded string and convert back
+  const url = `${MISSING_VALUE_IMPUTATION_PATH}/${encodeURIComponent(columnName)}`;  
+    
   return (
-    <Link href={`${MISSING_VALUE_IMPUTATION_PATH}/${columnName}`} >
+    <Link href={url} >
       <Card sx={{ width: "100%", backgroundColor: allColumns ? "#dff0fa" : "#eeeeee", borderRadius: 3, cursor: "pointer" }} elevation={0} >
         <Box sx={{ p: 2, pt: 1 }} >
           <Typography variant='h6' gutterBottom sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
