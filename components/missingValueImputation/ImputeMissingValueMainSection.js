@@ -10,9 +10,12 @@ import MissingValuePercentagePie from './MissingValuePercentagePie';
 import ApplyChangesIcon from '@mui/icons-material/Done';
 import RevertChangesIcon from '@mui/icons-material/Replay';
 import BackIcon from '@mui/icons-material/Reply';
+// import {TbSquareRoundedLetterN as NumericalIcon } from "react-icons/tb";
+// import {TbSquareRoundedLetterC } from 'react-icons/tb';
+
 
 // Constants
-import {MISSING_VALUE_IMPUTATION_PATH} from '/constants/Constants';
+import { MISSING_VALUE_IMPUTATION_PATH } from '/constants/Constants';
 
 const table_options = {
   selectableRowsHideCheckboxes: true,
@@ -88,11 +91,12 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
         <Box>
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             < Link href={MISSING_VALUE_IMPUTATION_PATH} >
-            < IconButton size='small' sx={{ color: "black", border:1,borderColor:"lightGray" }} >
-              <BackIcon />
-            </IconButton>
+              < IconButton size='small' sx={{ color: "black", border: 1, borderColor: "lightGray" }} >
+                <BackIcon />
+              </IconButton>
             </Link>
-            <Typography variant="h6" sx={{ fontWeight: "bold",ml:1 }} > Missing Value Imputation: {columnName} </Typography>
+            <Typography variant="h6" sx={{ fontWeight: "bold", ml: 1 }} > Missing Value Imputation: {columnName} </Typography>
+            {/* < TbSquareRoundedLetterC /> */}
             <Box sx={{ flexGrow: 1 }} />
             <Tooltip title="Once You Click on this Button, All the Changes will be made into Original Dataset Permanently">
               <Button variant="contained" color='success' size="small">Save Changes</Button>
@@ -147,7 +151,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                     size='small'
                     value={CustomValue}
                     onChange={handleCustomValueChange}
-                  />  
+                  />
                 </Box>
               )}
 

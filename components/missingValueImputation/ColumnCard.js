@@ -7,6 +7,7 @@ import { MISSING_VALUE_IMPUTATION_PATH } from '/constants/Constants';
 
 // Components
 import MissingValuePercentageBar from './MissingValuePercentageBar';
+import MissingValuePercentagePie from './MissingValuePercentagePie';
 
 
 const ColumnCard = ({ allColumns=false, columnName }) => {
@@ -21,12 +22,12 @@ const ColumnCard = ({ allColumns=false, columnName }) => {
           <Typography variant='h6' gutterBottom sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
             {columnName}
           </Typography>
-          <Typography sx={{ fontSize: "0.85rem", my: 1 }}>
-            Missing Value: &apos;null&apos;
-          </Typography>
-          <Box sx={{ width: "100%", height: "4vh", borderRadius: 10 }}>
+          <Box sx={{ width: "100%", height: "4.5vh",mt:2 }}>
             <MissingValuePercentageBar />
           </Box>
+          <Typography sx={{ fontSize: "0.85rem",mt:1 }} align="center">
+            Missing Value Percentage
+          </Typography>
         </Box>
       </Card>
     </Link >
