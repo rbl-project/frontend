@@ -340,12 +340,13 @@ const DataCleaningMainSection = () => {
                                             datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_LOADING
                                                 ? <CircularProgress size={24} sx={{ color: "white" }} />
                                                 : <Typography>
+                                                    Save Changes
                                                     {
                                                         (dataCleaningState.metadata?.is_copy == true && dataCleaningState.metadata?.is_copy_modified == true)
                                                             ? <span> &#x2a; </span>
                                                             : null
                                                     }
-                                                    Save Changes
+                                                    
                                                 </Typography>
                                         }
                                     </Button>
@@ -426,9 +427,8 @@ const DataCleaningMainSection = () => {
                             columns={columns}
                             options={options}
                         /> */}
-                        <Typography variant="h6" gutterBottom sx={{textAlign: 'start', mt: 2}}>
-                            Current Dataset View:
-                            <Chip label={selectedDataset} sx={{ ml: 1, fontSize: "1rem", padding: "0px 3px" }} />
+                        <Typography variant="h6" gutterBottom sx={{textAlign: 'start', mt: 2, color: "black"}}>
+                            Result
                         </Typography>
                         <GlobalDataRepresentationContent
                             currPage={0}

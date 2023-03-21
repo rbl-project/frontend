@@ -60,18 +60,19 @@ const GlobalDataRepresentationMainSection = () => {
         <>
             <Fab
                 variant="extended"
-                size="large"
+                size="small"
                 color="primary"
                 sx={{
                     position: "fixed",
                     bottom: 20,
-                    right: 20,
+                    left: 10,
                     textTransform: "none",
                     color: "white",
+                    zIndex: 10000
                 }}
                 onClick={handleModalOpen}
             >
-                <RemoveRedEyeIcon fontSize="large" />
+                <RemoveRedEyeIcon fontSize="medium" />
             </Fab>
 
             <Dialog
