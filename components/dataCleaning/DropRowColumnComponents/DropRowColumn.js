@@ -4,32 +4,12 @@ import { useSelector } from 'react-redux';
 // material-ui
 import {
     Box,
-    Paper,
-    Typography,
-    Button,
-    Grid,
-    TextField,
     Tabs,
-    Tab,
-    CircularProgress,
-    Autocomplete,
-    FormControl,
-    TableContainer,
-    Table,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableBody,
-    Chip,
-    Link,
-    Tooltip
+    Tab
 } from '@mui/material';
 
-import { styled } from '@mui/material/styles';
 
 // icons
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 // components
 import DropByCategoricalColValueSection from './DropByCategoricalColValueSection';
@@ -55,22 +35,6 @@ const TabPanel = ({ children, value, index, ...other }) => {
         </div>
     );
 }
-
-const ListItem = styled('li')(({ theme }) => ({
-    margin: theme.spacing(0.5),
-}));
-
-const ToolTipText = styled('p')(({ theme }) => ({
-    color: "white",
-    backgroundColor: "grey",
-    borderRadius: "50%",
-    padding: "0px 8px",
-    display: "inline-block",
-    fontSize: "15px",
-    fontWeight: "bold",
-    cursor: "pointer",
-    marginLeft: "0.5rem"
-}))
 
 const DropRowsAndColumnSection = ({
     setApiTaskType,

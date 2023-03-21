@@ -10,11 +10,11 @@ import {
     Typography,
     Button,
     Grid,
-    Badge,
     Tabs,
     Tab,
     CircularProgress,
-    Divider
+    Divider,
+    Chip
 } from '@mui/material';
 
 import { styled } from '@mui/material/styles';
@@ -25,6 +25,7 @@ import ChangeDataTypeSection from './ChangeDataTypes';
 import FindAndReplaceSection from './FindAndReplace';
 import RenameColumnSection from './RenameColumn';
 import ChangeColumnType from './ChangeColumnType';
+import GlobalDataRepresentationContent from "/components/globalDataRepresentation/GlobalDataRepresentationContent";
 
 // icons
 import ReplayIcon from '@mui/icons-material/Replay';
@@ -105,7 +106,6 @@ const DataCleaningMainSection = () => {
 
 
     const [apiTaskType, setApiTaskType] = useState("");
-    const [badgeInVisibilty, setBadgeInVisibilty] = React.useState(true);
 
     const [dropByCategoricalQuery, setDropByCategoricalQuery] = useState({});
     const [dropByNumericalQuery, setDropByNumericalQuery] = useState({});
@@ -121,7 +121,7 @@ const DataCleaningMainSection = () => {
     // Calling backend APIs
     useEffect(() => {
         if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
-            dispatch(getColumnInfo({ dataset_name: selectedDataset }));
+            // dispatch(getColumnInfo({ dataset_name: selectedDataset }));
             dispatch(getMetaData({ dataset_name: selectedDataset }));
         }
     }, [selectedDataset])
@@ -329,27 +329,28 @@ const DataCleaningMainSection = () => {
                                 </Tabs>
                                 <Box>
                                     {/* Will be diabled if no changes are applied */}
-                                    
-                                        <Button
-                                            variant='contained'
-                                            color='success'
-                                            sx={{ float: 'right', width:'10.1rem' }}
-                                            onClick={saveDatasetChanges}
-                                        >
-                                            {
-                                                datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_LOADING
-                                                    ? <CircularProgress size={24} sx={{ color: "white" }} />
-                                                    : <Typography>
-                                                        { 
-                                                            (dataCleaningState.metadata?.is_copy == true && dataCleaningState.metadata?.is_copy_modified == true) 
-                                                            ? <span> &#x2a; </span> 
+
+                                    <Button
+                                        variant='contained'
+                                        color='success'
+                                        sx={{ float: 'right', width: '10.1rem' }}
+                                        onClick={saveDatasetChanges}
+                                    >
+                                        {
+                                            datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_LOADING
+                                                ? <CircularProgress size={24} sx={{ color: "white" }} />
+                                                : <Typography>
+                                                    Save Changes
+                                                    {
+                                                        (dataCleaningState.metadata?.is_copy == true && dataCleaningState.metadata?.is_copy_modified == true)
+                                                            ? <span> &#x2a; </span>
                                                             : null
-                                                        } 
-                                                            Save Changes
-                                                    </Typography>
-                                            }
-                                        </Button>
-                                    
+                                                    }
+                                                    
+                                                </Typography>
+                                        }
+                                    </Button>
+
                                 </Box>
                             </Box>
 
@@ -421,10 +422,24 @@ const DataCleaningMainSection = () => {
 
                         <Divider sx={{ mt: 2 }} />
 
-                        <MUIDataTable
+                        {/* <MUIDataTable
                             data={data}
                             columns={columns}
                             options={options}
+                        /> */}
+                        <Typography variant="h6" gutterBottom sx={{textAlign: 'start', mt: 2, color: "black"}}>
+                            Result
+                        </Typography>
+                        <GlobalDataRepresentationContent
+                            currPage={0}
+                            column={''}
+                            columnValue={[]}
+                            numericalToValue={null}
+                            numericalFromValue={null}
+                            parameters={{
+                                "categorical_values": {},
+                                "numerical_values": {}
+                            }}
                         />
                     </Item>
                 </Grid>
