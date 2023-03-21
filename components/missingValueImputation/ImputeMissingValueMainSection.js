@@ -10,8 +10,6 @@ import MissingValuePercentagePie from './MissingValuePercentagePie';
 import ApplyChangesIcon from '@mui/icons-material/Done';
 import RevertChangesIcon from '@mui/icons-material/Replay';
 import BackIcon from '@mui/icons-material/Reply';
-// import {TbSquareRoundedLetterN as NumericalIcon } from "react-icons/tb";
-// import {TbSquareRoundedLetterC } from 'react-icons/tb';
 
 
 // Constants
@@ -95,8 +93,9 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                 <BackIcon />
               </IconButton>
             </Link>
-            <Typography variant="h6" sx={{ fontWeight: "bold", ml: 1 }} > Missing Value Imputation: {columnName} </Typography>
-            {/* < TbSquareRoundedLetterC /> */}
+            <Typography variant="h6" sx={{ fontWeight:"bold", ml: 1 }} > Missing Value Imputation:</Typography>
+            <Typography variant="h6" sx={{ fontWeight:500,ml: 1 }} > {columnName} </Typography>
+            <Typography variant="caption" sx={{ fontWeight:500, ml:1 }} > (Numerical) </Typography>
             <Box sx={{ flexGrow: 1 }} />
             <Tooltip title="Once You Click on this Button, All the Changes will be made into Original Dataset Permanently">
               <Button variant="contained" color='success' size="small">Save Changes</Button>
