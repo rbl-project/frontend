@@ -13,7 +13,8 @@ import {
     Tabs,
     Tab,
     CircularProgress,
-    Divider
+    Divider,
+    Chip
 } from '@mui/material';
 
 import { styled } from '@mui/material/styles';
@@ -24,6 +25,7 @@ import ChangeDataTypeSection from './ChangeDataTypes';
 import FindAndReplaceSection from './FindAndReplace';
 import RenameColumnSection from './RenameColumn';
 import ChangeColumnType from './ChangeColumnType';
+import GlobalDataRepresentationContent from "/components/globalDataRepresentation/GlobalDataRepresentationContent";
 
 // icons
 import ReplayIcon from '@mui/icons-material/Replay';
@@ -327,27 +329,27 @@ const DataCleaningMainSection = () => {
                                 </Tabs>
                                 <Box>
                                     {/* Will be diabled if no changes are applied */}
-                                    
-                                        <Button
-                                            variant='contained'
-                                            color='success'
-                                            sx={{ float: 'right', width:'10.1rem' }}
-                                            onClick={saveDatasetChanges}
-                                        >
-                                            {
-                                                datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_LOADING
-                                                    ? <CircularProgress size={24} sx={{ color: "white" }} />
-                                                    : <Typography>
-                                                        { 
-                                                            (dataCleaningState.metadata?.is_copy == true && dataCleaningState.metadata?.is_copy_modified == true) 
-                                                            ? <span> &#x2a; </span> 
+
+                                    <Button
+                                        variant='contained'
+                                        color='success'
+                                        sx={{ float: 'right', width: '10.1rem' }}
+                                        onClick={saveDatasetChanges}
+                                    >
+                                        {
+                                            datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_LOADING
+                                                ? <CircularProgress size={24} sx={{ color: "white" }} />
+                                                : <Typography>
+                                                    {
+                                                        (dataCleaningState.metadata?.is_copy == true && dataCleaningState.metadata?.is_copy_modified == true)
+                                                            ? <span> &#x2a; </span>
                                                             : null
-                                                        } 
-                                                            Save Changes
-                                                    </Typography>
-                                            }
-                                        </Button>
-                                    
+                                                    }
+                                                    Save Changes
+                                                </Typography>
+                                        }
+                                    </Button>
+
                                 </Box>
                             </Box>
 
@@ -419,10 +421,25 @@ const DataCleaningMainSection = () => {
 
                         <Divider sx={{ mt: 2 }} />
 
-                        <MUIDataTable
+                        {/* <MUIDataTable
                             data={data}
                             columns={columns}
                             options={options}
+                        /> */}
+                        <Typography variant="h6" gutterBottom sx={{textAlign: 'start', mt: 2}}>
+                            Current Dataset View:
+                            <Chip label={selectedDataset} sx={{ ml: 1, fontSize: "1rem", padding: "0px 3px" }} />
+                        </Typography>
+                        <GlobalDataRepresentationContent
+                            currPage={0}
+                            column={''}
+                            columnValue={[]}
+                            numericalToValue={null}
+                            numericalFromValue={null}
+                            parameters={{
+                                "categorical_values": {},
+                                "numerical_values": {}
+                            }}
                         />
                     </Item>
                 </Grid>
