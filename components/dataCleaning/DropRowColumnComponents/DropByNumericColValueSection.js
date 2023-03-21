@@ -7,11 +7,7 @@ import {
     Paper,
     Typography,
     Button,
-    Grid,
     TextField,
-    Tabs,
-    Tab,
-    CircularProgress,
     Autocomplete,
     FormControl,
     TableContainer,
@@ -21,11 +17,9 @@ import {
     TableCell,
     TableBody,
     Chip,
-    Link,
-    Tooltip
+    Link
 } from '@mui/material';
 
-import { styled } from '@mui/material/styles';
 
 // icons
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';

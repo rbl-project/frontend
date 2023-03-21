@@ -18,6 +18,9 @@ import { setOpenModal, setModalTabIndex } from '/store/globalStateSlice';
 // Constants
 import { REQUEST_STATUS_LOADING } from '/constants/Constants';
 
+// Component
+import GlobalDataRepresentationMainSection from '/components/globalDataRepresentation/GlobalDataRepresentationMainSection';
+
 
 const DashboardLayout = ({ children }) => {
 
@@ -68,6 +71,7 @@ const DashboardLayout = ({ children }) => {
                 }
             </Box>
             <ToastContainer position="bottom-right" autoClose={false} newestOnTop={false} closeOnClick={false} rtl={false} pauseOnFocusLoss={false} draggable={false} theme="dark" />
+            <GlobalDataRepresentationMainSection />
         </Box>
     )
 }
