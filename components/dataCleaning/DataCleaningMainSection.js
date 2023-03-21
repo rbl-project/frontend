@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import MUIDataTable from "mui-datatables";
 import { toast } from 'react-toastify';
 
 // material-ui
@@ -13,9 +12,7 @@ import {
     Tabs,
     Tab,
     CircularProgress,
-    Divider,
-    Chip
-} from '@mui/material';
+    Divider} from '@mui/material';
 
 import { styled } from '@mui/material/styles';
 
