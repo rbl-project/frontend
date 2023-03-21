@@ -5,13 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     Box,
     Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
     Typography,
-    Fab,
     CircularProgress,
     Chip,
     FormControl,
@@ -31,7 +25,6 @@ import * as API from "/api";
 import { globalDataRepresentation } from '/store/datasetUpdateSlice';
 
 // Icons
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 
 // constants
@@ -104,6 +97,12 @@ const GlobalDataRepresentationContent = (props) => {
         setNumericalToValue(null);
         setNumericalFromValue(null);
     }
+
+    useEffect(() => {
+        dispatch(globalDataRepresentation({
+            dataset_name: selectedDataset
+        }))
+    }, [])
 
     // Async Autocomplete
     const [inputValue, setInputValue] = useState('');
@@ -350,7 +349,7 @@ const GlobalDataRepresentationContent = (props) => {
             <Box sx={{ minHeight: "65vh" }} >
                 {
                     datasetUpdateState.fetchDatasetStatus === REQUEST_STATUS_LOADING
-                        ? <Box sx={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                        ? <Box sx={{ width: "100%", height: "60vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
                             <CircularProgress size="3rem" color='inherit' />
                         </Box>
                         :
