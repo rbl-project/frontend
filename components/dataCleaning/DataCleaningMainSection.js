@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import MUIDataTable from "mui-datatables";
 import { toast } from 'react-toastify';
 
 // material-ui
@@ -47,7 +46,7 @@ import {
 
 import { saveChanges, revertChanges } from "/store/datasetUpdateSlice";
 import { setOpenMenuItem } from "/store/globalStateSlice";
-import { resetRequestStatus as resetDataCleaningRequestStatus, resetDatasetChangesStatus } from "/store/dataCleaningSlice";
+import { resetRequestStatus as resetDataCleaningRequestStatus } from "/store/dataCleaningSlice";
 import { resetRequestStatus as resetDatasetRequestStatus } from "/store/datasetUpdateSlice";
 
 // constant
@@ -271,7 +270,6 @@ const DataCleaningMainSection = () => {
     const saveDatasetChanges = async () => {
         await dispatch(saveChanges({ dataset_name: selectedDataset }));
         dispatch(getMetaData({ dataset_name: selectedDataset }));
-        resetDatasetChangesStatus();
     }
 
     const revertDatasetChanges = async () => {
@@ -315,7 +313,7 @@ const DataCleaningMainSection = () => {
     return (
         <Box>
             <Grid container spacing={2}>
-                <Grid item xs={12}>
+                <Grid item xs={12} >
                     <Item sx={{}}>
                         <Box sx={{ width: '100%' }}>
                             {/* Tabs and Buttons */}
@@ -337,17 +335,17 @@ const DataCleaningMainSection = () => {
                                         onClick={saveDatasetChanges}
                                     >
                                         {
-                                            datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_LOADING
-                                                ? <CircularProgress size={24} sx={{ color: "white" }} />
-                                                : <Typography>
+                                            datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_LOADING 
+                                                ? <CircularProgress size="1.5rem" sx={{ color: "white" }} />
+                                                : <>
                                                     Save Changes
                                                     {
-                                                        (dataCleaningState.metadata?.is_copy == true && dataCleaningState.metadata?.is_copy_modified == true)
-                                                            ? <span> &#x2a; </span>
+                                                        (dataCleaningState.dataset_modify_status)
+                                                            ? <sup> &#x2a; </sup>
                                                             : null
                                                     }
                                                     
-                                                </Typography>
+                                                </>
                                         }
                                     </Button>
 

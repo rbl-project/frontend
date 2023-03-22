@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Link from 'next/link';
-import { Card, Box, Typography } from '@mui/material';
+import { Card, Box, Typography, Tooltip } from '@mui/material';
 
 // Constants
 import { MISSING_VALUE_IMPUTATION_PATH } from '/constants/Constants';
@@ -10,11 +10,11 @@ import MissingValuePercentageBar from './MissingValuePercentageBar';
 import MissingValuePercentagePie from './MissingValuePercentagePie';
 
 
-const ColumnCard = ({ allColumns=false, columnName, missingValuePercentage,correctValuePercentage }) => {
+const ColumnCard = ({ allColumns = false, columnName, missingValuePercentage, correctValuePercentage }) => {
 
   // Convert column name to url encoded string and convert back
-  const url = `${MISSING_VALUE_IMPUTATION_PATH}/${encodeURIComponent(columnName)}`;  
-    
+  const url = `${MISSING_VALUE_IMPUTATION_PATH}/${encodeURIComponent(columnName)}`;
+
   return (
     <Link href={url} >
       <Card sx={{ width: "100%", backgroundColor: allColumns ? "#dff0fa" : "#eeeeee", borderRadius: 3, cursor: "pointer" }} elevation={0} >
@@ -22,10 +22,12 @@ const ColumnCard = ({ allColumns=false, columnName, missingValuePercentage,corre
           <Typography variant='h6' gutterBottom sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
             {columnName}
           </Typography>
-          <Box sx={{ width: "100%", height: "4.5vh",mt:2 }}>
-            <MissingValuePercentageBar correctValuePercentage={correctValuePercentage} missingValuePercentage={missingValuePercentage} />
-          </Box>
-          <Typography sx={{ fontSize: "0.85rem",mt:1 }} align="center">
+          <Tooltip title={<><Typography variant="caption" component="div">Correct Values: {correctValuePercentage}%</Typography><Typography variant="caption" component="div" >Missing Values: {missingValuePercentage}%</Typography></>}>
+            <Box sx={{ width: "100%", height: "4.5vh", mt: 2 }}>
+              <MissingValuePercentageBar correctValuePercentage={correctValuePercentage} missingValuePercentage={missingValuePercentage} />
+            </Box>
+          </Tooltip>
+          <Typography sx={{ fontSize: "0.85rem", mt: 1 }} align="center">
             Missing Value Percentage
           </Typography>
         </Box>

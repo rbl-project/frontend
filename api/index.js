@@ -66,6 +66,7 @@ export const globalDataRepresentation = (formData) => API.post("/global-data-rep
 
 // Missing Value Imputation APIs
 export const getMissingValuePercentage = (formData) => API.post("/missing-value-percentage",formData);
+export const imputeMissingValue = (formData) => API.post("/impute-missing-value",formData);
 
 // Data Cleaning APIs
 export const dropByColValue = (formData) => API.post("/drop-by-column-value",formData);

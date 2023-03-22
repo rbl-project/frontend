@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Autocomplete, Box, Paper, FormControl, Tooltip, ListItemText, TextField, Grid, Typography, Divider, CircularProgress } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
+
+// Redux Actions
 import { getMissingValuePercentage } from "/store/missingValueImputationSlice";
+import { setOpenMenuItem } from "/store/globalStateSlice";
 
 // Components
 import ColumnCard from './ColumnCard';
 
 // Constants
-import { REQUEST_STATUS_LOADING } from "/constants/Constants";
+import { REQUEST_STATUS_LOADING, MISSING_VALUE_IMPUTATION } from "/constants/Constants";
 
 
 const ShowMissingValueMainSection = () => {
@@ -16,10 +19,10 @@ const ShowMissingValueMainSection = () => {
     const dispatch = useDispatch();
     const missingValueImputationState = useSelector((state) => state.missingValueImputation);
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
+    const selectedMenuItem = useSelector((state) => state.global.openMenuItem);
 
     // Local State for Columns Showed in Missing Value Column Cards
     const [columns, setColumns] = useState([]);
-
     // Local State for Search Column SearchBar
     const [searchColumn, setSearchColumn] = useState(null);
 
@@ -28,34 +31,39 @@ const ShowMissingValueMainSection = () => {
         setSearchColumn(newValue);
         // If Clear Button is Clicked
         if (reason === "clear") {
-            setColumns(missingValueImputationState.missing_value_data);
+            setColumns(missingValueImputationState.all_columns_missing_value_data);
         }
         // If Option is Selected
         else {
-            setColumns(missingValueImputationState.missing_value_data.filter((column) => column.column_name === newValue));
+            setColumns(missingValueImputationState.all_columns_missing_value_data.filter((column) => column.column_name === newValue));
         }
     };
 
     // Handle Search Column SearchBar Input Change
     const handleSearchCoulmnInputChange = (event, newInputValue) => {
         if (newInputValue === "") {
-            setColumns(missingValueImputationState.missing_value_data);
+            setColumns(missingValueImputationState.all_columns_missing_value_data);
         } else {
-            setColumns(missingValueImputationState.missing_value_data.filter((column) => column.column_name.toLowerCase().includes(newInputValue.toLowerCase())));
+            setColumns(missingValueImputationState.all_columns_missing_value_data.filter((column) => column.column_name.toLowerCase().includes(newInputValue.toLowerCase())));
         }
     };
+
+    // Set Local State when Missing Value Percentage for All Columns is Fetched
+    useEffect(() => {
+        setColumns(missingValueImputationState.all_columns_missing_value_data);
+    }, [missingValueImputationState.all_columns_missing_value_data]);
+
+    // Setting Open Menu Item When Page Loads or Refreshes
+    useEffect(() => {
+        if (selectedMenuItem !== MISSING_VALUE_IMPUTATION) {
+            dispatch(setOpenMenuItem(MISSING_VALUE_IMPUTATION));
+        }
+    }, []);
 
     // Get Missing Value Percentage for All Columns
     useEffect(() => {
         dispatch(getMissingValuePercentage({ dataset_name: selectedDataset, get_all_columns: true, column_name: null }));
     }, [selectedDataset]);
-
-    // Set Local State when Missing Value Percentage for All Columns is Fetched
-    useEffect(() => {
-        if (missingValueImputationState.missing_value_data) {
-            setColumns(missingValueImputationState.missing_value_data);
-        }
-    }, [missingValueImputationState.missing_value_data]);
 
     return (
         <Paper elevation={0}>
@@ -95,11 +103,11 @@ const ShowMissingValueMainSection = () => {
                             </FormControl>
                         </Box>
 
-                        {/* Missing Values Column Cards Secction  */}
+                        {/* Missing Values Column Cards Section  */}
                         <Box sx={{ mt: 2, height: "100%" }}>
-                            
+
                             {/* No Content to Show */}
-                            {missingValueImputationState.missing_value_data && missingValueImputationState.missing_value_data.length === 0 && (
+                            {missingValueImputationState.all_columns_missing_value_data.length === 0 && (
                                 <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
                                     <Typography variant="h6" sx={{ fontWeight: "bold" }}>No Content to Show</Typography>
                                 </Box>

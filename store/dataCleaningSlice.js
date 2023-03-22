@@ -19,7 +19,8 @@ const initialState = {
     n_rows: 0,
     n_cols: 0,
     message: null,
-    metadata: {}
+    metadata: {},
+    dataset_modify_status: false,
 }
 
 export const getColumnInfo = createAsyncThunk('/get-categorical-columns', async (formData) => {
@@ -80,9 +81,6 @@ const dataCleaningSlice = createSlice({
             state.requestStatus = REQUEST_STATUS_IDLE;
             state.message = null;
         },
-        resetDatasetChangesStatus:(state,action) => {
-            state.datasetChangesStatus = false;
-        },
     },
     extraReducers: (builder) => {
         builder
@@ -97,6 +95,7 @@ const dataCleaningSlice = createSlice({
                 state.requestStatus = REQUEST_STATUS_SUCCEEDED;
                 state.message = null;
                 state.metadata = action.payload.data.metadata;
+                state.dataset_modify_status = action.payload.data.metadata.is_copy && action.payload.data.metadata.is_copy_modified;
             }
         })
         .addCase(getMetaData.rejected, (state, action) => {
@@ -295,6 +294,6 @@ const dataCleaningSlice = createSlice({
     }
 })
 
-export const { resetRequestStatus, resetDatasetChangesStatus } = dataCleaningSlice.actions;
+export const { resetRequestStatus } = dataCleaningSlice.actions;
 
 export default dataCleaningSlice.reducer;

@@ -33,6 +33,7 @@ const MissingValuePercentageBar = ({ missingValuePercentage, correctValuePercent
             label={(d) => `${d.value}%`}
             labelSkipWidth={40}
             labelTextColor="#ffffff"
+            isInteractive={false}
             theme={{ fontSize: 15 }}
             defs={[
                 {
