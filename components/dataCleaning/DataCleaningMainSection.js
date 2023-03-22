@@ -12,9 +12,7 @@ import {
     Tabs,
     Tab,
     CircularProgress,
-    Divider,
-    Chip
-} from '@mui/material';
+    Divider} from '@mui/material';
 
 import { styled } from '@mui/material/styles';
 

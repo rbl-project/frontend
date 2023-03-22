@@ -1,43 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Material UI
 import {
-    Box,
     Button,
     Dialog,
     DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
-    Typography,
     Fab,
-    CircularProgress,
-    Chip,
-    FormControl,
-    TextField,
-    Autocomplete,
-    Stack,
-    Paper
+    Chip
 } from '@mui/material';
 
-import MUIDataTable from "mui-datatables";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 // API Endpoints
-import * as API from "/api";
 
 // actions
 import { globalDataRepresentation } from '/store/datasetUpdateSlice';
 
 // Icons
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 
 // constants
-import { REQUEST_STATUS_LOADING } from '../../constants/Constants';
 
-import { styled } from '@mui/material/styles';
 
 import GlobalDataRepresentationContent from './GlobalDataRepresentationContent';
 
@@ -51,9 +37,6 @@ const GlobalDataRepresentationMainSection = () => {
     // Modal
     const handleModalOpen = async () => {
         setOpenGlobalDataRepresentation(true);
-        await dispatch(globalDataRepresentation({
-            dataset_name: selectedDataset
-        }))
     }
 
     return (
@@ -80,7 +63,12 @@ const GlobalDataRepresentationMainSection = () => {
                 maxWidth="xl"
                 scroll='paper'
                 open={openGlobalDataRepresentation}
-                onClose={() => setOpenGlobalDataRepresentation(false)}
+                onClose={() => {
+                    setOpenGlobalDataRepresentation(false)
+                    dispatch(globalDataRepresentation({
+                        dataset_name: selectedDataset
+                    }))
+                }}
 
             >
                 <DialogTitle>
@@ -89,7 +77,7 @@ const GlobalDataRepresentationMainSection = () => {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        <GlobalDataRepresentationContent 
+                        <GlobalDataRepresentationContent
                             currPage={0}
                             column={''}
                             columnValue={[]}
@@ -103,7 +91,14 @@ const GlobalDataRepresentationMainSection = () => {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpenGlobalDataRepresentation(false)}>Close</Button>
+                    <Button onClick={() => {
+                        setOpenGlobalDataRepresentation(false)
+                        dispatch(globalDataRepresentation({
+                            dataset_name: selectedDataset
+                        }))
+                    }}>
+                        Close
+                    </Button>
                 </DialogActions>
             </Dialog>
         </>
