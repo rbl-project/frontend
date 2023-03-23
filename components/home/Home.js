@@ -1,13 +1,14 @@
 import React from "react";
 import Image from "next/image";
-import {Box,Grid,Container} from '@mui/material';
+import { Box, Grid, Container } from '@mui/material';
+import Link from 'next/link';
 
 
 // components
 import HomePageFooter from "../footers/HomePageFooter";
 
 // styled components
-import { 
+import {
     HeadingTextPrimary,
     HeadingTextSecondary,
     HomeButton
@@ -25,18 +26,20 @@ const Home = () => {
 
                             <Grid item md={12}>
                                 <HeadingTextPrimary>
-                                    DataX - A great place to start with your data.
+                                    DataTreat - A great place to start with your data.
                                 </HeadingTextPrimary>
                             </Grid>
                             <Grid item md={12}>
                                 <HeadingTextSecondary>
-                                    DataX is the destination for all types of data engineering such Data Preprocessing, Exploratory Data Analysis and Feature Engineering. DataX is a platform where you can store your data and access it from anywhere.
+                                    DataTreat is the destination for all types of data engineering such Data Preprocessing, Exploratory Data Analysis and Feature Engineering. DataTreat is a platform where you can store your data and access it from anywhere.
                                 </HeadingTextSecondary>
                             </Grid>
                             <Grid item md={12}>
-                                <HomeButton href="/auth/login" type="dark">
-                                    Get Started
-                                </HomeButton>
+                                <Link href="/auth/login">
+                                    <HomeButton href="/auth/login" type="dark">
+                                        Get Started
+                                    </HomeButton>
+                                </Link>
                                 <HomeButton href="https://github.com/rbl-project" type="light">
                                     GitHub
                                 </HomeButton>

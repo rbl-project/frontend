@@ -9,7 +9,7 @@ const NumericalEncoding = () => {
   return (
     <>
       <Head>
-        <title>Numerical Encoding | DataX</title>
+        <title>Numerical Encoding | DataTreat</title>
       </Head>
       <DashboardLayout>
         <div>Numerical Encoding</div>

@@ -8,7 +8,7 @@ const HomePageFooter = () => {
             <Container>
                 <Grid container spacing={2} sx={{ marginTop: "1rem" }}>
                     <Grid item xs={6} md={6} sx={{ textAlign: "left" }}>
-                        Copyright © DataX 2022
+                        Copyright © DataTreat 2022
                     </Grid>
                     <Grid item xs={6} md={6} sx={{ textAlign: "right" }}>
                         About | Contact Us | Terms of Service | Privacy Policy

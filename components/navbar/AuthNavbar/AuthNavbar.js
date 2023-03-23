@@ -1,15 +1,15 @@
 import React from "react";
-
+import Link from 'next/link';
 // styled components
-import { 
-    AuthNavbarWrapper, 
-    AuthNavbarDiv, 
-    AuthNavbarLeft, 
+import {
+    AuthNavbarWrapper,
+    AuthNavbarDiv,
+    AuthNavbarLeft,
     AuthNavbarRight,
     List,
     ListOption,
     HomeButton,
-} from "./AuthNavbarStyles"; 
+} from "./AuthNavbarStyles";
 
 // icons
 import FacebookIcon from '@mui/icons-material/Facebook';
@@ -20,34 +20,38 @@ const AuthNavbar = (props) => {
 
     return (
         <>
-            <AuthNavbarWrapper page = {props.page} >
+            <AuthNavbarWrapper page={props.page} >
                 <AuthNavbarDiv>
 
                     <AuthNavbarLeft>
-                        <h2>DataX</h2>
+                        <h2>DataTreat</h2>
                     </AuthNavbarLeft>
 
                     <AuthNavbarRight>
                         <List>
-                            <ListOption> 
-                                <a href="https://github.com/rbl-project" target="_blank" rel="noopener noreferrer"> <GitHubIcon/> </a>
-                            </ListOption>
-                            <ListOption> 
-                                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"> <TwitterIcon/> </a>
+                            <ListOption>
+                                <a href="https://github.com/rbl-project" target="_blank" rel="noopener noreferrer"> <GitHubIcon /> </a>
                             </ListOption>
                             <ListOption>
-                                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"> <FacebookIcon/> </a>
+                                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"> <TwitterIcon /> </a>
+                            </ListOption>
+                            <ListOption>
+                                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"> <FacebookIcon /> </a>
                             </ListOption>
                             <ListOption>
                                 {
                                     props.page === "home" ?
-                                    <HomeButton href="/auth/login" page="home">
-                                        Login
-                                    </HomeButton>
-                                    :
-                                    <HomeButton href="/home" page="auth">
-                                        Home
-                                    </HomeButton>
+                                        < Link href="/auth/login">
+                                            <HomeButton href="/auth/login" page="home">
+                                                Login
+                                            </HomeButton>
+                                        </Link>
+                                        :
+                                        <Link href="/home">
+                                            <HomeButton href="/home" page="auth">
+                                                Home
+                                            </HomeButton>
+                                        </Link>
                                 }
                             </ListOption>
                         </List>

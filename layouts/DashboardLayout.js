@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import "react-toastify/dist/ReactToastify.css";
 import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import { ToastContainer } from 'react-toastify';
 import { useSelector, useDispatch } from "react-redux";
+import { useRouter } from 'next/router';
 
 // Icons
 import UploadIcon from '@mui/icons-material/FileUploadOutlined';
@@ -11,18 +12,18 @@ import UploadIcon from '@mui/icons-material/FileUploadOutlined';
 // Components
 import Navbar from '../components/navbar/Navbar';
 import Sidebar from '../components/sidebar/Sidebar';
+import GlobalDataRepresentationMainSection from '/components/globalDataRepresentation/GlobalDataRepresentationMainSection';
 
 // Redux Actions
 import { setOpenModal, setModalTabIndex } from '/store/globalStateSlice';
 
 // Constants
-import { REQUEST_STATUS_LOADING } from '/constants/Constants';
-
-// Component
-import GlobalDataRepresentationMainSection from '/components/globalDataRepresentation/GlobalDataRepresentationMainSection';
+import { REQUEST_STATUS_LOADING,DATASET_OVERVIEW_PATH } from '/constants/Constants';
 
 
 const DashboardLayout = ({ children }) => {
+
+    const router = useRouter();
 
     // Redux State
     const dispatch = useDispatch();
@@ -30,10 +31,16 @@ const DashboardLayout = ({ children }) => {
     const datasetRequestStatus = useSelector((state) => state.dataset.requestStatus);
     const isNoDataset = selectedDataset === null || selectedDataset === undefined || selectedDataset === "";
 
+    // useEffect(() => {
+    //     if (isNoDataset && router.pathname !== DATASET_OVERVIEW_PATH) {
+    //         router.push(DATASET_OVERVIEW_PATH);
+    //     }
+    // }, [isNoDataset])
+            
     const clickHandler = () => {
         dispatch(setModalTabIndex(1));
         dispatch(setOpenModal());
-    }
+    }   
 
     return (
         <Box sx={{

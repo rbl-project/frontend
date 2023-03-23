@@ -226,96 +226,116 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
 
         {/* Main Section  */}
         < Grid container spacing={3} sx={{ px: 2 }}>
-
-          {/* Left Side */}
-          <Grid item xs={3}>
-            <Box sx={{ display: "flex", flexDirection: "column", }}>
-
-              {/* Missing Value Percentage  */}
-              < Box sx={{ height: "35vh",mt:3 }} >
-                < MissingValuePercentagePie value={30} missingValueData={missingValueImputationState.single_column_missing_value_data} />
+          {
+            missingValueImputationState.impute_missing_value_req_status === REQUEST_STATUS_LOADING ? (
+              <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "82vh", width: "100%" }}>
+                <CircularProgress size="3rem" color='inherit' />
               </Box>
-              < Typography variant="caption" sx={{ textAlign: "center", mt: 1, fontWeight: 500, textTransform: "uppercase" }} > Missing Value Percentage </Typography>
+            ) : (
+              <>
+                {/* Left Side */}
+                <Grid item xs={3}>
+                  <Box sx={{ display: "flex", flexDirection: "column", }}>
 
-              < Divider sx={{ my: 4 }} />
+                    {/* Missing Value Percentage  */}
+                    < Box sx={{ height: "35vh", mt: 3 }} >
 
-              {/* Handle Missing Value Dropdown */}
-              <Box sx={{ mt: 2 }}>
-                <FormControl fullWidth>
-                  <InputLabel id="impute-missing-value-by-select">Imputation Method</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    size='small'
-                    value={ImputationMethod}
-                    label="Imputation Method"
-                    onChange={handleImpuationMethodChange}
-                  >
-                    {MissingValueHandleOptions.map((option, index) => (
-                      <MenuItem key={index} value={option.value} disabled={option.disabled}>{option.title}</MenuItem>
-                    ))}
+                      {/* While get missing value percentage is loading */}
+                      {
+                        missingValueImputationState.get_missing_value_percentage_req_status === REQUEST_STATUS_LOADING ? (
+                          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%", width: "100%" }}>
+                            <CircularProgress size="2rem" color='inherit' />
+                          </Box>
+                        ) : (
 
-                  </Select>
-                </FormControl>
-              </Box>
+                          < MissingValuePercentagePie value={30} missingValueData={missingValueImputationState.single_column_missing_value_data} />
+                        )}
+                    </Box>
+                    < Typography variant="caption" sx={{ textAlign: "center", mt: 1, fontWeight: 500, textTransform: "uppercase" }} > Missing Value Percentage </Typography>
 
-              {/* Custom Value Input */}
-              {ImputationMethod === 'custom-value' && (
-                <Box sx={{ mt: 2 }}>
-                  <TextField
-                    fullWidth
-                    id="custom-value-input"
-                    label="Custom Value"
-                    variant="outlined"
-                    size='small'
-                    value={CustomValue}
-                    onChange={handleCustomValueChange}
-                  />
-                </Box>
-              )}
+                    < Divider sx={{ my: 4 }} />
 
-              {/* Apply Chnage Button */}
-              <Box sx={{ mt: 3 }}>
-                < Tooltip title="Apply Changes will not modify Original Dataset" >
-                  <Button aria-label="Apply Changes" variant="contained" onClick={applyDataChanges} fullWidth endIcon={<ApplyChangesIcon />}>
-                    Apply Changes
-                  </Button>
-                </Tooltip>
-              </Box>
+                    {/* Handle Missing Value Dropdown */}
+                    <Box sx={{ mt: 2 }}>
+                      <FormControl fullWidth>
+                        <InputLabel id="impute-missing-value-by-select">Imputation Method</InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          size='small'
+                          value={ImputationMethod}
+                          label="Imputation Method"
+                          onChange={handleImpuationMethodChange}
+                        >
+                          {MissingValueHandleOptions.map((option, index) => (
+                            <MenuItem key={index} value={option.value} disabled={option.disabled}>{option.title}</MenuItem>
+                          ))}
 
-              {/* Revert Chnage Button */}
-              <Box sx={{ mt: 2 }}>
-                {/* < Tooltip title="Revert Changes" > */}
-                <Button aria-label="Revert Changes" variant="contained" onClick={revertDatasetChanges} color='error' fullWidth endIcon={<RevertChangesIcon />} >
-                  Revert Changes
-                </Button>
-                {/* </Tooltip> */}
-              </Box>
+                        </Select>
+                      </FormControl>
+                    </Box>
 
-            </Box>
-          </Grid>
+                    {/* Custom Value Input */}
+                    {ImputationMethod === 'custom-value' && (
+                      <Box sx={{ mt: 2 }}>
+                        <TextField
+                          fullWidth
+                          id="custom-value-input"
+                          label="Custom Value"
+                          variant="outlined"
+                          size='small'
+                          value={CustomValue}
+                          onChange={handleCustomValueChange}
+                        />
+                      </Box>
+                    )}
 
-          { /* Right Side */}
-          <Grid item xs={9}>
-            {/* Show Result */}
-            <Box >
-              <Typography variant="h6" gutterBottom sx={{ textAlign: 'start', color: "black" }}>
-                Result
-              </Typography>
-              <GlobalDataRepresentationContent
-                currPage={0}
-                column={''}
-                columnValue={[]}
-                numericalToValue={null}
-                numericalFromValue={null}
-                reload={missingValueImputationState.dataset_modify_status}
-                parameters={{
-                  "categorical_values": {},
-                  "numerical_values": {}
-                }}
-              />
-            </Box>
-          </Grid>
+                    {/* Apply Chnage Button */}
+                    <Box sx={{ mt: 3 }}>
+                      < Tooltip title="Apply Changes will not modify Original Dataset" >
+                        <Button aria-label="Apply Changes" variant="contained" onClick={applyDataChanges} fullWidth endIcon={<ApplyChangesIcon />}>
+                          Apply Changes
+                        </Button>
+                      </Tooltip>
+                    </Box>
+
+                    {/* Revert Chnage Button */}
+                    <Box sx={{ mt: 2 }}>
+                      {/* < Tooltip title="Revert Changes" > */}
+                      <Button aria-label="Revert Changes" variant="contained" onClick={revertDatasetChanges} color='error' fullWidth endIcon={<RevertChangesIcon />} >
+                        Revert Changes
+                      </Button>
+                      {/* </Tooltip> */}
+                    </Box>
+
+                  </Box>
+                </Grid>
+
+                { /* Right Side */}
+                <Grid item xs={9}>
+                  {/* Show Result */}
+                  <Box >
+                    <Typography variant="h6" gutterBottom sx={{ textAlign: 'start', color: "black" }}>
+                      Result
+                    </Typography>
+                    <GlobalDataRepresentationContent
+                      currPage={0}
+                      column={''}
+                      columnValue={[]}
+                      numericalToValue={null}
+                      numericalFromValue={null}
+                      reload={missingValueImputationState.dataset_modify_status}
+                      parameters={{
+                        "categorical_values": {},
+                        "numerical_values": {}
+                      }}
+                    />
+                  </Box>
+                </Grid>
+
+              </>
+            )
+          }
 
         </Grid>
 

@@ -9,7 +9,7 @@ const GraphicalRepresentation = () => {
   return (
     <>
       <Head>
-        <title> Graphical Representation | DataX </title>
+        <title> Graphical Representation | DataTreat </title>
       </Head>
       <DashboardLayout>
         <GraphicalRepresentationMainSection />

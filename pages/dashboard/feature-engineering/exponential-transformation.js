@@ -9,7 +9,7 @@ const ExponentialTransformation = () => {
   return (
     <>
       <Head>
-        <title>Exponential Transformation | DataX</title>
+        <title>Exponential Transformation | DataTreat</title>
       </Head>
       <DashboardLayout>
         <div>Exponential Transformation</div>

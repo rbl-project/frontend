@@ -9,7 +9,7 @@ const DatasetOverview = () => {
   return (
     <>
       <Head>
-        <title>Data Cleaning | DataX</title>
+        <title>Data Cleaning | DataTreat</title>
       </Head>
       <DashboardLayout>
         <DataCleaningMainSection/>

@@ -9,7 +9,7 @@ const MissingValueImputation = () => {
   return (
     <>
       <Head>
-        <title>Missing Value Imputation | DataX</title>
+        <title>Missing Value Imputation | DataTreat</title>
       </Head>
       <DashboardLayout>
         <ShowMissingValueMainSection />

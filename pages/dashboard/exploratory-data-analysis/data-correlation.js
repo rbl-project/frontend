@@ -9,7 +9,7 @@ const DatasetOverview = () => {
   return (
     <>
       <Head>
-        <title>Data Correlation | DataX</title>
+        <title>Data Correlation | DataTreat</title>
       </Head>
       <DashboardLayout>
         <DataCorrelationMainSection/>
