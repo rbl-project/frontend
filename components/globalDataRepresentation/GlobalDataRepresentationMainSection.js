@@ -18,6 +18,7 @@ import {
 
 // actions
 import { globalDataRepresentation } from '/store/datasetUpdateSlice';
+import { setOpenGlobalDataRepresentation } from '/store/globalStateSlice';
 
 // Icons
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
@@ -31,17 +32,12 @@ const GlobalDataRepresentationMainSection = () => {
 
     const dispatch = useDispatch();
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
+    const openGlobalDataRepresentation = useSelector((state) => state.global.openGlobalDataRepresentation);
 
-    const [openGlobalDataRepresentation, setOpenGlobalDataRepresentation] = useState(false);
-
-    // Modal
-    const handleModalOpen = async () => {
-        setOpenGlobalDataRepresentation(true);
-    }
 
     return (
         <>
-            <Fab
+            {/* <Fab
                 variant="extended"
                 size="small"
                 color="primary"
@@ -56,7 +52,7 @@ const GlobalDataRepresentationMainSection = () => {
                 onClick={handleModalOpen}
             >
                 <RemoveRedEyeIcon fontSize="medium" />
-            </Fab>
+            </Fab> */}
 
             <Dialog
                 fullWidth={true}
@@ -64,7 +60,7 @@ const GlobalDataRepresentationMainSection = () => {
                 scroll='paper'
                 open={openGlobalDataRepresentation}
                 onClose={() => {
-                    setOpenGlobalDataRepresentation(false)
+                    dispatch(setOpenGlobalDataRepresentation(false));
                     dispatch(globalDataRepresentation({
                         dataset_name: selectedDataset
                     }))
@@ -92,7 +88,7 @@ const GlobalDataRepresentationMainSection = () => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => {
-                        setOpenGlobalDataRepresentation(false)
+                        dispatch(setOpenGlobalDataRepresentation(false))
                         dispatch(globalDataRepresentation({
                             dataset_name: selectedDataset
                         }))

@@ -9,7 +9,7 @@ const Register = () => {
     return (
         <>
             <Head>
-                <title>Register | DataX</title>
+                <title>Register | DataTreat</title>
             </Head>
             <AuthLayout>
                 <RegisterMainSection />

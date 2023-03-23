@@ -5,6 +5,7 @@ const initialState = {
     openMenuItem: "",
     openModal: false,
     modalTabIndex: 0,
+    openGlobalDataRepresentation: false
 }
 
 const stateSlice = createSlice({
@@ -25,10 +26,13 @@ const stateSlice = createSlice({
         },
         setModalTabIndex: (state, action) => {
             state.modalTabIndex = action.payload;
+        },
+        setOpenGlobalDataRepresentation: (state, action) => {
+            state.openGlobalDataRepresentation = action.payload;
         }
     }
 });
 
-export const { toggleSidebar, setOpenMenuItem, setOpenModal, setCloseModal,setModalTabIndex } = stateSlice.actions;
+export const { toggleSidebar, setOpenMenuItem, setOpenModal, setCloseModal,setModalTabIndex,setOpenGlobalDataRepresentation } = stateSlice.actions;
 
 export default stateSlice.reducer;

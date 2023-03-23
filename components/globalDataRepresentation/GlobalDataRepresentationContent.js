@@ -104,6 +104,13 @@ const GlobalDataRepresentationContent = (props) => {
         }))
     }, [])
 
+    // Fetch Dataset When Reload True
+    useEffect(() => {
+        dispatch(globalDataRepresentation({
+            dataset_name: selectedDataset
+        }))
+    }, [props.reload])
+
     // Async Autocomplete
     const [inputValue, setInputValue] = useState('');
     const [options, setOptions] = useState([]);
@@ -122,7 +129,7 @@ const GlobalDataRepresentationContent = (props) => {
             console.log(err);
         })
 
-    }, [inputValue, columnValue])
+    }, [inputValue, columnValue,])
 
     // Pagination
     const changePage = (page) => {
@@ -136,11 +143,14 @@ const GlobalDataRepresentationContent = (props) => {
 
     const mui_datatable_options = {
         jumpToPage: true,
-        filter: true,
+        filter: false,
         filterType: 'dropdown',
         selectableRowsHideCheckboxes: true,
         selectableRowsOnClick: false,
         // responsive: 'vertical',
+        print: false,
+        search: false,
+
         serverSide: true,
         rowsPerPageOptions: [10],
         elevation: 0,
@@ -168,13 +178,16 @@ const GlobalDataRepresentationContent = (props) => {
 
     return (
         <>
-            <Box sx={{ mt: "0.8rem", width: "100%", display: "flex", alignItems: "center", justifyContent: "start" }}>
+            <Box sx={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "start" }}>
+                
+            < Typography variant="body1" sx={{mr:1,fontWeight:500}} color="gray" >Filter Result: </Typography>
                 {/* Select Column Dropdown  */}
                 <Box sx={
                     ((parseFloat(numericalToValue) < parseFloat(numericalFromValue)) && datasetUpdateState.currentDatasetView?.numerical_columns.includes(column))
                         ? { width: "20vw", mr: 2, mt: "-23px" }
                         : { width: "20vw", mr: 2 }
                 }>
+                    
                     <FormControl fullWidth size="small">
                         <Autocomplete
                             disableClearable

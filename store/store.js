@@ -8,6 +8,7 @@ import datasetOverviewSlice from "./datasetOverviewSlice";
 import dataCorrelationSlice from "./dataCorrelationSlice";
 import graphicalRepresentationSlice from "./graphicalRepresentationSlice";
 import tabularRepresentationSlice from "./tabularRepresentationSlice";
+import missingValueImputationSlice from "./missingValueImputationSlice";
 import dataCleaningSlice from "./dataCleaningSlice";
 import datasetUpdateSlice from "./datasetUpdateSlice";
 
@@ -19,6 +20,7 @@ const combineReducer = combineReducers({
     dataCorrelation:dataCorrelationSlice,
     graphicalRepresentation:graphicalRepresentationSlice,
     tabularRepresentation:tabularRepresentationSlice,
+    missingValueImputation:missingValueImputationSlice,
     dataCleaning:dataCleaningSlice,
     datasetUpdate:datasetUpdateSlice,
 });

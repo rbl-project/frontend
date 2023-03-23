@@ -29,7 +29,7 @@ const NumericalVsCategoricalPieChart = ({ data }) => (
     arcLinkLabelsStraightLength={27}
     arcLinkLabelsThickness={3}
     arcLinkLabelsColor={{ from: 'color', modifiers: [] }}
-    arcLabelsSkipAngle={10}
+    arcLabelsSkipAngle={15}
     arcLabelsTextColor="#ffffff"
     theme={{fontSize: 15}}
     defs={[

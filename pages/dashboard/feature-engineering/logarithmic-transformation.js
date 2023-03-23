@@ -9,7 +9,7 @@ const LogarithmicTransformation = () => {
   return (
     <>
       <Head>
-        <title>Logarithmic Transformation | DataX</title>
+        <title>Logarithmic Transformation | DataTreat</title>
       </Head>
       <DashboardLayout>
         <div>Logarithmic Transformation</div>

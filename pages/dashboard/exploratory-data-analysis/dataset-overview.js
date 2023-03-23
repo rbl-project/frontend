@@ -9,7 +9,7 @@ const DatasetOverview = () => {
   return (
     <>
       <Head>
-        <title>Dataset Overview | DataX</title>
+        <title>Dataset Overview | DataTreat</title>
       </Head>
       <DashboardLayout>
         <DatasetOverviewMainSection/>

@@ -11,45 +11,51 @@ import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
 import DatasetIcon from '@mui/icons-material/Dataset';
 import TableChartIcon from '@mui/icons-material/TableChart';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
+import MissingValueImputationIcon from '@mui/icons-material/Troubleshoot';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
+
+import GlobalDataRepresentationIcon from '@mui/icons-material/RemoveRedEye';
 
 // Components
 import SidebarItem from './SidebarItem';
 import SidebarSubheader from './SidebarSubheader';
 
 // Constants
-import { 
-    DRAWER_WIDTH, 
-    DATASET_OVERVIEW, 
-    DATASET_OVERVIEW_PATH, 
-    DATA_CORRELATION, 
-    DATA_CORRELATION_PATH, 
-    TABULAR_REPRESENTATION, 
-    TABULAR_REPRESENTATION_PATH, 
-    GRAPHICAL_REPRESENTATION, 
-    GRAPHICAL_REPRESENTATION_PATH, 
-    MISSING_VALUE_IMPUTATION, 
-    MISSING_VALUE_IMPUTATION_PATH, 
-    NUMERICAL_ENCODING, 
-    NUMERICAL_ENCODING_PATH, 
-    EXPONENTIAL_TRANSFORMATION, 
-    EXPONENTIAL_TRANSFORMATION_PATH, 
-    LOGARITHMIC_TRANSFORMATION, 
-    LOGARITHMIC_TRANSFORMATION_PATH,
+import {
+    DRAWER_WIDTH,
+    DATASET_OVERVIEW,
+    DATASET_OVERVIEW_PATH,
+    DATA_CORRELATION,
+    DATA_CORRELATION_PATH,
+    TABULAR_REPRESENTATION,
+    TABULAR_REPRESENTATION_PATH,
+    GRAPHICAL_REPRESENTATION,
+    GRAPHICAL_REPRESENTATION_PATH,
+    MISSING_VALUE_IMPUTATION,
+    MISSING_VALUE_IMPUTATION_PATH,
     DATA_CLEANING,
-    DATA_CLEANING_PATH 
+    DATA_CLEANING_PATH,
+    FEATURE_ENCODING,
+    FEATURE_ENCODING_PATH,
+    DATA_TRANSFORMATION,
+    DATA_TRANSFORMATION_PATH,
+    DATA_DISCRETIZATION,
+    DATA_DISCRETIZATION_PATH,
+    DATASET_VIEW,
 } from '/constants/Constants';
+import { Box } from '@mui/system';
 
 const drawerWidth = DRAWER_WIDTH;
 
 
-const DrawerHeader = styled('div')(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: theme.spacing(0, 1),
-    ...theme.mixins.toolbar,
-}));
+// const DrawerHeader = styled('div')(({ theme }) => ({
+//     display: 'flex',
+//     alignItems: 'center',
+//     minHeight:"6vh",
+//     justifyContent: 'flex-end',
+//     padding: theme.spacing(0, 1),
+//     ...theme.mixins.toolbar,
+// }));
 
 
 const Sidebar = () => {
@@ -99,34 +105,45 @@ const Sidebar = () => {
     );
 
     return (
-        <Drawer variant="permanent" open={open} PaperProps={{ sx: { backgroundColor: "rgba(30,41,59,1)", color: "white", px: 1 } }} >
-            <DrawerHeader></DrawerHeader>
+        <Drawer variant="permanent" open={open} PaperProps={{ sx: { backgroundColor: "rgba(30,41,59,1)", color: "white", overflow:"hidden" } }} >
+            {/* <DrawerHeader ></DrawerHeader> */}
+            <Box sx={{height:"7vh"}} />
+            <Box sx={{ display: "flex", flexDirection: "column", height: "93vh" }}>
+                <Box sx={{ flexGrow: 1, overflowX:"hidden",overflowY:"auto", "&::-webkit-scrollbar": { width: "0.5rem", borderRadius: "2rem" },
+                                    "&::-webkit-scrollbar-track": { bgcolor: "rgba(255,255,255,0)",borderRadius: "3rem" },
+                                    "&::-webkit-scrollbar-thumb": { bgcolor: "rgba(255,255,255,0.1)", borderRadius: "3rem" }}}>
+                    {/* Exploratory Data Analysis Functions */}
+                    <List sx={{ mt: 0,mx:1 }} >
+                        <SidebarSubheader title="Exploratory Data Analysis" open={open}></SidebarSubheader>
+                        <SidebarItem itemKey={1} name={DATASET_OVERVIEW} path={DATASET_OVERVIEW_PATH} ItemIcon={DatasetIcon} open={open} />
+                        <SidebarItem itemKey={2} name={DATA_CORRELATION} path={DATA_CORRELATION_PATH} ItemIcon={ScatterPlotIcon} open={open} />
+                        <SidebarItem itemKey={3} name={TABULAR_REPRESENTATION} path={TABULAR_REPRESENTATION_PATH} ItemIcon={TableChartIcon} open={open} />
+                        <SidebarItem itemKey={4} name={GRAPHICAL_REPRESENTATION} path={GRAPHICAL_REPRESENTATION_PATH} ItemIcon={AutoGraphIcon} open={open} />
+                    </List >
 
-            {/* Exploratory Data Analysis Functions */}
-            <List sx={{ mt: 0 }} >
-                <SidebarSubheader title="Exploratory Data Analysis" open={open}></SidebarSubheader>
-                <SidebarItem itemKey={1} name={DATASET_OVERVIEW} path={DATASET_OVERVIEW_PATH} ItemIcon={DatasetIcon} open={open} />
-                <SidebarItem itemKey={2} name={DATA_CORRELATION} path={DATA_CORRELATION_PATH} ItemIcon={ScatterPlotIcon} open={open} />
-                <SidebarItem itemKey={2} name={TABULAR_REPRESENTATION} path={TABULAR_REPRESENTATION_PATH} ItemIcon={TableChartIcon} open={open} />
-                <SidebarItem itemKey={3} name={GRAPHICAL_REPRESENTATION} path={GRAPHICAL_REPRESENTATION_PATH} ItemIcon={AutoGraphIcon} open={open} />
-            </List >
+                    {/* Data Preprocessing Functions */}
+                    <List sx={{ mt: 0,mx:1,}} >
+                    <hr style={{ borderColor: 'transparent', width: "100%", backgroundColor: "rgb(86 86 86)" }} />
+                        <SidebarSubheader title="Data Preprocessing" open={open}></SidebarSubheader>
+                        <SidebarItem itemKey={1} name={MISSING_VALUE_IMPUTATION} path={MISSING_VALUE_IMPUTATION_PATH} ItemIcon={MissingValueImputationIcon} open={open} />
+                        <SidebarItem itemKey={2} name={DATA_CLEANING} path={DATA_CLEANING_PATH} ItemIcon={CleaningServicesIcon} open={open} />
+                    </List>
 
-            {/* Data Preprocessing Functions */}
-            <hr style={{ borderColor: 'transparent', width: "100%", backgroundColor: "rgb(86 86 86)" }} />
-            <List sx={{ mt: 0 }} >
-                <SidebarSubheader title="Data Preprocessing" open={open}></SidebarSubheader>
-                <SidebarItem itemKey={1} name={MISSING_VALUE_IMPUTATION} path={MISSING_VALUE_IMPUTATION_PATH} ItemIcon={InboxIcon} open={open} />
-                <SidebarItem itemKey={2} name={NUMERICAL_ENCODING} path={NUMERICAL_ENCODING_PATH} ItemIcon={MailIcon} open={open} />
-                <SidebarItem itemKey={3} name={DATA_CLEANING} path={DATA_CLEANING_PATH} ItemIcon={CleaningServicesIcon} open={open} />
-            </List>
+                    {/* Feature Engineering Functions */}
+                    <List sx={{ mt: 0,mx:1 }}>
+                    <hr style={{ borderColor: 'transparent', width: "100%", backgroundColor: "rgb(86 86 86)" }} />
+                        <SidebarSubheader title="Feature Engineering" open={open}></SidebarSubheader>
+                        <SidebarItem itemKey={1} name={FEATURE_ENCODING} path={FEATURE_ENCODING_PATH} ItemIcon={InboxIcon} open={open} />
+                        <SidebarItem itemKey={2} name={DATA_TRANSFORMATION} path={DATA_TRANSFORMATION_PATH} ItemIcon={MailIcon} open={open} />
+                        <SidebarItem itemKey={3} name={DATA_DISCRETIZATION} path={DATA_DISCRETIZATION_PATH} ItemIcon={CleaningServicesIcon} open={open} />
+                    </List>
+                </Box>
+                <Box sx={{ mb: 1,mx:1 }}>
+                    <hr style={{ borderColor: 'transparent', width: "100%", backgroundColor: "rgb(86 86 86)" }} />
+                    <SidebarItem itemKey={1} name={DATASET_VIEW} path={null} ItemIcon={GlobalDataRepresentationIcon} open={open} isGlobal={true} />
+                </Box>
 
-            {/* Feature Engineering Functions */}
-            <hr style={{ borderColor: 'transparent', width: "100%", backgroundColor: "rgb(86 86 86)" }} />
-            <List sx={{ mt: 0 }}>
-                <SidebarSubheader title="Feature Engineering" open={open}></SidebarSubheader>
-                <SidebarItem itemKey={1} name={EXPONENTIAL_TRANSFORMATION} path={EXPONENTIAL_TRANSFORMATION_PATH} ItemIcon={InboxIcon} open={open} />
-                <SidebarItem itemKey={2} name={LOGARITHMIC_TRANSFORMATION} path={LOGARITHMIC_TRANSFORMATION_PATH} ItemIcon={MailIcon} open={open} />
-            </List>
+            </Box>
 
         </Drawer >
     )

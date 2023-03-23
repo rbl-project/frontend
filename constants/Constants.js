@@ -16,16 +16,7 @@ export const CATEGORICAL = "Categorical";
 
 export const DRAWER_WIDTH = 300;
 
-// Data Types
-export const NUMBER_DATA_TYPE = "number";
-export const STRING_DATA_TYPE = "string";
-export const DATE_DATA_TYPE = "date";
-export const BOOLEAN_DATA_TYPE = "boolean";
-export const NULL_DATA_TYPE = "null";
-
-// Colors
-export const BLACK_COLOR = "black";
-export const BLUE_COLOR = "blue";
+export const DATASET_VIEW = "Dataset View";
 
 // EDA Functions
 export const EDA_PATH = "/dashboard/exploratory-data-analysis"
@@ -41,9 +32,7 @@ export const GRAPHICAL_REPRESENTATION_PATH = EDA_PATH + "/graphical-representati
 // Data Preprocessing Functions
 export const DATA_PREPROCESSING_PATH = "/dashboard/data-preprocessing"
 export const MISSING_VALUE_IMPUTATION = "Missing Value Imputation";
-export const NUMERICAL_ENCODING = "Numerical Encoding";
 export const MISSING_VALUE_IMPUTATION_PATH = DATA_PREPROCESSING_PATH + "/missing-value-imputation";
-export const NUMERICAL_ENCODING_PATH = DATA_PREPROCESSING_PATH + "/numerical-encoding";
 export const DATA_CLEANING = "Data Cleaning";
 export const DATA_CLEANING_PATH = DATA_PREPROCESSING_PATH + "/data-cleaning";
 
@@ -60,10 +49,12 @@ export const COLUMN_TYPE_OPTIONS = ["Categorical", "Numerical"];
 
 // Feature Engineering Functions
 export const FEATURE_ENGINEERING_PATH = "/dashboard/feature-engineering"
-export const EXPONENTIAL_TRANSFORMATION = "Exponential Transformation";
-export const LOGARITHMIC_TRANSFORMATION = "Logarithmic Transformation";
-export const EXPONENTIAL_TRANSFORMATION_PATH = FEATURE_ENGINEERING_PATH + "/exponential-transformation";
-export const LOGARITHMIC_TRANSFORMATION_PATH = FEATURE_ENGINEERING_PATH + "/logarithmic-transformation";
+export const FEATURE_ENCODING = "Feature Encoding";
+export const FEATURE_ENCODING_PATH = FEATURE_ENGINEERING_PATH + "/feature-encoding";
+export const DATA_TRANSFORMATION = "Data Transformation";
+export const DATA_TRANSFORMATION_PATH = FEATURE_ENGINEERING_PATH + "/data-transformation";
+export const DATA_DISCRETIZATION = "Data Discretization";
+export const DATA_DISCRETIZATION_PATH = FEATURE_ENGINEERING_PATH + "/data-discretization";
 
 
 

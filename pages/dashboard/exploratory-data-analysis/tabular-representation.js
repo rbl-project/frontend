@@ -9,7 +9,7 @@ const DatasetOverview = () => {
   return (
     <>
       <Head>
-        <title>Tabular Representation | DataX</title>
+        <title>Tabular Representation | DataTreat</title>
       </Head>
       <DashboardLayout>
         <TabularRepresentationMainSection/>

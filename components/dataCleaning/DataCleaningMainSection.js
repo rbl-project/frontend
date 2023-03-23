@@ -44,7 +44,7 @@ import {
 
 import { saveChanges, revertChanges } from "/store/datasetUpdateSlice";
 import { setOpenMenuItem } from "/store/globalStateSlice";
-import { resetRequestStatus as resetDataCleaningRequestStatus, resetDatasetChangesStatus } from "/store/dataCleaningSlice";
+import { resetRequestStatus as resetDataCleaningRequestStatus } from "/store/dataCleaningSlice";
 import { resetRequestStatus as resetDatasetRequestStatus } from "/store/datasetUpdateSlice";
 
 // constant
@@ -268,7 +268,6 @@ const DataCleaningMainSection = () => {
     const saveDatasetChanges = async () => {
         await dispatch(saveChanges({ dataset_name: selectedDataset }));
         dispatch(getMetaData({ dataset_name: selectedDataset }));
-        resetDatasetChangesStatus();
     }
 
     const revertDatasetChanges = async () => {
@@ -276,43 +275,11 @@ const DataCleaningMainSection = () => {
         dispatch(getMetaData({ dataset_name: selectedDataset }));
     }
 
-    // temp
-    const columns = ["Name", "Company", "City", "State"];
-
-    const data = [
-        ["Joe James", "Test Corp", "Yonkers", "NY"],
-        ["John Walsh", "Test Corp", "Hartford", "CT"],
-        ["Bob Herm", "Test Corp", "Tampa", "FL"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX"]
-    ];
-
-    const options = {
-        selectableRowsHideCheckboxes: true,
-        selectableRowsOnClick: false,
-        rowsPerPage: 10,
-        elevation: 0,
-        fixedHeader: true,
-        textLabels: {
-            body: {
-                noMatch: 'No data to show',
-            }
-        }
-    };
 
     return (
         <Box>
             <Grid container spacing={2}>
-                <Grid item xs={12}>
+                <Grid item xs={12} >
                     <Item sx={{}}>
                         <Box sx={{ width: '100%' }}>
                             {/* Tabs and Buttons */}
@@ -334,13 +301,13 @@ const DataCleaningMainSection = () => {
                                         onClick={saveDatasetChanges}
                                     >
                                         {
-                                            datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_LOADING
-                                                ? <CircularProgress size={24} sx={{ color: "white" }} />
-                                                : <Typography>
+                                            datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_LOADING 
+                                                ? <CircularProgress size="1.5rem" sx={{ color: "white" }} />
+                                                : <Typography variant="subtitle2">
                                                     Save Changes
                                                     {
-                                                        (dataCleaningState.metadata?.is_copy == true && dataCleaningState.metadata?.is_copy_modified == true)
-                                                            ? <span> &#x2a; </span>
+                                                        (dataCleaningState.dataset_modify_status)
+                                                            ? <sup> &#x2a; </sup>
                                                             : null
                                                     }
                                                     
@@ -419,11 +386,6 @@ const DataCleaningMainSection = () => {
 
                         <Divider sx={{ mt: 2 }} />
 
-                        {/* <MUIDataTable
-                            data={data}
-                            columns={columns}
-                            options={options}
-                        /> */}
                         <Typography variant="h6" gutterBottom sx={{textAlign: 'start', mt: 2, color: "black"}}>
                             Result
                         </Typography>
@@ -431,6 +393,7 @@ const DataCleaningMainSection = () => {
                             currPage={0}
                             column={''}
                             columnValue={[]}
+                            reload={dataCleaningState.dataset_modify_status}
                             numericalToValue={null}
                             numericalFromValue={null}
                             parameters={{
@@ -440,11 +403,6 @@ const DataCleaningMainSection = () => {
                         />
                     </Item>
                 </Grid>
-                {/* <Grid item xs={12} >
-                    <Item>
-                        <Typography variant="h6" component="div" gutterBottom>Result</Typography>
-                    </Item>
-                </Grid> */}
             </Grid>
         </Box>
     )

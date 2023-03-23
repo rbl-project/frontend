@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Box, Button, Typography,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Checkbox,TextField,Tooltip,CircularProgress,IconButton} from '@mui/material';
+import { Box, Button, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, TextField, Tooltip, CircularProgress, IconButton } from '@mui/material';
 import { toast } from 'react-toastify';
-import {saveAs} from "file-saver";
+import { saveAs } from "file-saver";
+import { useRouter } from 'next/router';
 
 // Icons
 import ExportIcon from '@mui/icons-material/SystemUpdateAltOutlined';
@@ -16,11 +17,12 @@ import * as API from "/api";
 // Actions from Redux State
 import { getAllDatasets, updateSelectedDataset, deleteDataset, renameDataset, resetRequestStatus, setRequestStatus } from "/store/datasetSlice";
 // Constants
-import { REQUEST_STATUS_FAILED, REQUEST_STATUS_SUCCEEDED, REQUEST_STATUS_LOADING, CUSTOM_ERROR_MESSAGE, CUSTOM_SUCCESS_MESSAGE, SMALLEST_VALID_STRING_LENGTH, LARGEST_VALID_STRING_LENGTH, REQUEST_STATUS_IDLE } from '../../constants/Constants';
+import { REQUEST_STATUS_FAILED, REQUEST_STATUS_SUCCEEDED, REQUEST_STATUS_LOADING, CUSTOM_ERROR_MESSAGE, CUSTOM_SUCCESS_MESSAGE, SMALLEST_VALID_STRING_LENGTH, LARGEST_VALID_STRING_LENGTH, REQUEST_STATUS_IDLE, DATASET_OVERVIEW_PATH } from '/constants/Constants';
 
 
 const AvailableDatasetTab = ({ handleModalClose }) => {
 
+    const router = useRouter();
     // Dataset State from Redux Store
     const datasetState = useSelector((state) => state.dataset);
     const dispatch = useDispatch();
@@ -107,11 +109,16 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
     const handleSelectDataset = () => {
         dispatch(updateSelectedDataset(selectedDataset));
         handleModalClose();
+        router.push(DATASET_OVERVIEW_PATH);
     }
 
     const handleDeleteDataset = async (dataset_name) => {
         setRequestCreatorId({ type: "delete", name: dataset_name });
         await dispatch(deleteDataset({ dataset_name: dataset_name }));
+        // If selected dataset is deleted , then redirect to dataset overview page
+        if (datasetState.selectedDataset === dataset_name) {
+            router.push(DATASET_OVERVIEW_PATH); 
+        }
         dispatch(getAllDatasets());
     }
 
@@ -138,7 +145,7 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
         // setExportDatasetLoader(true);
         dispatch(setRequestStatus({ requestStatus: REQUEST_STATUS_LOADING }));
         API.exportDataset({ "dataset_name": dataset_name }).then((res) => {
-            
+
             // ============================= Download File Traditional Method ========================= 
             // console.log(res);
             // const url = window.URL.createObjectURL(new Blob([res.data], { type: "text/csv" }));
@@ -148,7 +155,7 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
             // a.click();
             // a.remove();
 
-            saveAs(new Blob([res.data], { type: "text/csv" }),dataset_name+".csv");
+            saveAs(new Blob([res.data], { type: "text/csv" }), dataset_name + ".csv");
 
             setExportDatasetLoader(false);
             dispatch(setRequestStatus({ requestStatus: REQUEST_STATUS_IDLE }));
@@ -194,7 +201,7 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
     useEffect(() => {
         // console.log(datasetState,requestCreatorId);
         if (datasetState.requestStatus === REQUEST_STATUS_FAILED) {
-            toast.error([undefined,null,""].includes(datasetState.message) ? CUSTOM_ERROR_MESSAGE: datasetState.message, {
+            toast.error([undefined, null, ""].includes(datasetState.message) ? CUSTOM_ERROR_MESSAGE : datasetState.message, {
                 position: "bottom-right",
                 autoClose: false,
                 hideProgressBar: true,
@@ -243,7 +250,7 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
                             (
                                 <TableRow>
                                     <TableCell colSpan={5} >
-                                        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "Center",height:"30vh" }}>
+                                        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "Center", height: "30vh" }}>
                                             <CircularProgress size="1rem" color="inherit" />
                                         </Box>
                                     </TableCell>
@@ -258,7 +265,7 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
                                     tabIndex={-1}
                                     key={dataset.name}
                                 >
-                                     {/* Dataset Name  */}
+                                    {/* Dataset Name  */}
                                     <TableCell padding="checkbox" onClick={handleClick}>
                                         <Checkbox
                                             color="primary"
@@ -289,7 +296,7 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
                                                 : (dataset.name)
                                         }
                                     </TableCell>
-                                    
+
                                     {/* Dataset Size  */}
                                     <TableCell align="right" >
                                         {dataset.size} KB

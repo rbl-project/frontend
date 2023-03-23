@@ -9,7 +9,7 @@ const Login = () => {
     return (
         <>
             <Head>
-                <title>Login | DataX</title>
+                <title>Login | DataTreat</title>
             </Head>
             <AuthLayout>
                 <LoginMainSection />

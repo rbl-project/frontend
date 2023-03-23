@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import {
     Container,
     Box,
@@ -31,7 +32,7 @@ import {
 
 // actions
 import { login } from "/store/authSlice";
-import {setOpenMenuItem} from "/store/globalStateSlice";
+import { setOpenMenuItem } from "/store/globalStateSlice";
 import { DATASET_OVERVIEW_PATH, REQUEST_STATUS_LOADING } from '/constants/Constants';
 
 
@@ -139,12 +140,16 @@ const LoginMainSection = () => {
                 </Box>
                 <Box sx={{ width: "70%" }}>
                     <FormFooter>
-                        <FormFooterElement href="/auth/forget-password">
-                            Forget Password?
-                        </FormFooterElement>
-                        <FormFooterElement href='/auth/register'>
-                            Create new account
-                        </FormFooterElement>
+                        < Link href="/auth/forget-password">
+                            <FormFooterElement href="/auth/forget-password">
+                                Forget Password?
+                            </FormFooterElement>
+                        </Link>
+                        < Link href="/auth/register">
+                            <FormFooterElement href='/auth/register'>
+                                Create new account
+                            </FormFooterElement>
+                        </Link>
                     </FormFooter>
                 </Box>
             </Container>

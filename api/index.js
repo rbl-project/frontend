@@ -64,6 +64,10 @@ export const generateGraph = (formData) => API.post("/generate-graph",formData);
 export const getTabularRepresentation = (formData) => API.post("/filtered-tabular-representation",formData);
 export const globalDataRepresentation = (formData) => API.post("/global-data-representation",formData);
 
+// Missing Value Imputation APIs
+export const getMissingValuePercentage = (formData) => API.post("/missing-value-percentage",formData);
+export const imputeMissingValue = (formData) => API.post("/impute-missing-value",formData);
+
 // Data Cleaning APIs
 export const dropByColValue = (formData) => API.post("/drop-by-column-value",formData);
 export const dropByNumericalValue = (formData) => API.post("/drop-by-numerical-value",formData);

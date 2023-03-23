@@ -38,6 +38,7 @@ const Navbar = () => {
     // Get all datasets on page load
     useEffect(() => {
         if (selectedDataset === null || selectedDataset === undefined || selectedDataset === "") {
+            console.log(selectedDataset, "selectedDataset");
             dispatch(getAllDatasets());
         }
     }, [])

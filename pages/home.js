@@ -10,7 +10,7 @@ const Home = () => {
   return (
     <>
       <Head>
-        <title>Home | DataX</title>
+        <title>Home | DataTreat</title>
       </Head>
       <AuthNavbar page="home" />
       <HomeSection />
