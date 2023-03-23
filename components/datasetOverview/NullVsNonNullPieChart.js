@@ -56,7 +56,7 @@ const NullVsNonNullPieChart = ({ data }) => (
     arcLinkLabelsThickness={3}
     arcLabel={formatNumber}
     arcLinkLabelsColor={{ from: 'color', modifiers: [] }}
-    arcLabelsSkipAngle={10}
+    arcLabelsSkipAngle={15}
     arcLabelsTextColor="#ffffff"
     theme={{ fontSize: 15 }}
     defs={[

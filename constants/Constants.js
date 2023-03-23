@@ -16,6 +16,8 @@ export const CATEGORICAL = "Categorical";
 
 export const DRAWER_WIDTH = 300;
 
+export const DATASET_VIEW = "Dataset View";
+
 // EDA Functions
 export const EDA_PATH = "/dashboard/exploratory-data-analysis"
 export const DATASET_OVERVIEW = "Dataset Overview";
@@ -47,10 +49,12 @@ export const COLUMN_TYPE_OPTIONS = ["Categorical", "Numerical"];
 
 // Feature Engineering Functions
 export const FEATURE_ENGINEERING_PATH = "/dashboard/feature-engineering"
-export const EXPONENTIAL_TRANSFORMATION = "Exponential Transformation";
-export const LOGARITHMIC_TRANSFORMATION = "Logarithmic Transformation";
-export const EXPONENTIAL_TRANSFORMATION_PATH = FEATURE_ENGINEERING_PATH + "/exponential-transformation";
-export const LOGARITHMIC_TRANSFORMATION_PATH = FEATURE_ENGINEERING_PATH + "/logarithmic-transformation";
+export const FEATURE_ENCODING = "Feature Encoding";
+export const FEATURE_ENCODING_PATH = FEATURE_ENGINEERING_PATH + "/feature-encoding";
+export const DATA_TRANSFORMATION = "Data Transformation";
+export const DATA_TRANSFORMATION_PATH = FEATURE_ENGINEERING_PATH + "/data-transformation";
+export const DATA_DISCRETIZATION = "Data Discretization";
+export const DATA_DISCRETIZATION_PATH = FEATURE_ENGINEERING_PATH + "/data-discretization";
 
 
 

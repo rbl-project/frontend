@@ -275,38 +275,6 @@ const DataCleaningMainSection = () => {
         dispatch(getMetaData({ dataset_name: selectedDataset }));
     }
 
-    // temp
-    const columns = ["Name", "Company", "City", "State"];
-
-    const data = [
-        ["Joe James", "Test Corp", "Yonkers", "NY"],
-        ["John Walsh", "Test Corp", "Hartford", "CT"],
-        ["Bob Herm", "Test Corp", "Tampa", "FL"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX"],
-        ["James Houston", "Test Corp", "Dallas", "TX"]
-    ];
-
-    const options = {
-        selectableRowsHideCheckboxes: true,
-        selectableRowsOnClick: false,
-        rowsPerPage: 10,
-        elevation: 0,
-        fixedHeader: true,
-        textLabels: {
-            body: {
-                noMatch: 'No data to show',
-            }
-        }
-    };
 
     return (
         <Box>
@@ -335,7 +303,7 @@ const DataCleaningMainSection = () => {
                                         {
                                             datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_LOADING 
                                                 ? <CircularProgress size="1.5rem" sx={{ color: "white" }} />
-                                                : <>
+                                                : <Typography variant="subtitle2">
                                                     Save Changes
                                                     {
                                                         (dataCleaningState.dataset_modify_status)
@@ -343,7 +311,7 @@ const DataCleaningMainSection = () => {
                                                             : null
                                                     }
                                                     
-                                                </>
+                                                </Typography>
                                         }
                                     </Button>
 
@@ -418,11 +386,6 @@ const DataCleaningMainSection = () => {
 
                         <Divider sx={{ mt: 2 }} />
 
-                        {/* <MUIDataTable
-                            data={data}
-                            columns={columns}
-                            options={options}
-                        /> */}
                         <Typography variant="h6" gutterBottom sx={{textAlign: 'start', mt: 2, color: "black"}}>
                             Result
                         </Typography>
@@ -430,6 +393,7 @@ const DataCleaningMainSection = () => {
                             currPage={0}
                             column={''}
                             columnValue={[]}
+                            reload={dataCleaningState.dataset_modify_status}
                             numericalToValue={null}
                             numericalFromValue={null}
                             parameters={{
@@ -439,11 +403,6 @@ const DataCleaningMainSection = () => {
                         />
                     </Item>
                 </Grid>
-                {/* <Grid item xs={12} >
-                    <Item>
-                        <Typography variant="h6" component="div" gutterBottom>Result</Typography>
-                    </Item>
-                </Grid> */}
             </Grid>
         </Box>
     )
