@@ -11,6 +11,7 @@ import * as API from "/api";
 
 const initialState = {
     get_missing_value_percentage_req_status: REQUEST_STATUS_IDLE,
+    is_column_deleted: false,
     all_columns_missing_value_data: [],
     single_column_missing_value_data: {},
     get_metadata_req_status: REQUEST_STATUS_IDLE,
@@ -80,6 +81,7 @@ const missingValueImputationSlice = createSlice({
                     else{
                         state.single_column_missing_value_data = action.payload.data.missing_value_data;
                     }
+                    state.is_column_deleted = action.payload.data.is_column_deleted;
                     state.get_missing_value_percentage_req_status = REQUEST_STATUS_SUCCEEDED;
                 } else {
                     state.get_missing_value_percentage_req_status = REQUEST_STATUS_FAILED;

@@ -2,7 +2,7 @@ import { ResponsivePie } from '@nivo/pie';
 
 
 
-const MissingValuePercentagePie = ({ missingValueData }) => {
+const MissingValuePercentagePie = ({ missingValueData, isDeleted = false }) => {
 
     const data = [
         {
@@ -27,7 +27,7 @@ const MissingValuePercentagePie = ({ missingValueData }) => {
             padAngle={0.7}
             cornerRadius={3}
             activeOuterRadiusOffset={8}
-            colors={{ scheme: 'dark2' }}
+            colors={{ scheme: isDeleted ?'pastel2':'dark2' }}
             borderWidth={1}
             borderColor={{
                 from: 'color',
@@ -49,6 +49,8 @@ const MissingValuePercentagePie = ({ missingValueData }) => {
             arcLinkLabelsColor={{ from: 'color', modifiers: [] }}
             arcLabelsSkipAngle={15}
             arcLabelsTextColor="#ffffff"
+            enableArcLabels={!isDeleted}
+            isInteractive={!isDeleted}
             theme={{ fontSize: 15 }}
             defs={[
                 {
