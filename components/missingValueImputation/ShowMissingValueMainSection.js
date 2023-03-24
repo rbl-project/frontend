@@ -95,9 +95,9 @@ const ShowMissingValueMainSection = () => {
                                     onInputChange={handleSearchCoulmnInputChange}
                                     renderInput={(params) => <TextField sx={{}} {...params} label="Search Column" size="small" />}
                                     renderOption={(props, option) => (
-                                        < Tooltip title={option} placement="bottom-start" key={`tooltip-${option}`}>
+                                        // < Tooltip title={option} placement="bottom-start" key={`tooltip-${option}`}>
                                             <ListItemText key={option} {...props} primaryTypographyProps={{ sx: { overflow: "hidden", textOverflow: "ellipsis" } }} >{option}</ListItemText>
-                                        </Tooltip>
+                                        // </Tooltip>
                                     )}
                                 />
                             </FormControl>

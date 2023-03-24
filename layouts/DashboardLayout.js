@@ -52,7 +52,7 @@ const DashboardLayout = ({ children }) => {
         }}>
             < Navbar />
             < Sidebar />
-            <Box sx={{ mt: 8, mb: 2, width: "100%", px: 2, overflow: "hidden" }}>
+            <Box sx={{ mb: 2,mt:8, width: "100%", px: 2, overflow: "hidden" }}>
                 {
                     // Loading Screen
                     datasetRequestStatus === REQUEST_STATUS_LOADING ? (
@@ -65,10 +65,10 @@ const DashboardLayout = ({ children }) => {
                     isNoDataset ?
                         (<Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%", width: "100%", bgcolor: "rgba(255, 255, 255,1)" }} >
                             <Box>
-                                <Image src="/images/dataset_upload.jpeg" alt="No Dataset" width={800} height={400} />
+                                <Image src="/images/dataset_upload.jpg" alt="No Dataset" width={800} height={500} />
                                 <Typography variant="h4" sx={{ fontWeight: "bold" }} align="center" >No Dataset Available</Typography>
                                 <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mt: 1 }}>
-                                    <Button variant="contained" size='small' onClick={clickHandler} color="warning" sx={{ textTransform: "none", fontSize: "1rem", bgcolor: "gold", color: "black", "&:hover": { bgcolor: "goldenrod", color: "white" }, mr: 1 }} startIcon={<UploadIcon />}>Upload</Button>
+                                    <Button variant="contained" size='small' onClick={clickHandler} color="error" sx={{ textTransform: "none", fontSize: "1rem",mr:1}}  startIcon={<UploadIcon />}>Upload</Button>
                                     <Typography variant="h6" align="center" color="#5a5a5a" >New Dataset to Get Started</Typography>
                                 </Box>
                             </Box>

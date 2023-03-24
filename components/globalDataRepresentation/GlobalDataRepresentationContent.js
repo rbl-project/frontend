@@ -178,7 +178,7 @@ const GlobalDataRepresentationContent = (props) => {
 
     return (
         <>
-            <Box sx={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "start" }}>
+            <Box sx={{ width: "100%",mt:1, display: "flex", alignItems: "center", justifyContent: "start" }}>
                 
             < Typography variant="body1" sx={{mr:1,fontWeight:500}} color="gray" >Filter Result: </Typography>
                 {/* Select Column Dropdown  */}
@@ -359,10 +359,10 @@ const GlobalDataRepresentationContent = (props) => {
 
             </Box>
 
-            <Box sx={{ minHeight: "65vh" }} >
+            <Box >
                 {
                     datasetUpdateState.fetchDatasetStatus === REQUEST_STATUS_LOADING
-                        ? <Box sx={{ width: "100%", height: "60vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                        ? <Box sx={{ width: "100%", height: "73vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
                             <CircularProgress size="3rem" color='inherit' />
                         </Box>
                         :

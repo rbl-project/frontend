@@ -45,7 +45,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
     { title: 'Impute Mean', value: 'mean', disabled: columnType === CATEGORICAL },
     { title: 'Impute Median', value: 'median', disabled: columnType === CATEGORICAL },
     { title: 'Impute Mode', value: 'mode', },
-    { title: 'Impute Custom Value', value: 'custom-value', disabled: columnName === 'All Columns' }
+    { title: 'Impute Custom Value', value: 'custom_value', disabled: columnName === 'All Columns' }
   ]
 
   // State for Imputation Method Dropdown
@@ -61,7 +61,12 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
 
   // Change Handler for Custom Value Input
   const handleCustomValueChange = (event) => {
-    setCustomValue(event.target.value);
+    if (columnType === CATEGORICAL) {
+      setCustomValue(String(event.target.value));
+    }
+    else {
+      setCustomValue(Number(event.target.value));
+    }
   };
 
   // function to save changes permanently to the dataset
@@ -276,7 +281,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                     </Box>
 
                     {/* Custom Value Input */}
-                    {ImputationMethod === 'custom-value' && (
+                    {ImputationMethod === 'custom_value' && (
                       <Box sx={{ mt: 2 }}>
                         <TextField
                           fullWidth
@@ -284,6 +289,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                           label="Custom Value"
                           variant="outlined"
                           size='small'
+                          type={columnType === NUMERICAL ? 'number' : 'text'}
                           value={CustomValue}
                           onChange={handleCustomValueChange}
                         />
