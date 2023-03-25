@@ -198,7 +198,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
             <Typography variant="h6" sx={{ fontWeight: "bold", ml: 1 }} > Missing Value Imputation:</Typography>
             <Typography variant="h6" sx={{ fontWeight: 500, ml: 1 }} > {columnName} </Typography>
             {columnName !== "All Columns" && (<Typography variant="caption" sx={{ fontWeight: 500, ml: 1 }} > ({columnType}) </Typography>)}
-            {missingValueImputationState.is_column_deleted && (<Typography variant="h6" color='error' sx={{ fontWeight: 500, ml: 1 }} > [Deleted] </Typography>)}
+            {missingValueImputationState.single_column_missing_value_data?.is_column_deleted && (<Typography variant="h6" color='error' sx={{ fontWeight: 500, ml: 1 }} > [Deleted] </Typography>)}
 
             <Box sx={{ flexGrow: 1 }} />
             <Tooltip title="Once You Click on this Button, All the Changes will be made into Original Dataset Permanently">
@@ -243,10 +243,10 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                     </Box>
                   ) : (
 
-                    < MissingValuePercentagePie isDeleted={missingValueImputationState.is_column_deleted} missingValueData={missingValueImputationState.single_column_missing_value_data} />
+                    < MissingValuePercentagePie isDeleted={missingValueImputationState.single_column_missing_value_data?.is_column_deleted} missingValueData={missingValueImputationState.single_column_missing_value_data} />
                   )}
               </Box>
-              < Typography variant="caption" sx={{ textAlign: "center", mt: 1, fontWeight: 500, textTransform: "uppercase", color: missingValueImputationState.is_column_deleted ? "lightgray" : "black" }} > Missing Value Percentage </Typography>
+              < Typography variant="caption" sx={{ textAlign: "center", mt: 1, fontWeight: 500, textTransform: "uppercase", color: missingValueImputationState.single_column_missing_value_data?.is_column_deleted ? "lightgray" : "black" }} > Missing Value Percentage </Typography>
 
               < Divider sx={{ my: 4 }} />
 
@@ -294,7 +294,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                     aria-label="Apply Changes"
                     variant="contained"
                     onClick={applyDataChanges}
-                    disabled={missingValueImputationState.is_column_deleted}
+                    disabled={missingValueImputationState.single_column_missing_value_data?.is_column_deleted}
                     endIcon={missingValueImputationState.impute_missing_value_req_status !== REQUEST_STATUS_LOADING && <ApplyChangesIcon />}
                   >
                     {

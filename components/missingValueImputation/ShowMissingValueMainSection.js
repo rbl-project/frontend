@@ -118,7 +118,7 @@ const ShowMissingValueMainSection = () => {
                                 <Grid container spacing={3}>
                                     {columns.map((column) => (
                                         <Grid item xs={3} key={column.column_name}>
-                                            <ColumnCard columnName={column.column_name} allColumns={column.all_columns} missingValuePercentage={column.missing_value_percentage} correctValuePercentage={column.correct_value_percentage} />
+                                            <ColumnCard columnName={column.column_name} isDeleted={column.is_column_deleted} allColumns={column.all_columns} missingValuePercentage={column.missing_value_percentage} correctValuePercentage={column.correct_value_percentage} />
                                         </Grid>
                                     ))}
                                 </Grid>

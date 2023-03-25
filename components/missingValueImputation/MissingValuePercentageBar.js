@@ -6,7 +6,7 @@ import { ResponsiveBar } from '@nivo/bar'
 // website examples showcase many properties,
 // you'll often use just a few of them.
 
-const MissingValuePercentageBar = ({ missingValuePercentage, correctValuePercentage }) => {
+const MissingValuePercentageBar = ({ missingValuePercentage, correctValuePercentage,isDeleted = false }) => {
 
     const data = [
         {
@@ -29,12 +29,13 @@ const MissingValuePercentageBar = ({ missingValuePercentage, correctValuePercent
             layout="horizontal"
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
-            colors={{ scheme: 'dark2' }}
+            colors={{ scheme: isDeleted ?'pastel2':'dark2' }}
             label={(d) => `${d.value}%`}
             labelSkipWidth={40}
             labelTextColor="#ffffff"
             isInteractive={false}
             theme={{ fontSize: 15 }}
+            enableLabel={!isDeleted}
             defs={[
                 {
                     id: 'lines',
