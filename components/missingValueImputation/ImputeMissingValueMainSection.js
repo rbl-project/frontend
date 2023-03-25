@@ -186,7 +186,6 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
   // Calling backend APIs
   useEffect(() => {
     if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
-      console.log("Calling API",selectedDataset);
       dispatch(getMetaData({ dataset_name: selectedDataset }));
       dispatch(getMissingValuePercentage({ dataset_name: selectedDataset, get_all_columns: false, column_name: columnName }));
     }

@@ -71,9 +71,11 @@ const datasetOverviewSlice = createSlice({
 
             // Get Basic Information
             .addCase(getBasicInformation.pending, (state, action) => {
+                console.log(" GetBasicInfo Loading");
                 state.basic_info_req_status = REQUEST_STATUS_LOADING;
             })
             .addCase(getBasicInformation.fulfilled, (state, action) => { // action.payload is the response.data
+                console.log(" GetBasicInfo Fulfilled",action.payload);
                 if (action.payload.status) {
                     state.dataset_name = action.payload.data.dataset_name;
                     state.n_columns = action.payload.data.n_columns;
@@ -87,6 +89,7 @@ const datasetOverviewSlice = createSlice({
                 }
             })
             .addCase(getBasicInformation.rejected, (state, action) => {
+                console.log(" GetBasicInfo Rejected",action.payload);
                 state.basic_info_req_status = REQUEST_STATUS_FAILED;
                 state.message = CUSTOM_ERROR_MESSAGE; // unknow error in request
             })

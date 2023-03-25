@@ -70,8 +70,6 @@ const ShowMissingValueMainSection = () => {
 
     // toaster for dataCleaning state
     useEffect(() => {
-
-        console.log("ttt", missingValueImputationState);
         // In case of failure
         if (
             missingValueImputationState.get_missing_value_percentage_req_status === REQUEST_STATUS_FAILED ||
