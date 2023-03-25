@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import Image from 'next/image';
 import "react-toastify/dist/ReactToastify.css";
 import { Box, Typography, Button, CircularProgress } from '@mui/material';
-import { ToastContainer } from 'react-toastify';
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from 'next/router';
 
@@ -77,7 +76,6 @@ const DashboardLayout = ({ children }) => {
                         (children)
                 }
             </Box>
-            <ToastContainer position="bottom-right" autoClose={false} newestOnTop={false} closeOnClick={false} rtl={false} pauseOnFocusLoss={false} draggable={false} theme="dark" />
             <GlobalDataRepresentationMainSection />
         </Box>
     )

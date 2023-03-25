@@ -38,10 +38,10 @@ const Navbar = () => {
     // Get all datasets on page load
     useEffect(() => {
         if (selectedDataset === null || selectedDataset === undefined || selectedDataset === "") {
-            console.log(selectedDataset, "selectedDataset");
+            console.log("Getting all datasets", selectedDataset);
             dispatch(getAllDatasets());
         }
-    }, [])
+    }, [selectedDataset])
 
     return (
         <AppBar position="fixed" open={open} sx={{ bgcolor: "white", color: "black", zIndex: (theme) => theme.zIndex.drawer + 1 }} elevation={1} >

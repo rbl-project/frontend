@@ -73,6 +73,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
   const saveDatasetChanges = async () => {
     await dispatch(saveChanges({ dataset_name: selectedDataset }));
     dispatch(getMetaData({ dataset_name: selectedDataset }));
+    dispatch(getMissingValuePercentage({ dataset_name: selectedDataset, get_all_columns: false, column_name: columnName }));
   }
 
   // function to revert changes made to the dataset
@@ -92,11 +93,19 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
     }
   }
 
+  // Function to redirect to the show missing value percentage page if column does not exist
+  useEffect(() => {
+  }, [missingValueImputationState.get_missing_value_percentage_req_status])
+
   // toaster for dataCleaning state
   useEffect(() => {
+
+    // redirect to missing value imputation page if column does not exist
+    if (missingValueImputationState.get_missing_value_percentage_req_status === REQUEST_STATUS_FAILED) {
+      router.push(MISSING_VALUE_IMPUTATION_PATH);
+    }
     // In case of success
-    if (
-      missingValueImputationState.impute_missing_value_req_status === REQUEST_STATUS_SUCCEEDED) {
+    else if ( missingValueImputationState.impute_missing_value_req_status === REQUEST_STATUS_SUCCEEDED) {
       toast.success(missingValueImputationState.message, {
         position: "bottom-right",
         autoClose: false,
@@ -107,14 +116,12 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
         draggable: false,
         theme: "light",
       });
+
+      dispatch(resetMissingValueImputationRequestStatus());
     }
 
     // In case of failure
-    else if (
-      missingValueImputationState.get_missing_value_percentage_req_status === REQUEST_STATUS_FAILED ||
-      missingValueImputationState.impute_missing_value_req_status === REQUEST_STATUS_FAILED ||
-      missingValueImputationState.get_metadata_req_status === REQUEST_STATUS_FAILED
-    ) {
+    else if ( missingValueImputationState.impute_missing_value_req_status === REQUEST_STATUS_FAILED ) {
       toast.error(missingValueImputationState.message, {
         position: "bottom-right",
         autoClose: false,
@@ -124,9 +131,11 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
         draggable: false,
         theme: "light",
       });
+
+      dispatch(resetMissingValueImputationRequestStatus());
     }
 
-    dispatch(resetMissingValueImputationRequestStatus());
+    
 
   }, [missingValueImputationState.impute_missing_value_req_status, missingValueImputationState.get_missing_value_percentage_req_status, missingValueImputationState.get_metadata_req_status])
 
@@ -177,6 +186,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
   // Calling backend APIs
   useEffect(() => {
     if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
+      console.log("Calling API",selectedDataset);
       dispatch(getMetaData({ dataset_name: selectedDataset }));
       dispatch(getMissingValuePercentage({ dataset_name: selectedDataset, get_all_columns: false, column_name: columnName }));
     }

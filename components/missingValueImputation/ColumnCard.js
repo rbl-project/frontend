@@ -26,7 +26,7 @@ const ColumnCard = ({ allColumns = false, isDeleted = false, columnName, missing
             [Deleted]
             </Typography>}
           </Box>
-          <Tooltip title={<><Typography variant="caption" component="div">Correct Values: {correctValuePercentage}%</Typography><Typography variant="caption" component="div" >Missing Values: {missingValuePercentage}%</Typography></>}>
+          <Tooltip title={isDeleted? null : <><Typography variant="caption" component="div">Correct Values: {correctValuePercentage}%</Typography><Typography variant="caption" component="div" >Missing Values: {missingValuePercentage}%</Typography></>}>
             <Box sx={{ width: "100%", height: "4.5vh", mt: 2 }}>
               <MissingValuePercentageBar correctValuePercentage={correctValuePercentage} missingValuePercentage={missingValuePercentage} isDeleted={isDeleted} />
             </Box>
