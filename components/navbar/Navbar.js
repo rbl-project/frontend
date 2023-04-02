@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import { styled, useTheme, } from '@mui/material/styles';
-import { Toolbar, IconButton, Typography, Box } from '@mui/material';
+import { Toolbar, IconButton, Typography, Box, Button, Divider } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Icons
 import DataThresholdingIcon from '@mui/icons-material/DataThresholding';
 import MenuIcon from '@mui/icons-material/Menu';
+import SaveIcon from '@mui/icons-material/SaveOutlined';
+import RevertIcon from '@mui/icons-material/Replay';
 
 // Actions from Redux
 import { toggleSidebar } from "/store/globalStateSlice";
@@ -58,8 +60,14 @@ const Navbar = () => {
                 <Box sx={{ flexGrow: 1 }} />
 
                 {/* Profile Menu and Select Dataset Dropdown */}
-                <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 3 }}>
+                <Box sx={{ display: "flex",mr:1, alignItems: "center" }}>
                     < SelectDatasetDropdown />
+                    <Box sx={{ mr:1, width: "5.5rem" }}>
+                        <Button variant="contained" fullWidth size="small" color="success" startIcon={<SaveIcon />}>Save</Button>
+                    </Box>
+                    <Box sx={{ mr:1,width: "5.5rem" }}>
+                        <Button variant="outlined" fullwidth size="small" color="error" startIcon={<RevertIcon />}>Revert</Button>
+                    </Box>
                     < ProfileMenu />
                 </Box>
 
