@@ -65,11 +65,9 @@ const datasetSlice = createSlice({
             
             // Dataset Upload
             .addCase(uploadDataset.pending, (state, action) => {
-                console.log("uploadDataset Loading")
                 state.datasetUploadStatus = REQUEST_STATUS_LOADING;
             })
-            .addCase(uploadDataset.fulfilled, (state, action) => { // action.payload is the response.data
-                console.log("uploadDataset Fulfilled",action.payload)
+            .addCase(uploadDataset.fulfilled, (state, action) => { // action.payload is the response.dat
                 if (action.payload.status) {
                     state.datasetUploadStatus = REQUEST_STATUS_SUCCEEDED;
                     state.message = "Dataset Uploaded Successfully";
@@ -79,14 +77,12 @@ const datasetSlice = createSlice({
                 }
             })
             .addCase(uploadDataset.rejected, (state, action) => {
-                console.log("uploadDataset Rejected")
                 state.datasetUploadStatus = REQUEST_STATUS_FAILED;
                 state.message = CUSTOM_ERROR_MESSAGE; // unknow error in request
             })
 
             // Get All Datasets
             .addCase(getAllDatasets.pending, (state, action) => {
-                console.log("getAllDatasets Loading")  
                 state.requestStatus = REQUEST_STATUS_LOADING;
             })
             .addCase(getAllDatasets.fulfilled, (state, action) => { // action.payload is the response.data
@@ -105,12 +101,10 @@ const datasetSlice = createSlice({
                     state.requestStatus = REQUEST_STATUS_FAILED;
                     state.message = action.payload.error; // error sent by us from our backend
                 }
-                console.log("getAllDatasets Fulfilled",action.payload);  
             })
             .addCase(getAllDatasets.rejected, (state, action) => {
                 state.requestStatus = REQUEST_STATUS_FAILED;
                 state.message = CUSTOM_ERROR_MESSAGE; // unknow error in request
-                console.log("getAllDatasets Rejected")  
             })
 
             // ================ Older Approach for Export Datatset using REdux Toolkit ====================
@@ -134,11 +128,9 @@ const datasetSlice = createSlice({
 
             // Delete Dataset
             .addCase(deleteDataset.pending, (state, action) => {
-                console.log("deleteDataset Loading")
                 state.requestStatus = REQUEST_STATUS_LOADING;
             })
             .addCase(deleteDataset.fulfilled, (state, action) => { // action.payload is the response.data
-                console.log("deleteDataset Fulfilled",action.payload)
                 if (action.payload.status) {
                     state.requestStatus = REQUEST_STATUS_SUCCEEDED;
                     state.message = "Dataset Deleted Successfully";
@@ -148,7 +140,6 @@ const datasetSlice = createSlice({
                 }
             })
             .addCase(deleteDataset.rejected, (state, action) => {
-                console.log("deleteDataset Rejected")
                 state.requestStatus = REQUEST_STATUS_FAILED;
                 state.message = CUSTOM_ERROR_MESSAGE; // unknow error in request
             })
