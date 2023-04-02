@@ -38,8 +38,7 @@ const DatasetSelectButton = () => {
             mr:1,textTransform: "none", height: 30, my: "auto", maxWidth: 240, justifyContent: "space-between", px: 1
             }}>
                 < Typography sx={{overflow:"hidden",textOverflow:"ellipsis"}}>
-                {/* {datasetState.selectedDataset === null ? "No Detaset Available" : datasetState.selectedDataset} */}
-                aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                {datasetState.selectedDataset === null ? "No Detaset Available" : datasetState.selectedDataset}
                 </Typography>
             </ColorButton>
 
