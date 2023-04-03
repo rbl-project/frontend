@@ -4,15 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 // Redux Actions
-import { getMissingValuePercentage, resetRequestStatus as resetMissingValueImputationRequestStatus, } from '/store/missingValueImputationSlice';
+import { getMissingValuePercentage, resetRequestStatus } from '/store/missingValueImputationSlice';
 import { setOpenMenuItem } from "/store/globalStateSlice";
-import { resetRequestStatus as resetDatasetRequestStatus } from "/store/datasetUpdateSlice";
 
 // Components
 import ColumnCard from './ColumnCard';
 
 // Constants
-import { REQUEST_STATUS_LOADING, MISSING_VALUE_IMPUTATION, REQUEST_STATUS_FAILED, REQUEST_STATUS_SUCCEEDED } from "/constants/Constants";
+import { REQUEST_STATUS_LOADING, MISSING_VALUE_IMPUTATION, REQUEST_STATUS_FAILED, REQUEST_STATUS_SUCCEEDED} from "/constants/Constants";
 
 
 const ShowMissingValueMainSection = () => {
@@ -20,9 +19,9 @@ const ShowMissingValueMainSection = () => {
     // Redux State
     const dispatch = useDispatch();
     const missingValueImputationState = useSelector((state) => state.missingValueImputation);
+    const datasetUpdateState = useSelector((state) => state.datasetUpdate);
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     const selectedMenuItem = useSelector((state) => state.global.openMenuItem);
-    const datasetUpdateState = useSelector((state) => state.datasetUpdate);
 
     // Local State for Columns Showed in Missing Value Column Cards
     const [columns, setColumns] = useState([]);
@@ -63,6 +62,13 @@ const ShowMissingValueMainSection = () => {
         }
     }, []);
 
+    // When Revert Changes or Save Changes isx clicked, call backend to get the updated data
+    useEffect(() => {
+        if (datasetUpdateState.revertChangesRequestStatus === REQUEST_STATUS_SUCCEEDED || datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_SUCCEEDED) {
+            dispatch(getMissingValuePercentage({ dataset_name: selectedDataset, get_all_columns: false, column_name: null }));
+        }
+    }, [datasetUpdateState.revertChangesRequestStatus, datasetUpdateState.saveChangesRequestStatus])
+
     // Get Missing Value Percentage for All Columns
     useEffect(() => {
         dispatch(getMissingValuePercentage({ dataset_name: selectedDataset, get_all_columns: true, column_name: null }));
@@ -71,10 +77,7 @@ const ShowMissingValueMainSection = () => {
     // toaster for dataCleaning state
     useEffect(() => {
         // In case of failure
-        if (
-            missingValueImputationState.get_missing_value_percentage_req_status === REQUEST_STATUS_FAILED ||
-            missingValueImputationState.get_metadata_req_status === REQUEST_STATUS_FAILED
-        ) {
+        if (missingValueImputationState.get_missing_value_percentage_req_status === REQUEST_STATUS_FAILED) {
             toast.error(missingValueImputationState.message, {
                 position: "bottom-right",
                 autoClose: false,
@@ -86,46 +89,10 @@ const ShowMissingValueMainSection = () => {
             });
         }
 
-        dispatch(resetMissingValueImputationRequestStatus());
+        dispatch(resetRequestStatus());
 
-    }, [])
+    }, [missingValueImputationState.get_missing_value_percentage_req_status])
 
-    // toaster for dataset state
-    useEffect(() => {
-
-        // In case of success
-        if (datasetUpdateState.revertChangesRequestStatus === REQUEST_STATUS_SUCCEEDED || datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_SUCCEEDED) {
-            toast.success(datasetUpdateState.message, {
-                position: "bottom-right",
-                autoClose: false,
-                hideProgressBar: false,
-                autoClose: 2000,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                theme: "light",
-            });
-        }
-        // In case of failure
-        else if (
-            datasetUpdateState.revertChangesRequestStatus === REQUEST_STATUS_FAILED ||
-            datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_FAILED
-        ) {
-            toast.error(datasetUpdateState.message, {
-                position: "bottom-right",
-                autoClose: false,
-                hideProgressBar: false,
-                autoClose: 2000,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                theme: "light",
-            });
-        }
-
-        dispatch(resetDatasetRequestStatus());
-
-    }, [datasetUpdateState.revertChangesRequestStatus, datasetUpdateState.saveChangesRequestStatus])
 
     return (
         <Paper elevation={0}>

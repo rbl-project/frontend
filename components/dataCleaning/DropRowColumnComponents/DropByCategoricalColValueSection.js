@@ -44,7 +44,7 @@ const DropByCategoricalColValueSection = ({ setApiTaskType, dropByCategoricalQue
 
     // const [categoricalColValuesOptions, setCategoricalColValuesOptions] = useState([]);
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
-    const dataCleaningState = useSelector((state) => state.dataCleaning);
+    const datasetUpdateState = useSelector((state) => state.datasetUpdate);
 
     const handleDropColSubmit = () => {
 
@@ -95,7 +95,7 @@ const DropByCategoricalColValueSection = ({ setApiTaskType, dropByCategoricalQue
                             fullWidth={true}
                             filterSelectedOptions={true}
                             id="combo-box-demo"
-                            options={Object.keys(dataCleaningState.metadata).length > 0 ? dataCleaningState.metadata.categorical_column_list : []}
+                            options={Object.keys(datasetUpdateState.metadata).length > 0 ? datasetUpdateState.metadata.categorical_column_list : []}
                             size="small"
                             value={dropColumn}
                             onChange={(e, value, reason) => {

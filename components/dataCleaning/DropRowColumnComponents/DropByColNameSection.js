@@ -36,7 +36,7 @@ const ListItem = styled('li')(({ theme }) => ({
 const DropByColNameSection = ({ setApiTaskType, dropByColNameQuery, setDropByColNameQuery }) => {
 
     const [deleteColumnList, setDeleteColumnList] = useState([]);
-    const dataCleaningState = useSelector(state => state.dataCleaning);
+    const datasetUpdateState = useSelector((state) => state.datasetUpdate);
 
     const handleDeleteColSubmit = () => {
         let dropQuery_temp = dropByColNameQuery;
@@ -64,7 +64,7 @@ const DropByColNameSection = ({ setApiTaskType, dropByColNameQuery, setDropByCol
                             fullWidth={true}
                             filterSelectedOptions={true}
                             id="combo-box-demo"
-                            options={dataCleaningState.metadata?.column_list}
+                            options={datasetUpdateState.metadata?.column_list}
                             size="small"
                             value={deleteColumnList}
                             onChange={(e, value, reason) => setDeleteColumnList(value)}

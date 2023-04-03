@@ -11,14 +11,12 @@ import GlobalDataRepresentationContent from "/components/globalDataRepresentatio
 
 // icons
 import ApplyChangesIcon from '@mui/icons-material/Done';
-import RevertChangesIcon from '@mui/icons-material/Replay';
 import BackIcon from '@mui/icons-material/Reply';
 
 // Redux Actions
 import { setOpenMenuItem } from "/store/globalStateSlice";
-import { saveChanges, revertChanges } from "/store/datasetUpdateSlice";
-import { getMissingValuePercentage, getMetaData, imputeMissingValue, resetRequestStatus as resetMissingValueImputationRequestStatus, } from '/store/missingValueImputationSlice';
-import { resetRequestStatus as resetDatasetRequestStatus } from "/store/datasetUpdateSlice";
+import { getMissingValuePercentage, imputeMissingValue, resetRequestStatus } from '/store/missingValueImputationSlice';
+import { getMetaData } from '/store/datasetUpdateSlice';
 
 // Constants
 import { MISSING_VALUE_IMPUTATION_PATH, MISSING_VALUE_IMPUTATION, NUMERICAL, CATEGORICAL, REQUEST_STATUS_SUCCEEDED, REQUEST_STATUS_FAILED, REQUEST_STATUS_LOADING } from '/constants/Constants';
@@ -36,7 +34,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
   const datasetUpdateState = useSelector((state) => state.datasetUpdate);
 
   // Get Column Type
-  const columnType = ["bool", "object"].includes(missingValueImputationState.metadata?.column_datatypes?.[columnName]) ? CATEGORICAL : NUMERICAL;
+  const columnType = ["bool", "object"].includes(datasetUpdateState.metadata?.column_datatypes?.[columnName]) ? CATEGORICAL : NUMERICAL;
 
   // Options for Imputation Method Dropdown
   const MissingValueHandleOptions = [
@@ -69,33 +67,21 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
     }
   };
 
-  // function to save changes permanently to the dataset
-  const saveDatasetChanges = async () => {
-    await dispatch(saveChanges({ dataset_name: selectedDataset }));
-    dispatch(getMetaData({ dataset_name: selectedDataset }));
-    dispatch(getMissingValuePercentage({ dataset_name: selectedDataset, get_all_columns: false, column_name: columnName }));
-  }
-
-  // function to revert changes made to the dataset
-  const revertDatasetChanges = async () => {
-    await dispatch(revertChanges({ dataset_name: selectedDataset }));
-    dispatch(getMetaData({ dataset_name: selectedDataset }));
-    dispatch(getMissingValuePercentage({ dataset_name: selectedDataset, get_all_columns: false, column_name: columnName }));
-  }
-
   // function to apply current changes to the dataset
   const applyDataChanges = async () => {
     // check if the request is already in progress
     if (missingValueImputationState.impute_missing_value_req_status !== REQUEST_STATUS_LOADING) {
       await dispatch(imputeMissingValue({ dataset_name: selectedDataset, column_name: columnName, imputation_method: ImputationMethod, imputation_value: CustomValue }));
       dispatch(getMetaData({ dataset_name: selectedDataset }));
-      dispatch(getMissingValuePercentage({ dataset_name: selectedDataset, get_all_columns: false, column_name: columnName }));
+      // If Imputation Method is drop column and request is successful, redirect to missing value imputation page, As the column is dropped
+      if (ImputationMethod === "drop_column" && missingValueImputationState.impute_missing_value_req_status === REQUEST_STATUS_SUCCEEDED) {
+        router.push(MISSING_VALUE_IMPUTATION_PATH);
+      } else {
+        dispatch(getMissingValuePercentage({ dataset_name: selectedDataset, get_all_columns: false, column_name: columnName }));
+      }
     }
   }
 
-  // Function to redirect to the show missing value percentage page if column does not exist
-  useEffect(() => {
-  }, [missingValueImputationState.get_missing_value_percentage_req_status])
 
   // toaster for dataCleaning state
   useEffect(() => {
@@ -105,7 +91,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
       router.push(MISSING_VALUE_IMPUTATION_PATH);
     }
     // In case of success
-    else if ( missingValueImputationState.impute_missing_value_req_status === REQUEST_STATUS_SUCCEEDED) {
+    else if (missingValueImputationState.impute_missing_value_req_status === REQUEST_STATUS_SUCCEEDED && ImputationMethod !== "drop_column") {
       toast.success(missingValueImputationState.message, {
         position: "bottom-right",
         autoClose: false,
@@ -117,11 +103,11 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
         theme: "light",
       });
 
-      dispatch(resetMissingValueImputationRequestStatus());
+      dispatch(resetRequestStatus());
     }
 
     // In case of failure
-    else if ( missingValueImputationState.impute_missing_value_req_status === REQUEST_STATUS_FAILED ) {
+    else if (missingValueImputationState.impute_missing_value_req_status === REQUEST_STATUS_FAILED) {
       toast.error(missingValueImputationState.message, {
         position: "bottom-right",
         autoClose: false,
@@ -132,49 +118,11 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
         theme: "light",
       });
 
-      dispatch(resetMissingValueImputationRequestStatus());
+      dispatch(resetRequestStatus());
     }
 
-    
+  }, [missingValueImputationState.impute_missing_value_req_status, missingValueImputationState.get_missing_value_percentage_req_status])
 
-  }, [missingValueImputationState.impute_missing_value_req_status, missingValueImputationState.get_missing_value_percentage_req_status, missingValueImputationState.get_metadata_req_status])
-
-  // toaster for dataset state
-  useEffect(() => {
-
-    // In case of success
-    if (datasetUpdateState.revertChangesRequestStatus === REQUEST_STATUS_SUCCEEDED || datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_SUCCEEDED) {
-      toast.success(datasetUpdateState.message, {
-        position: "bottom-right",
-        autoClose: false,
-        hideProgressBar: false,
-        autoClose: 2000,
-        closeOnClick: false,
-        pauseOnHover: false,
-        draggable: false,
-        theme: "light",
-      });
-    }
-    // In case of failure
-    else if (
-      datasetUpdateState.revertChangesRequestStatus === REQUEST_STATUS_FAILED ||
-      datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_FAILED
-    ) {
-      toast.error(datasetUpdateState.message, {
-        position: "bottom-right",
-        autoClose: false,
-        hideProgressBar: false,
-        autoClose: 2000,
-        closeOnClick: false,
-        pauseOnHover: false,
-        draggable: false,
-        theme: "light",
-      });
-    }
-
-    dispatch(resetDatasetRequestStatus());
-
-  }, [datasetUpdateState.revertChangesRequestStatus, datasetUpdateState.saveChangesRequestStatus])
 
   // Setting Open Menu Item When Page Loads or Refreshes
   useEffect(() => {
@@ -183,10 +131,16 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
     }
   }, []);
 
+  // When Revert Changes or Save Changes isx clicked, call backend to get the updated data
+  useEffect(() => {
+    if (datasetUpdateState.revertChangesRequestStatus === REQUEST_STATUS_SUCCEEDED || datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_SUCCEEDED) {
+      dispatch(getMissingValuePercentage({ dataset_name: selectedDataset, get_all_columns: false, column_name: columnName }));
+    }
+  }, [datasetUpdateState.revertChangesRequestStatus, datasetUpdateState.saveChangesRequestStatus])
+
   // Calling backend APIs
   useEffect(() => {
     if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
-      dispatch(getMetaData({ dataset_name: selectedDataset }));
       dispatch(getMissingValuePercentage({ dataset_name: selectedDataset, get_all_columns: false, column_name: columnName }));
     }
   }, [selectedDataset, columnName])
@@ -210,27 +164,6 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
             {missingValueImputationState.single_column_missing_value_data?.is_column_deleted && (<Typography variant="h6" color='error' sx={{ fontWeight: 500, ml: 1 }} > [Deleted] </Typography>)}
 
             <Box sx={{ flexGrow: 1 }} />
-            <Tooltip title="Once You Click on this Button, All the Changes will be made into Original Dataset Permanently">
-              <Button
-                variant='contained'
-                color='success'
-                onClick={saveDatasetChanges}
-              >
-                {
-                  datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_LOADING
-                    ? <CircularProgress size="1.5rem" sx={{ color: "white" }} />
-                    : <Typography variant="subtitle2">
-                      Save Changes
-                      {
-                        (missingValueImputationState.dataset_modify_status)
-                          ? <sup> &#x2a; </sup>
-                          : null
-                      }
-
-                    </Typography>
-                }
-              </Button>
-            </Tooltip>
           </Box>
           < Divider sx={{ my: 1 }} />
         </Box>
@@ -315,15 +248,6 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                     }
                   </Button>
                 </Tooltip>
-              </Box>
-
-              {/* Revert Chnage Button */}
-              <Box sx={{ mt: 2 }}>
-                {/* < Tooltip title="Revert Changes" > */}
-                <Button aria-label="Revert Changes" variant="contained" onClick={revertDatasetChanges} color='error' fullWidth endIcon={<RevertChangesIcon />} >
-                  Revert Changes
-                </Button>
-                {/* </Tooltip> */}
               </Box>
 
             </Box>

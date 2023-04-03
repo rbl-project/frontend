@@ -32,7 +32,7 @@ import * as API from "/api/index";
 
 const FindAndReplaceSection = ({ setApiTaskType, findReplaceQuery, setFindReplaceQuery }) => {
     // REdux state
-    const dataCleaningState = useSelector((state) => state.dataCleaning);
+    const datasetUpdateState = useSelector((state) => state.datasetUpdate);
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
 
     // Local state
@@ -91,7 +91,7 @@ const FindAndReplaceSection = ({ setApiTaskType, findReplaceQuery, setFindReplac
                                 fullWidth={true}
                                 filterSelectedOptions={true}
                                 id="combo-box-demo"
-                                options={dataCleaningState.metadata?.column_list}
+                                options={datasetUpdateState.metadata?.column_list}
                                 size="small"
                                 value={column}
                                 // sx={{ width: "130px", padding: "0px" }}
@@ -108,7 +108,7 @@ const FindAndReplaceSection = ({ setApiTaskType, findReplaceQuery, setFindReplac
                     <Box>
                         <FormControl fullWidth size="small" sx={{ flexDirection: 'row' }}>
                             {
-                                (column.length != 0 && dataCleaningState.metadata?.categorical_column_list.includes(column))
+                                (column.length != 0 && datasetUpdateState.metadata?.categorical_column_list.includes(column))
                                     ? <Autocomplete
                                         disableClearable
                                         fullWidth={true}

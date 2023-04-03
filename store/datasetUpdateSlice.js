@@ -15,8 +15,16 @@ const initialState = {
     fetchDatasetStatus: REQUEST_STATUS_IDLE,
     message: null,
     saveChangesStatus: true,
-    currentDatasetView: {}
+    currentDatasetView: {},
+    getMetadataRequestStatus: REQUEST_STATUS_IDLE,
+    metadata: {},
+    dataset_modify_status: false,
 }
+
+export const getMetaData = createAsyncThunk('/get-metadata', async (formData) => {
+    const response = await API.getMetaData(formData);
+    return response.data;
+})
 
 export const saveChanges = createAsyncThunk('/save-changes', async (formData) => {
     const response = await API.saveChanges(formData);
@@ -40,11 +48,34 @@ const datasetUpdateSlice = createSlice({
         resetRequestStatus:(state,action) => {
             state.revertChangesRequestStatus = REQUEST_STATUS_IDLE;
             state.saveChangesRequestStatus = REQUEST_STATUS_IDLE;
+            state.getMetadataRequestStatus = REQUEST_STATUS_IDLE;
             state.message = null;
         }
     },
     extraReducers: (builder) => {
         builder
+
+            // get Metadata
+            .addCase(getMetaData.pending, (state, action) => {
+                state.getMetadataRequestStatus = REQUEST_STATUS_LOADING;
+                state.message = null;
+            })
+            .addCase(getMetaData.fulfilled, (state, action) => {
+                if (action.payload.status) {
+                    state.metadata = action.payload.data.metadata;
+                    state.message = null;
+                    state.dataset_modify_status = action.payload.data.metadata.is_copy && action.payload.data.metadata.is_copy_modified;
+                    state.getMetadataRequestStatus = REQUEST_STATUS_SUCCEEDED;
+                }
+                else {
+                    state.getMetadataRequestStatus = REQUEST_STATUS_FAILED;
+                    state.message = action.payload.error;
+                }
+            })
+            .addCase(getMetaData.rejected, (state, action) => {
+                state.getMetadataRequestStatus = REQUEST_STATUS_FAILED;
+                state.message = CUSTOM_ERROR_MESSAGE;
+            })
             
             // Save Changes
             .addCase(saveChanges.pending, (state, action) => {

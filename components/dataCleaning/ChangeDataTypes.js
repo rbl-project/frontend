@@ -29,8 +29,9 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { CHANGE_DATA_TYPE_API_TASK_TYPE } from '/constants/Constants';
 
 const ChangeDataTypeSection = ({ setApiTaskType, changeDataTypeQuery, setChangeDataTypeQuery }) => {
+    
     // REdux state
-    const dataCleaningState = useSelector((state) => state.dataCleaning);
+    const datasetUpdateState = useSelector((state) => state.datasetUpdate);
 
     const list_of_data_types = {
         "int16": ["int32", "int64", "float32", "float64", "str"] ,
@@ -71,14 +72,14 @@ const ChangeDataTypeSection = ({ setApiTaskType, changeDataTypeQuery, setChangeD
                             fullWidth={true}
                             filterSelectedOptions={true}
                             id="combo-box-demo"
-                            options={dataCleaningState.metadata?.column_list}
+                            options={datasetUpdateState.metadata?.column_list}
                             size="small"
                             value={column}
                             // sx={{ width: "130px", padding: "0px" }}
                             onChange={(e, value, reason) => {
                                 setColumn(value)
-                                setDataType(dataCleaningState.metadata?.column_datatypes[value])
-                                setDataTypeOptions(list_of_data_types[dataCleaningState.metadata?.column_datatypes[value]])
+                                setDataType(datasetUpdateState.metadata?.column_datatypes[value])
+                                setDataTypeOptions(list_of_data_types[datasetUpdateState.metadata?.column_datatypes[value]])
                             }}
                             renderInput={(params) => <TextField sx={{}} {...params} label="Columns" />}
                         />

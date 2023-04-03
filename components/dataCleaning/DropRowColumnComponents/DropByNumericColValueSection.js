@@ -30,7 +30,7 @@ import { DROP_BY_NUMERICAL_RANGE_API_TASK_TYPE } from "/constants/Constants";
 
 const DropByNumericColValueSection = ({ setApiTaskType, dropByNumericalQuery, setDropByNumericalQuery }) => {
 
-    const dataCleaningState = useSelector(state => state.dataCleaning);
+    const datasetUpdateState = useSelector((state) => state.datasetUpdate);
 
     const [dropColumnNumerical, setDropColumnNumerical] = useState('');
     const [dropNumericalToValue, setDropNumericalToValue] = useState(null);
@@ -66,7 +66,7 @@ const DropByNumericColValueSection = ({ setApiTaskType, dropByNumericalQuery, se
                             fullWidth={true}
                             filterSelectedOptions={true}
                             id="combo-box-demo"
-                            options={dataCleaningState.metadata?.numerical_column_list}
+                            options={datasetUpdateState.metadata?.numerical_column_list}
                             size="small"
                             value={dropColumnNumerical}
                             // sx={{ width: "130px", padding: "0px" }}

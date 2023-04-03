@@ -25,11 +25,11 @@ const DashboardLayoutMainSection = ({ component }) => {
     const datasetRequestStatus = useSelector((state) => state.dataset.requestStatus);
     const isNoDataset = selectedDataset === null || selectedDataset === undefined || selectedDataset === "";
 
-    useEffect(() => {
-        if (isNoDataset && router.pathname !== DATASET_OVERVIEW_PATH) {
-            router.push(DATASET_OVERVIEW_PATH);
-        }
-    }, [isNoDataset])
+    // useEffect(() => {
+    //     if (isNoDataset && router.pathname !== DATASET_OVERVIEW_PATH) {
+    //         router.push(DATASET_OVERVIEW_PATH);
+    //     }
+    // }, [isNoDataset])
 
     const clickHandler = () => {
         dispatch(setModalTabIndex(1));
