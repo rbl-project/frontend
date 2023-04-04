@@ -23,7 +23,7 @@ import { DROP_BY_ROW_INDEX_API_TASK_TYPE } from '/constants/Constants';
 
 const DropByRowIndexSection = ({ setApiTaskType, dropByRowIndexQuery, setDropByRowIndexQuery }) => {
 
-    const dataCleaningState = useSelector(state => state.dataCleaning);
+    const datasetUpdateState = useSelector((state) => state.datasetUpdate);
 
     const [startIndex, setStartIndex] = useState(0);
     const [endIndex, setEndIndex] = useState(0);
@@ -90,12 +90,12 @@ const DropByRowIndexSection = ({ setApiTaskType, dropByRowIndexQuery, setDropByR
                 <Box sx={{ mr: 2 }}>
 
                     <Button onClick={() => {
-                        setEndIndex(dataCleaningState.metadata.n_rows)
+                        setEndIndex(datasetUpdateState.metadata.n_rows)
                         setDropByRowIndexQuery({
-                            ...dropByRowIndexQuery, ["row_end"]: dataCleaningState.metadata.n_rows
+                            ...dropByRowIndexQuery, ["row_end"]: datasetUpdateState.metadata.n_rows
                         })
                     }}
-                        style={endIndex != dataCleaningState.metadata.n_rows && endIndex !== undefined ? { marginLeft: "1rem", color: "rgba(0, 0, 0, 0.26)", border: "1px solid rgba(0, 0, 0, 0.12)", padding: 0 } : { marginLeft: "1rem", padding: 0 }}
+                        style={endIndex != datasetUpdateState.metadata.n_rows && endIndex !== undefined ? { marginLeft: "1rem", color: "rgba(0, 0, 0, 0.26)", border: "1px solid rgba(0, 0, 0, 0.12)", padding: 0 } : { marginLeft: "1rem", padding: 0 }}
                         variant="outlined">
                         End
                     </Button>
@@ -107,12 +107,12 @@ const DropByRowIndexSection = ({ setApiTaskType, dropByRowIndexQuery, setDropByR
                     <TextField
                         size='small'
                         type="number"
-                        error={endIndex !== dataCleaningState.metadata.n_rows && (parseInt(endIndex) < parseInt(startIndex))}
-                        helperText={(endIndex !== dataCleaningState.metadata.n_rows && (parseInt(endIndex) < parseInt(startIndex)) ? "End must be greater than start" : "")}
+                        error={endIndex !== datasetUpdateState.metadata.n_rows && (parseInt(endIndex) < parseInt(startIndex))}
+                        helperText={(endIndex !== datasetUpdateState.metadata.n_rows && (parseInt(endIndex) < parseInt(startIndex)) ? "End must be greater than start" : "")}
                         inputProps={{ inputMode: 'numeric' }}
                         value={endIndex}
                         onChange={handleEndIndexChange}
-                        style={endIndex === dataCleaningState.metadata.n_rows ? { padding: "6px 16px", WebkitTextFillColor: "rgba(0, 0, 0, 0.38)" } : { padding: "6px 16px" }}  placeholder="Index" />
+                        style={endIndex === datasetUpdateState.metadata.n_rows ? { padding: "6px 16px", WebkitTextFillColor: "rgba(0, 0, 0, 0.38)" } : { padding: "6px 16px" }}  placeholder="Index" />
 
                 </Box>
             </Box>

@@ -13,17 +13,9 @@ const initialState = {
     get_missing_value_percentage_req_status: REQUEST_STATUS_IDLE,
     all_columns_missing_value_data: [],
     single_column_missing_value_data: {},
-    get_metadata_req_status: REQUEST_STATUS_IDLE,
-    metadata: {},
     impute_missing_value_req_status: REQUEST_STATUS_IDLE,
-    dataset_modify_status: false,
     message: null,
 }
-
-export const getMetaData = createAsyncThunk('/get-metadata', async (formData) => {
-    const response = await API.getMetaData(formData);
-    return response.data;
-})
 
 export const getMissingValuePercentage = createAsyncThunk('/missing-value-percentage', async (formData) => {
     const response = await API.getMissingValuePercentage(formData);
@@ -43,30 +35,11 @@ const missingValueImputationSlice = createSlice({
     reducers: {
         resetRequestStatus: (state, action) => {
             state.get_missing_value_percentage_req_status = REQUEST_STATUS_IDLE;
-            state.get_metadata_req_status = REQUEST_STATUS_IDLE;
             state.impute_missing_value_req_status = REQUEST_STATUS_IDLE;
         },
     },
     extraReducers: (builder) => {
         builder
-
-            // get metadata
-            .addCase(getMetaData.pending, (state, action) => {
-                state.get_metadata_req_status = REQUEST_STATUS_LOADING;
-                state.message = null;
-            })
-            .addCase(getMetaData.fulfilled, (state, action) => {
-                if (action.payload.status) {
-                    state.metadata = action.payload.data.metadata;
-                    state.message = null;
-                    state.dataset_modify_status = action.payload.data.metadata.is_copy && action.payload.data.metadata.is_copy_modified;
-                    state.get_metadata_req_status = REQUEST_STATUS_SUCCEEDED;
-                }
-            })
-            .addCase(getMetaData.rejected, (state, action) => {
-                state.get_metadata_req_status = REQUEST_STATUS_FAILED;
-                state.message = CUSTOM_ERROR_MESSAGE;
-            })
 
             // Get Missing Value Percentage
             .addCase(getMissingValuePercentage.pending, (state, action) => {
@@ -74,10 +47,10 @@ const missingValueImputationSlice = createSlice({
             })
             .addCase(getMissingValuePercentage.fulfilled, (state, action) => { // action.payload is the response.data
                 if (action.payload.status) {
-                    if (action.payload.data.all_columns === true){
+                    if (action.payload.data.all_columns === true) {
                         state.all_columns_missing_value_data = action.payload.data.missing_value_data;
                     }
-                    else{
+                    else {
                         state.single_column_missing_value_data = action.payload.data.missing_value_data;
                     }
                     state.get_missing_value_percentage_req_status = REQUEST_STATUS_SUCCEEDED;
@@ -97,9 +70,10 @@ const missingValueImputationSlice = createSlice({
             })
             .addCase(imputeMissingValue.fulfilled, (state, action) => { // action.payload is the response.data
                 if (action.payload.status) {
+                    console.log("action.payload", action.payload.data.msg);
                     state.impute_missing_value_req_status = REQUEST_STATUS_SUCCEEDED;
-                    state.message = action.payload.message;
-                }   else {
+                    state.message = action.payload.data.msg;
+                } else {
                     state.impute_missing_value_req_status = REQUEST_STATUS_FAILED;
                     state.message = action.payload.error; // error sent by us from our backend
                 }

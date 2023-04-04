@@ -49,7 +49,6 @@ const DatasetOverviewMainSection = () => {
   const datasetOverviewState = useSelector((state) => state.datasetOverview);
   const selectedMenuItem = useSelector((state) => state.global.openMenuItem);
 
-
   // Calling Backend APIs
   useEffect(() => {
     if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
@@ -76,6 +75,7 @@ const DatasetOverviewMainSection = () => {
 
   // Error HAndling
   useEffect(() => {
+    // console.log("datasetOverviewState", datasetOverviewState);
     if (
       datasetOverviewState.basic_info_req_status === REQUEST_STATUS_FAILED ||
       datasetOverviewState.desc_num_cols_req_status === REQUEST_STATUS_FAILED ||

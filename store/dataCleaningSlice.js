@@ -19,19 +19,12 @@ const initialState = {
     n_rows: 0,
     n_cols: 0,
     message: null,
-    metadata: {},
-    dataset_modify_status: false,
 }
 
 export const getColumnInfo = createAsyncThunk('/get-categorical-columns', async (formData) => {
     const response = await API.getColumnInfo(formData);
     return response.data;
 });
-
-export const getMetaData = createAsyncThunk('/get-metadata', async (formData) => {
-    const response = await API.getMetaData(formData);
-    return response.data;
-})
 
 export const dropByColValue = createAsyncThunk('/drop-by-column-value', async (formData) => {
     const response = await API.dropByColValue(formData);
@@ -84,24 +77,6 @@ const dataCleaningSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-
-        //* get metadata
-        .addCase(getMetaData.pending, (state, action) => {
-            state.requestStatus = REQUEST_STATUS_LOADING;
-            state.message = null;
-        })
-        .addCase(getMetaData.fulfilled, (state, action) => {
-            if (action.payload.status) {
-                state.requestStatus = REQUEST_STATUS_SUCCEEDED;
-                state.message = null;
-                state.metadata = action.payload.data.metadata;
-                state.dataset_modify_status = action.payload.data.metadata.is_copy && action.payload.data.metadata.is_copy_modified;
-            }
-        })
-        .addCase(getMetaData.rejected, (state, action) => {
-            state.requestStatus = REQUEST_STATUS_FAILED;
-            state.message = CUSTOM_ERROR_MESSAGE;
-        })
 
         //*  columns info
         .addCase( getColumnInfo.pending, (state, action) => {

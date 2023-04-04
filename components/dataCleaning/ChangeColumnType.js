@@ -30,7 +30,7 @@ import { CHANGE_COLUMN_TYPE_API_TASK_TYPE, COLUMN_TYPE_OPTIONS } from '/constant
 
 const ChangeColumnType = ({ setApiTaskType, changeColumnTypeQuery, setChangeColumnTypeQuery }) => {
     // REdux state
-    const dataCleaningState = useSelector((state) => state.dataCleaning);
+    const datasetUpdateState = useSelector((state) => state.datasetUpdate);
 
     const [column, setColumn] = useState('');
     const [columnType, setColumnType] = useState('');
@@ -59,7 +59,7 @@ const ChangeColumnType = ({ setApiTaskType, changeColumnTypeQuery, setChangeColu
                             fullWidth={true}
                             filterSelectedOptions={true}
                             id="combo-box-demo"
-                            options={dataCleaningState.metadata?.column_list}
+                            options={datasetUpdateState.metadata?.column_list}
                             size="small"
                             value={column}
                             onChange={(e, value, reason) => {
@@ -83,9 +83,9 @@ const ChangeColumnType = ({ setApiTaskType, changeColumnTypeQuery, setChangeColu
                             options={columnTypeOptions}
                             size="small"
                             value={
-                                (dataCleaningState.metadata?.categorical_column_list.includes(column)) 
+                                (datasetUpdateState.metadata?.categorical_column_list.includes(column)) 
                                 ? "Categorical" 
-                                : (dataCleaningState.metadata?.numerical_column_list.includes(column)) ? "Numerical" : ""
+                                : (datasetUpdateState.metadata?.numerical_column_list.includes(column)) ? "Numerical" : ""
                             }
                             // sx={{ width: "130px", padding: "0px" }}
                             onChange={(e, value, reason) => {

@@ -24,7 +24,7 @@ const SelectGraphType = ({setTabName, seletedTabName,}) => {
         <SelectGraphTypeItem value="scatter" name="Scatter Plot" ItemIcon={ScatterPlotIcon} setTabName={setTabName} seletedTabName={seletedTabName} columnType={NUMERICAL} nColumns={2} />
         <SelectGraphTypeItem value="bar" name="Bar Graph" ItemIcon={BarGraphIcon} setTabName={setTabName} seletedTabName={seletedTabName} columnType={CATEGORICAL} nColumns={1} />
         <SelectGraphTypeItem value="hist" name="Histogram" ItemIcon={HistogramIcon} setTabName={setTabName} seletedTabName={seletedTabName} columnType={NUMERICAL} nColumns={1} />
-        <SelectGraphTypeItem value="density" name="Desnity Plot" ItemIcon={DensityPlotIcon} setTabName={setTabName} seletedTabName={seletedTabName} columnType={NUMERICAL} nColumns={1} />
+        <SelectGraphTypeItem value="density" name="Density Plot" ItemIcon={DensityPlotIcon} setTabName={setTabName} seletedTabName={seletedTabName} columnType={NUMERICAL} nColumns={1} />
         <SelectGraphTypeItem value="hexbin" name="Hexbin Plot" ItemIcon={HexbinPlotIcon} setTabName={setTabName} seletedTabName={seletedTabName} columnType={NUMERICAL} nColumns={2} />
         <SelectGraphTypeItem value="pie" name="Pie Chart" ItemIcon={PieChartIcon} setTabName={setTabName} seletedTabName={seletedTabName} columnType={CATEGORICAL} nColumns={1} />
         <SelectGraphTypeItem value="box" name="Box Plot" ItemIcon={BoxPlotIcon} setTabName={setTabName} seletedTabName={seletedTabName} columnType={NUMERICAL} nColumns={1} />

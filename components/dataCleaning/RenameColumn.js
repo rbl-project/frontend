@@ -29,7 +29,7 @@ import { RENAME_COLUMN_API_TASK_TYPE } from "/constants/Constants";
 
 const RenameColumnSection = ({ setApiTaskType, renameColumnQuery, setRenameColumnQuery}) => {
     // REdux state
-    const dataCleaningState = useSelector((state) => state.dataCleaning);
+    const datasetUpdateState = useSelector((state) => state.datasetUpdate);
 
     // Local state
     const [column, setColumn] = useState('');
@@ -59,7 +59,7 @@ const RenameColumnSection = ({ setApiTaskType, renameColumnQuery, setRenameColum
                                 fullWidth={true}
                                 filterSelectedOptions={true}
                                 id="combo-box-demo"
-                                options={dataCleaningState.metadata?.column_list}
+                                options={datasetUpdateState.metadata?.column_list}
                                 size="small"
                                 value={column}
                                 onChange={(e, value, reason) => {

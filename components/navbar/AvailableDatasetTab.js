@@ -115,10 +115,6 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
     const handleDeleteDataset = async (dataset_name) => {
         setRequestCreatorId({ type: "delete", name: dataset_name });
         await dispatch(deleteDataset({ dataset_name: dataset_name }));
-        // If selected dataset is deleted , then redirect to dataset overview page
-        if (datasetState.selectedDataset === dataset_name) {
-            router.push(DATASET_OVERVIEW_PATH); 
-        }
         dispatch(getAllDatasets());
     }
 

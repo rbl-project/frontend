@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Autocomplete, Box, Paper, FormControl, Tooltip, ListItemText, TextField, Grid, Typography, Divider, CircularProgress } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 // Redux Actions
-import { getMissingValuePercentage } from "/store/missingValueImputationSlice";
+import { getMissingValuePercentage, resetRequestStatus } from '/store/missingValueImputationSlice';
 import { setOpenMenuItem } from "/store/globalStateSlice";
 
 // Components
 import ColumnCard from './ColumnCard';
 
 // Constants
-import { REQUEST_STATUS_LOADING, MISSING_VALUE_IMPUTATION } from "/constants/Constants";
+import { REQUEST_STATUS_LOADING, MISSING_VALUE_IMPUTATION, REQUEST_STATUS_FAILED, REQUEST_STATUS_SUCCEEDED } from "/constants/Constants";
 
 
 const ShowMissingValueMainSection = () => {
@@ -18,6 +19,7 @@ const ShowMissingValueMainSection = () => {
     // Redux State
     const dispatch = useDispatch();
     const missingValueImputationState = useSelector((state) => state.missingValueImputation);
+    const datasetUpdateState = useSelector((state) => state.datasetUpdate);
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     const selectedMenuItem = useSelector((state) => state.global.openMenuItem);
 
@@ -60,10 +62,51 @@ const ShowMissingValueMainSection = () => {
         }
     }, []);
 
+    // When Revert Changes or Save Changes isx clicked, call backend to get the updated data
+    useEffect(() => {
+        if (datasetUpdateState.revertChangesRequestStatus === REQUEST_STATUS_SUCCEEDED || datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_SUCCEEDED) {
+            dispatch(getMissingValuePercentage({ dataset_name: selectedDataset, get_all_columns: true, column_name: null }));
+        }
+    }, [datasetUpdateState.revertChangesRequestStatus, datasetUpdateState.saveChangesRequestStatus])
+
     // Get Missing Value Percentage for All Columns
     useEffect(() => {
         dispatch(getMissingValuePercentage({ dataset_name: selectedDataset, get_all_columns: true, column_name: null }));
     }, [selectedDataset]);
+
+    // toaster for dataCleaning state
+    useEffect(() => {
+        // In case of success
+        if (missingValueImputationState.impute_missing_value_req_status === REQUEST_STATUS_SUCCEEDED) {
+            toast.success(missingValueImputationState.message, {
+                position: "bottom-right",
+                autoClose: false,
+                hideProgressBar: false,
+                autoClose: 2000,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "light",
+            });
+            dispatch(resetRequestStatus());
+        }
+        // In case of failure
+        else if (missingValueImputationState.get_missing_value_percentage_req_status === REQUEST_STATUS_FAILED) {
+            toast.error(missingValueImputationState.message, {
+                position: "bottom-right",
+                autoClose: false,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "light",
+            });
+            dispatch(resetRequestStatus());
+        }
+
+
+    }, [missingValueImputationState.impute_missing_value_req_status,missingValueImputationState.get_missing_value_percentage_req_status])
+
 
     return (
         <Paper elevation={0}>
@@ -95,9 +138,9 @@ const ShowMissingValueMainSection = () => {
                                     onInputChange={handleSearchCoulmnInputChange}
                                     renderInput={(params) => <TextField sx={{}} {...params} label="Search Column" size="small" />}
                                     renderOption={(props, option) => (
-                                        < Tooltip title={option} placement="bottom-start" key={`tooltip-${option}`}>
-                                            <ListItemText key={option} {...props} primaryTypographyProps={{ sx: { overflow: "hidden", textOverflow: "ellipsis" } }} >{option}</ListItemText>
-                                        </Tooltip>
+                                        // < Tooltip title={option} placement="bottom-start" key={`tooltip-${option}`}>
+                                        <ListItemText key={option} {...props} primaryTypographyProps={{ sx: { overflow: "hidden", textOverflow: "ellipsis" } }} >{option}</ListItemText>
+                                        // </Tooltip>
                                     )}
                                 />
                             </FormControl>
@@ -118,7 +161,7 @@ const ShowMissingValueMainSection = () => {
                                 <Grid container spacing={3}>
                                     {columns.map((column) => (
                                         <Grid item xs={3} key={column.column_name}>
-                                            <ColumnCard columnName={column.column_name} allColumns={column.all_columns} missingValuePercentage={column.missing_value_percentage} correctValuePercentage={column.correct_value_percentage} />
+                                            <ColumnCard columnName={column.column_name} isDeleted={column.is_column_deleted} allColumns={column.all_columns} missingValuePercentage={column.missing_value_percentage} correctValuePercentage={column.correct_value_percentage} />
                                         </Grid>
                                     ))}
                                 </Grid>

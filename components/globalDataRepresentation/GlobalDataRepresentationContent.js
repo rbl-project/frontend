@@ -102,14 +102,23 @@ const GlobalDataRepresentationContent = (props) => {
         dispatch(globalDataRepresentation({
             dataset_name: selectedDataset
         }))
+    }, [props.reload])
+
+    // Fetch Dataset When Dataset is Updated
+    useEffect(() => {
+        if (datasetUpdateState.datasetModifyStatus === true) {
+            dispatch(globalDataRepresentation({
+                dataset_name: selectedDataset
+            }))
+        }
     }, [])
 
-    // Fetch Dataset When Reload True
+    // Fetch Dataset When DatasetUpdate.modifystatus is Updated
     useEffect(() => {
         dispatch(globalDataRepresentation({
             dataset_name: selectedDataset
         }))
-    }, [props.reload])
+    }, [datasetUpdateState.datasetModifyStatus])
 
     // Async Autocomplete
     const [inputValue, setInputValue] = useState('');
@@ -178,204 +187,208 @@ const GlobalDataRepresentationContent = (props) => {
 
     return (
         <>
-            <Box sx={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "start" }}>
-                
-            < Typography variant="body1" sx={{mr:1,fontWeight:500}} color="gray" >Filter Result: </Typography>
-                {/* Select Column Dropdown  */}
-                <Box sx={
-                    ((parseFloat(numericalToValue) < parseFloat(numericalFromValue)) && datasetUpdateState.currentDatasetView?.numerical_columns.includes(column))
-                        ? { width: "20vw", mr: 2, mt: "-23px" }
-                        : { width: "20vw", mr: 2 }
-                }>
-                    
-                    <FormControl fullWidth size="small">
-                        <Autocomplete
-                            disableClearable
-                            disableCloseOnSelect
-                            fullWidth={true}
-                            filterSelectedOptions={true}
-                            id="combo-box-demo"
-                            options={Object.keys(datasetUpdateState.currentDatasetView).length > 0 ? datasetUpdateState.currentDatasetView?.column_list : []}
-                            size="small"
-                            value={column}
-                            onChange={(e, value, reason) => {
-                                setColumn(value)
-                            }}
-                            renderInput={(params) => <TextField sx={{}} {...params} label="Column" />}
-                        />
-                    </FormControl>
-                </Box>
+            { 
+                datasetUpdateState.fetchDatasetStatus === REQUEST_STATUS_LOADING || false
+                    ? (<Box sx={{ width: "100%", height: "82vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                        <CircularProgress size="3rem" color='inherit' />
+                    </Box>)
+                    : (
+                        <>
+                            <Box sx={{ width: "100%", mt: 1, display: "flex", alignItems: "center", justifyContent: "start" }}>
 
-                {/* Select Value Dropdown  */}
-                {
-                    (column.length > 0 && datasetUpdateState.currentDatasetView.categorical_columns.includes(column)) ?
-                        (
-                            <Box sx={{ width: "20vw" }}>
-                                <FormControl fullWidth size="small">
-                                    <Autocomplete
-                                        multiple
-                                        disableClearable
-                                        fullWidth={true}
-                                        filterSelectedOptions={true}
-                                        id="combo-box-demo"
-                                        filterOptions={(x) => x}
-                                        options={options}
-                                        size="small"
-                                        value={columnValue}
-                                        // onChange={(e, value, reason) => setDropValue(value)}
-                                        onChange={(event, newValue) => {
-                                            setOptions(newValue ? [newValue, ...options] : options);
-                                            setColumnValue(newValue)
-                                        }}
-                                        onInputChange={(event, newInputValue) => {
-                                            setInputValue(newInputValue);
-                                        }}
-                                        renderInput={(params) => <TextField sx={{}} {...params} label="Value" />}
-                                    />
-                                </FormControl>
-                            </Box>
-                        )
-                        : (column.length > 0 && datasetUpdateState.currentDatasetView.numerical_columns.includes(column)) ?
-                            (
-                                <Box>
-                                    <FormControl fullWidth size="small" sx={{ flexDirection: 'row' }}>
-                                        <TextField
-                                            disabled={column.length != 0 ? false : true}
-                                            placeholder='From'
-                                            type="number"
-                                            size='small'
-                                            onChange={(e) => setNumericalFromValue(parseFloat(e.target.value))}
-                                            value={numericalFromValue} sx={{ mr: 2 }}
-                                        />
-                                        <TextField
-                                            disabled={column.length != 0 ? false : true}
-                                            placeholder='To'
-                                            type="number"
-                                            size='small'
-                                            onChange={(e) => setNumericalToValue(parseFloat(e.target.value))}
-                                            value={numericalToValue}
-                                            error={parseFloat(numericalToValue) < parseFloat(numericalFromValue)}
-                                            helperText={((parseFloat(numericalToValue) < parseFloat(numericalFromValue)) ? "To value must be greater than From" : "")}
+                                < Typography variant="body1" sx={{ mr: 1, fontWeight: 500 }} color="gray" >Filter Result: </Typography>
+                                {/* Select Column Dropdown  */}
+                                <Box sx={
+                                    ((parseFloat(numericalToValue) < parseFloat(numericalFromValue)) && datasetUpdateState.currentDatasetView?.numerical_columns.includes(column))
+                                        ? { width: "20vw", mr: 2, mt: "-23px" }
+                                        : { width: "20vw", mr: 2 }
+                                }>
+
+                                    <FormControl fullWidth size="small">
+                                        <Autocomplete
+                                            disableClearable
+                                            disableCloseOnSelect
+                                            fullWidth={true}
+                                            filterSelectedOptions={true}
+                                            id="combo-box-demo"
+                                            options={Object.keys(datasetUpdateState.currentDatasetView).length > 0 ? datasetUpdateState.currentDatasetView?.column_list : []}
+                                            size="small"
+                                            value={column}
+                                            onChange={(e, value, reason) => {
+                                                setColumn(value)
+                                            }}
+                                            renderInput={(params) => <TextField sx={{}} {...params} label="Column" />}
                                         />
                                     </FormControl>
                                 </Box>
-                            ) : null
-                }
-                <Box sx={
-                    ((parseFloat(numericalToValue) < parseFloat(numericalFromValue)) && datasetUpdateState.currentDatasetView?.numerical_columns.includes(column))
-                        ? { ml: "1rem", mt: "-23px" }
-                        : { ml: "1rem" }
-                }>
-                    <Button
-                        variant='outlined'
-                        disabled={(column.length != 0 && columnValue.length != 0) || (column.length != 0 && numericalFromValue != null && numericalToValue != null) ? false : true}
-                        onClick={handleParameterSubmit} >
-                        <FileDownloadDoneIcon />
-                    </Button>
-                </Box>
 
-            </Box>
-
-            <Box sx={{ mt: 2 }}>
-                {
-                    Object.keys(parameters['numerical_values']).map((col) => (
-                        <Stack
-                            key={col}
-                            direction="row"
-                            justifyContent="flex-start"
-                            alignItems="center"
-                            spacing={1}
-                            sx={{ padding: "1px", mt: 1 }}
-                        >
-                            <Typography variant="body2" sx={{ fontWeight: "bold", textAlign: 'start' }}>
-                                {col} :
-                            </Typography>
-                            <Item>
+                                {/* Select Value Dropdown  */}
                                 {
-                                    parameters['numerical_values'][col][0] == parameters['numerical_values'][col][1]
-                                        ? (<Chip label={`${parameters['numerical_values'][col][0]}`} onDelete={
-                                            async () => {
-                                                let temp = { ...parameters };
-                                                delete temp['numerical_values'][col];
-                                                setParameters(temp);
-                                                await fetchNewDatasetView();
-                                            }
-                                        } />)
-                                        : (<Chip label={`${parameters['numerical_values'][col][0]} - ${parameters['numerical_values'][col][1]}`} onDelete={
-                                            async () => {
-                                                let temp = { ...parameters };
-                                                delete temp['numerical_values'][col];
-                                                setParameters(temp);
-                                                await fetchNewDatasetView();
-                                            }
-                                        } />)
+                                    (column.length > 0 && datasetUpdateState.currentDatasetView.categorical_columns.includes(column)) ?
+                                        (
+                                            <Box sx={{ width: "20vw" }}>
+                                                <FormControl fullWidth size="small">
+                                                    <Autocomplete
+                                                        multiple
+                                                        disableClearable
+                                                        fullWidth={true}
+                                                        filterSelectedOptions={true}
+                                                        id="combo-box-demo"
+                                                        filterOptions={(x) => x}
+                                                        options={options}
+                                                        size="small"
+                                                        value={columnValue}
+                                                        // onChange={(e, value, reason) => setDropValue(value)}
+                                                        onChange={(event, newValue) => {
+                                                            setOptions(newValue ? [newValue, ...options] : options);
+                                                            setColumnValue(newValue)
+                                                        }}
+                                                        onInputChange={(event, newInputValue) => {
+                                                            setInputValue(newInputValue);
+                                                        }}
+                                                        renderInput={(params) => <TextField sx={{}} {...params} label="Value" />}
+                                                    />
+                                                </FormControl>
+                                            </Box>
+                                        )
+                                        : (column.length > 0 && datasetUpdateState.currentDatasetView.numerical_columns.includes(column)) ?
+                                            (
+                                                <Box>
+                                                    <FormControl fullWidth size="small" sx={{ flexDirection: 'row' }}>
+                                                        <TextField
+                                                            disabled={column.length != 0 ? false : true}
+                                                            placeholder='From'
+                                                            type="number"
+                                                            size='small'
+                                                            onChange={(e) => setNumericalFromValue(parseFloat(e.target.value))}
+                                                            value={numericalFromValue} sx={{ mr: 2 }}
+                                                        />
+                                                        <TextField
+                                                            disabled={column.length != 0 ? false : true}
+                                                            placeholder='To'
+                                                            type="number"
+                                                            size='small'
+                                                            onChange={(e) => setNumericalToValue(parseFloat(e.target.value))}
+                                                            value={numericalToValue}
+                                                            error={parseFloat(numericalToValue) < parseFloat(numericalFromValue)}
+                                                            helperText={((parseFloat(numericalToValue) < parseFloat(numericalFromValue)) ? "To value must be greater than From" : "")}
+                                                        />
+                                                    </FormControl>
+                                                </Box>
+                                            ) : null
                                 }
-                            </Item>
-                        </Stack>
-                    ))
-                }
+                                <Box sx={
+                                    ((parseFloat(numericalToValue) < parseFloat(numericalFromValue)) && datasetUpdateState.currentDatasetView?.numerical_columns.includes(column))
+                                        ? { ml: "1rem", mt: "-23px" }
+                                        : { ml: "1rem" }
+                                }>
+                                    <Button
+                                        variant='outlined'
+                                        disabled={(column.length != 0 && columnValue.length != 0) || (column.length != 0 && numericalFromValue != null && numericalToValue != null) ? false : true}
+                                        onClick={handleParameterSubmit} >
+                                        <FileDownloadDoneIcon />
+                                    </Button>
+                                </Box>
 
-                {
-                    Object.keys(parameters['categorical_values']).map((col) => (
-                        <Stack
-                            key={col}
-                            direction="row"
-                            justifyContent="flex-start"
-                            alignItems="center"
-                            spacing={1}
-                            sx={{ padding: "1px", mt: 1 }}
-                        >
-                            <Typography variant="body2" sx={{ fontWeight: "bold", textAlign: 'start' }}>
-                                {col} :
-                            </Typography>
-                            {
-                                parameters['categorical_values'][col].map((val) => {
-                                    return (
-                                        <Item key={val}>
-                                            <Chip
-                                                label={val}
-                                                onDelete={async () => {
-                                                    let temp = { ...parameters };
-                                                    temp['categorical_values'][col] = temp['categorical_values'][col].filter((item) => item !== val);
-                                                    setParameters(temp)
+                            </Box>
 
-                                                    if (parameters['categorical_values'][col].length == 0) {
-                                                        let temp_ = { ...parameters };
-                                                        delete temp_['categorical_values'][col];
-                                                        setParameters(temp_);
-                                                    }
-                                                    await fetchNewDatasetView();
+                            <Box sx={{ mt: 2 }}>
+                                {
+                                    Object.keys(parameters['numerical_values']).map((col) => (
+                                        <Stack
+                                            key={col}
+                                            direction="row"
+                                            justifyContent="flex-start"
+                                            alignItems="center"
+                                            spacing={1}
+                                            sx={{ padding: "1px", mt: 1 }}
+                                        >
+                                            <Typography variant="body2" sx={{ fontWeight: "bold", textAlign: 'start' }}>
+                                                {col} :
+                                            </Typography>
+                                            <Item>
+                                                {
+                                                    parameters['numerical_values'][col][0] == parameters['numerical_values'][col][1]
+                                                        ? (<Chip label={`${parameters['numerical_values'][col][0]}`} onDelete={
+                                                            async () => {
+                                                                let temp = { ...parameters };
+                                                                delete temp['numerical_values'][col];
+                                                                setParameters(temp);
+                                                                await fetchNewDatasetView();
+                                                            }
+                                                        } />)
+                                                        : (<Chip label={`${parameters['numerical_values'][col][0]} - ${parameters['numerical_values'][col][1]}`} onDelete={
+                                                            async () => {
+                                                                let temp = { ...parameters };
+                                                                delete temp['numerical_values'][col];
+                                                                setParameters(temp);
+                                                                await fetchNewDatasetView();
+                                                            }
+                                                        } />)
+                                                }
+                                            </Item>
+                                        </Stack>
+                                    ))
+                                }
 
-                                                }}
-                                            />
-                                        </Item>
-                                    )
-                                })
-                            }
-                        </Stack>
+                                {
+                                    Object.keys(parameters['categorical_values']).map((col) => (
+                                        <Stack
+                                            key={col}
+                                            direction="row"
+                                            justifyContent="flex-start"
+                                            alignItems="center"
+                                            spacing={1}
+                                            sx={{ padding: "1px", mt: 1 }}
+                                        >
+                                            <Typography variant="body2" sx={{ fontWeight: "bold", textAlign: 'start' }}>
+                                                {col} :
+                                            </Typography>
+                                            {
+                                                parameters['categorical_values'][col].map((val) => {
+                                                    return (
+                                                        <Item key={val}>
+                                                            <Chip
+                                                                label={val}
+                                                                onDelete={async () => {
+                                                                    let temp = { ...parameters };
+                                                                    temp['categorical_values'][col] = temp['categorical_values'][col].filter((item) => item !== val);
+                                                                    setParameters(temp)
 
-                    ))
-                }
+                                                                    if (parameters['categorical_values'][col].length == 0) {
+                                                                        let temp_ = { ...parameters };
+                                                                        delete temp_['categorical_values'][col];
+                                                                        setParameters(temp_);
+                                                                    }
+                                                                    await fetchNewDatasetView();
 
-            </Box>
+                                                                }}
+                                                            />
+                                                        </Item>
+                                                    )
+                                                })
+                                            }
+                                        </Stack>
 
-            <Box sx={{ minHeight: "65vh" }} >
-                {
-                    datasetUpdateState.fetchDatasetStatus === REQUEST_STATUS_LOADING
-                        ? <Box sx={{ width: "100%", height: "60vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                            <CircularProgress size="3rem" color='inherit' />
-                        </Box>
-                        :
-                        <ThemeProvider theme={getMuiTheme()}>
-                            <MUIDataTable
-                                data={datasetUpdateState.currentDatasetView?.result?.data}
-                                columns={datasetUpdateState.currentDatasetView?.result?.columns}
-                                options={mui_datatable_options}
-                            />
-                        </ThemeProvider>
-                }
+                                    ))
+                                }
 
-            </Box>
+                            </Box>
+
+                            <Box >
+
+                                <ThemeProvider theme={getMuiTheme()}>
+                                    <MUIDataTable
+                                        data={datasetUpdateState.currentDatasetView?.result?.data}
+                                        columns={datasetUpdateState.currentDatasetView?.result?.columns}
+                                        options={mui_datatable_options}
+                                    />
+                                </ThemeProvider>
+
+                            </Box>
+                        </>
+                    )
+            }
         </>
     );
 }

@@ -67,7 +67,7 @@ const datasetSlice = createSlice({
             .addCase(uploadDataset.pending, (state, action) => {
                 state.datasetUploadStatus = REQUEST_STATUS_LOADING;
             })
-            .addCase(uploadDataset.fulfilled, (state, action) => { // action.payload is the response.data
+            .addCase(uploadDataset.fulfilled, (state, action) => { // action.payload is the response.dat
                 if (action.payload.status) {
                     state.datasetUploadStatus = REQUEST_STATUS_SUCCEEDED;
                     state.message = "Dataset Uploaded Successfully";

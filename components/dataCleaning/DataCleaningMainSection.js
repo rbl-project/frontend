@@ -12,7 +12,8 @@ import {
     Tabs,
     Tab,
     CircularProgress,
-    Divider} from '@mui/material';
+    Divider
+} from '@mui/material';
 
 import { styled } from '@mui/material/styles';
 
@@ -25,7 +26,6 @@ import ChangeColumnType from './ChangeColumnType';
 import GlobalDataRepresentationContent from "/components/globalDataRepresentation/GlobalDataRepresentationContent";
 
 // icons
-import ReplayIcon from '@mui/icons-material/Replay';
 import DoneIcon from '@mui/icons-material/Done';
 
 // actions
@@ -38,14 +38,12 @@ import {
     dropByNumericalValue,
     dropByColName,
     dropByRowIndex,
-    getMetaData,
-    changeColumnType
+    changeColumnType,
+    resetRequestStatus
 } from "/store/dataCleaningSlice";
-
-import { saveChanges, revertChanges } from "/store/datasetUpdateSlice";
+import { getMetaData } from "/store/datasetUpdateSlice";
 import { setOpenMenuItem } from "/store/globalStateSlice";
-import { resetRequestStatus as resetDataCleaningRequestStatus } from "/store/dataCleaningSlice";
-import { resetRequestStatus as resetDatasetRequestStatus } from "/store/datasetUpdateSlice";
+
 
 // constant
 import {
@@ -99,7 +97,6 @@ const DataCleaningMainSection = () => {
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     const selectedMenuItem = useSelector((state) => state.global.openMenuItem);
     const dataCleaningState = useSelector((state) => state.dataCleaning);
-    const datasetUpdateState = useSelector((state) => state.datasetUpdate);
 
 
     const [apiTaskType, setApiTaskType] = useState("");
@@ -114,14 +111,6 @@ const DataCleaningMainSection = () => {
     const [changeColumnTypeQuery, setChangeColumnTypeQuery] = useState({})
 
     const [value, setValue] = useState(0);
-
-    // Calling backend APIs
-    useEffect(() => {
-        if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
-            // dispatch(getColumnInfo({ dataset_name: selectedDataset }));
-            dispatch(getMetaData({ dataset_name: selectedDataset }));
-        }
-    }, [selectedDataset])
 
     // Setting Open Menu Item When Page Loads or Refreshes
     useEffect(() => {
@@ -154,7 +143,7 @@ const DataCleaningMainSection = () => {
             setDropByRowIndexQuery({ "row_start": 0, "row_end": 0 });
             setChangeColumnTypeQuery({});
 
-            dispatch(resetDataCleaningRequestStatus());
+            dispatch(resetRequestStatus());
 
             if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
                 dispatch(getColumnInfo({ dataset_name: selectedDataset }));
@@ -170,43 +159,10 @@ const DataCleaningMainSection = () => {
                 draggable: false,
                 theme: "light",
             });
-            dispatch(resetDataCleaningRequestStatus());
+            dispatch(resetRequestStatus());
         }
     }, [dataCleaningState.message])
 
-    // toaster for dataset state
-    useEffect(() => {
-        if (datasetUpdateState.revertChangesRequestStatus === REQUEST_STATUS_SUCCEEDED || datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_SUCCEEDED) {
-            toast.success(datasetUpdateState.message, {
-                position: "bottom-right",
-                autoClose: false,
-                hideProgressBar: false,
-                autoClose: 2000,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                theme: "light",
-            });
-            setRenameColumnQuery({});
-            dispatch(resetDatasetRequestStatus());
-            if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
-                dispatch(getColumnInfo({ dataset_name: selectedDataset }));
-            }
-
-        } else if (datasetUpdateState.revertChangesRequestStatus === REQUEST_STATUS_FAILED || datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_FAILED) {
-            toast.error(datasetUpdateState.message, {
-                position: "bottom-right",
-                autoClose: false,
-                hideProgressBar: false,
-                autoClose: 2000,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                theme: "light",
-            });
-            dispatch(resetDatasetRequestStatus());
-        }
-    }, [datasetUpdateState.message])
 
     const applyDataChanges = () => {
 
@@ -265,16 +221,6 @@ const DataCleaningMainSection = () => {
         dispatch(getMetaData({ dataset_name: selectedDataset }));
     }
 
-    const saveDatasetChanges = async () => {
-        await dispatch(saveChanges({ dataset_name: selectedDataset }));
-        dispatch(getMetaData({ dataset_name: selectedDataset }));
-    }
-
-    const revertDatasetChanges = async () => {
-        await dispatch(revertChanges({ dataset_name: selectedDataset }));
-        dispatch(getMetaData({ dataset_name: selectedDataset }));
-    }
-
 
     return (
         <Box>
@@ -291,31 +237,6 @@ const DataCleaningMainSection = () => {
                                     <Tab label="Rename Columns" />
                                     <Tab label="Change Column Type" />
                                 </Tabs>
-                                <Box>
-                                    {/* Will be diabled if no changes are applied */}
-
-                                    <Button
-                                        variant='contained'
-                                        color='success'
-                                        sx={{ float: 'right', width: '10.1rem' }}
-                                        onClick={saveDatasetChanges}
-                                    >
-                                        {
-                                            datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_LOADING 
-                                                ? <CircularProgress size="1.5rem" sx={{ color: "white" }} />
-                                                : <Typography variant="subtitle2">
-                                                    Save Changes
-                                                    {
-                                                        (dataCleaningState.dataset_modify_status)
-                                                            ? <sup> &#x2a; </sup>
-                                                            : null
-                                                    }
-                                                    
-                                                </Typography>
-                                        }
-                                    </Button>
-
-                                </Box>
                             </Box>
 
                             {/* Tab Panels */}
@@ -374,26 +295,19 @@ const DataCleaningMainSection = () => {
                                             : <DoneIcon />
                                     }
                                 </Button>
-                                <Button variant="contained" color='error' sx={{ m: 1 }} onClick={revertDatasetChanges}>
-                                    {
-                                        datasetUpdateState.revertChangesRequestStatus === REQUEST_STATUS_LOADING
-                                            ? <CircularProgress size={24} sx={{ color: 'white' }} />
-                                            : <ReplayIcon />
-                                    }
-                                </Button>
                             </Box>
                         </Box>
 
                         <Divider sx={{ mt: 2 }} />
 
-                        <Typography variant="h6" gutterBottom sx={{textAlign: 'start', mt: 2, color: "black"}}>
+                        <Typography variant="h6" gutterBottom sx={{ textAlign: 'start', mt: 2, color: "black" }}>
                             Result
                         </Typography>
                         <GlobalDataRepresentationContent
                             currPage={0}
                             column={''}
                             columnValue={[]}
-                            reload={dataCleaningState.dataset_modify_status}
+                            reload={dataCleaningState.requestStatus === REQUEST_STATUS_FAILED || dataCleaningState.requestStatus === REQUEST_STATUS_SUCCEEDED}
                             numericalToValue={null}
                             numericalFromValue={null}
                             parameters={{

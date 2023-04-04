@@ -3,14 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // Material UI
 import {
-    Button,
+    Box,
     Dialog,
-    DialogActions,
+    Divider,
     DialogContent,
     DialogContentText,
     DialogTitle,
-    Fab,
-    Chip
+    Chip,
+    IconButton
 } from '@mui/material';
 
 
@@ -21,7 +21,7 @@ import { globalDataRepresentation } from '/store/datasetUpdateSlice';
 import { setOpenGlobalDataRepresentation } from '/store/globalStateSlice';
 
 // Icons
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import CloseIcon from '@mui/icons-material/Close';
 
 // constants
 
@@ -37,28 +37,18 @@ const GlobalDataRepresentationMainSection = () => {
 
     return (
         <>
-            {/* <Fab
-                variant="extended"
-                size="small"
-                color="primary"
-                sx={{
-                    position: "fixed",
-                    bottom: 20,
-                    left: 10,
-                    textTransform: "none",
-                    color: "white",
-                    zIndex: 10000
-                }}
-                onClick={handleModalOpen}
-            >
-                <RemoveRedEyeIcon fontSize="medium" />
-            </Fab> */}
-
             <Dialog
                 fullWidth={true}
                 maxWidth="xl"
                 scroll='paper'
                 open={openGlobalDataRepresentation}
+                PaperProps={{
+                    sx: {
+                        m:1,
+                        maxHeight:"92vh",
+                        overflowY:"hidden"
+                    }
+                }}
                 onClose={() => {
                     dispatch(setOpenGlobalDataRepresentation(false));
                     dispatch(globalDataRepresentation({
@@ -67,12 +57,28 @@ const GlobalDataRepresentationMainSection = () => {
                 }}
 
             >
-                <DialogTitle>
-                    Current Dataset View:
-                    <Chip label={selectedDataset} sx={{ ml: 1, fontSize: "1rem", padding: "0px 3px" }} />
+                <DialogTitle sx={{pt:1,pb:1}}>
+                    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                        <Box>
+                            Dataset View:
+                            <Chip label={selectedDataset} sx={{ ml: 1, fontSize: "1rem", padding: "0px 3px" }} />
+                        </Box>
+                        <Box>
+                            <IconButton
+                                onClick={() => {
+                                    dispatch(setOpenGlobalDataRepresentation(false))
+                                    dispatch(globalDataRepresentation({
+                                        dataset_name: selectedDataset
+                                    }))
+                                }}>
+                                <CloseIcon />
+                            </IconButton>
+                        </Box>
+                    </Box>
+                        {/* <Divider /> */}
                 </DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
+                <DialogContent sx={{maxHeight:"87vh"}}>
+                    {/* <DialogContentText> */}
                         <GlobalDataRepresentationContent
                             currPage={0}
                             column={''}
@@ -84,18 +90,8 @@ const GlobalDataRepresentationMainSection = () => {
                                 "numerical_values": {}
                             }}
                         />
-                    </DialogContentText>
+                    {/* </DialogContentText> */}
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => {
-                        dispatch(setOpenGlobalDataRepresentation(false))
-                        dispatch(globalDataRepresentation({
-                            dataset_name: selectedDataset
-                        }))
-                    }}>
-                        Close
-                    </Button>
-                </DialogActions>
             </Dialog>
         </>
     );
