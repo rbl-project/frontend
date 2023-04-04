@@ -307,7 +307,7 @@ const DataCleaningMainSection = () => {
                             currPage={0}
                             column={''}
                             columnValue={[]}
-                            reload={dataCleaningState.dataset_modify_status}
+                            reload={dataCleaningState.requestStatus === REQUEST_STATUS_FAILED || dataCleaningState.requestStatus === REQUEST_STATUS_SUCCEEDED}
                             numericalToValue={null}
                             numericalFromValue={null}
                             parameters={{

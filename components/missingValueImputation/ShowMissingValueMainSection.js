@@ -11,7 +11,7 @@ import { setOpenMenuItem } from "/store/globalStateSlice";
 import ColumnCard from './ColumnCard';
 
 // Constants
-import { REQUEST_STATUS_LOADING, MISSING_VALUE_IMPUTATION, REQUEST_STATUS_FAILED, REQUEST_STATUS_SUCCEEDED} from "/constants/Constants";
+import { REQUEST_STATUS_LOADING, MISSING_VALUE_IMPUTATION, REQUEST_STATUS_FAILED, REQUEST_STATUS_SUCCEEDED } from "/constants/Constants";
 
 
 const ShowMissingValueMainSection = () => {
@@ -65,7 +65,7 @@ const ShowMissingValueMainSection = () => {
     // When Revert Changes or Save Changes isx clicked, call backend to get the updated data
     useEffect(() => {
         if (datasetUpdateState.revertChangesRequestStatus === REQUEST_STATUS_SUCCEEDED || datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_SUCCEEDED) {
-            dispatch(getMissingValuePercentage({ dataset_name: selectedDataset, get_all_columns: false, column_name: null }));
+            dispatch(getMissingValuePercentage({ dataset_name: selectedDataset, get_all_columns: true, column_name: null }));
         }
     }, [datasetUpdateState.revertChangesRequestStatus, datasetUpdateState.saveChangesRequestStatus])
 
@@ -76,8 +76,22 @@ const ShowMissingValueMainSection = () => {
 
     // toaster for dataCleaning state
     useEffect(() => {
+        // In case of success
+        if (missingValueImputationState.impute_missing_value_req_status === REQUEST_STATUS_SUCCEEDED) {
+            toast.success(missingValueImputationState.message, {
+                position: "bottom-right",
+                autoClose: false,
+                hideProgressBar: false,
+                autoClose: 2000,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "light",
+            });
+            dispatch(resetRequestStatus());
+        }
         // In case of failure
-        if (missingValueImputationState.get_missing_value_percentage_req_status === REQUEST_STATUS_FAILED) {
+        else if (missingValueImputationState.get_missing_value_percentage_req_status === REQUEST_STATUS_FAILED) {
             toast.error(missingValueImputationState.message, {
                 position: "bottom-right",
                 autoClose: false,
@@ -87,11 +101,11 @@ const ShowMissingValueMainSection = () => {
                 draggable: false,
                 theme: "light",
             });
+            dispatch(resetRequestStatus());
         }
 
-        dispatch(resetRequestStatus());
 
-    }, [missingValueImputationState.get_missing_value_percentage_req_status])
+    }, [missingValueImputationState.impute_missing_value_req_status,missingValueImputationState.get_missing_value_percentage_req_status])
 
 
     return (

@@ -18,7 +18,7 @@ const initialState = {
     currentDatasetView: {},
     getMetadataRequestStatus: REQUEST_STATUS_IDLE,
     metadata: {},
-    dataset_modify_status: false,
+    datasetModifyStatus: false,
 }
 
 export const getMetaData = createAsyncThunk('/get-metadata', async (formData) => {
@@ -64,7 +64,7 @@ const datasetUpdateSlice = createSlice({
                 if (action.payload.status) {
                     state.metadata = action.payload.data.metadata;
                     state.message = null;
-                    state.dataset_modify_status = action.payload.data.metadata.is_copy && action.payload.data.metadata.is_copy_modified;
+                    state.datasetModifyStatus = action.payload.data.metadata.is_copy && action.payload.data.metadata.is_copy_modified;
                     state.getMetadataRequestStatus = REQUEST_STATUS_SUCCEEDED;
                 }
                 else {

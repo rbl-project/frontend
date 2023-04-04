@@ -70,8 +70,9 @@ const missingValueImputationSlice = createSlice({
             })
             .addCase(imputeMissingValue.fulfilled, (state, action) => { // action.payload is the response.data
                 if (action.payload.status) {
+                    console.log("action.payload", action.payload.data.msg);
                     state.impute_missing_value_req_status = REQUEST_STATUS_SUCCEEDED;
-                    state.message = action.payload.message;
+                    state.message = action.payload.data.msg;
                 } else {
                     state.impute_missing_value_req_status = REQUEST_STATUS_FAILED;
                     state.message = action.payload.error; // error sent by us from our backend

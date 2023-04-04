@@ -37,23 +37,6 @@ const GlobalDataRepresentationMainSection = () => {
 
     return (
         <>
-            {/* <Fab
-                variant="extended"
-                size="small"
-                color="primary"
-                sx={{
-                    position: "fixed",
-                    bottom: 20,
-                    left: 10,
-                    textTransform: "none",
-                    color: "white",
-                    zIndex: 10000
-                }}
-                onClick={handleModalOpen}
-            >
-                <RemoveRedEyeIcon fontSize="medium" />
-            </Fab> */}
-
             <Dialog
                 fullWidth={true}
                 maxWidth="xl"

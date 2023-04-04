@@ -73,8 +73,8 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
     if (missingValueImputationState.impute_missing_value_req_status !== REQUEST_STATUS_LOADING) {
       await dispatch(imputeMissingValue({ dataset_name: selectedDataset, column_name: columnName, imputation_method: ImputationMethod, imputation_value: CustomValue }));
       dispatch(getMetaData({ dataset_name: selectedDataset }));
-      // If Imputation Method is drop column and request is successful, redirect to missing value imputation page, As the column is dropped
-      if (ImputationMethod === "drop_column" && missingValueImputationState.impute_missing_value_req_status === REQUEST_STATUS_SUCCEEDED) {
+      // If Imputation Method is drop column, Redirect to Missing Value Imputation Page
+      if (ImputationMethod === "drop_column") {
         router.push(MISSING_VALUE_IMPUTATION_PATH);
       } else {
         dispatch(getMissingValuePercentage({ dataset_name: selectedDataset, get_all_columns: false, column_name: columnName }));
@@ -82,16 +82,16 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
     }
   }
 
-
+console.log("status",missingValueImputationState);
   // toaster for dataCleaning state
   useEffect(() => {
 
-    // redirect to missing value imputation page if column does not exist
+    // // redirect to missing value imputation page if column does not exist
     if (missingValueImputationState.get_missing_value_percentage_req_status === REQUEST_STATUS_FAILED) {
       router.push(MISSING_VALUE_IMPUTATION_PATH);
     }
     // In case of success
-    else if (missingValueImputationState.impute_missing_value_req_status === REQUEST_STATUS_SUCCEEDED && ImputationMethod !== "drop_column") {
+    if (missingValueImputationState.impute_missing_value_req_status === REQUEST_STATUS_SUCCEEDED && ImputationMethod !== "drop_column") {
       toast.success(missingValueImputationState.message, {
         position: "bottom-right",
         autoClose: false,
@@ -102,7 +102,6 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
         draggable: false,
         theme: "light",
       });
-
       dispatch(resetRequestStatus());
     }
 
@@ -117,7 +116,6 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
         draggable: false,
         theme: "light",
       });
-
       dispatch(resetRequestStatus());
     }
 
@@ -134,13 +132,15 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
   // When Revert Changes or Save Changes isx clicked, call backend to get the updated data
   useEffect(() => {
     if (datasetUpdateState.revertChangesRequestStatus === REQUEST_STATUS_SUCCEEDED || datasetUpdateState.saveChangesRequestStatus === REQUEST_STATUS_SUCCEEDED) {
-      dispatch(getMissingValuePercentage({ dataset_name: selectedDataset, get_all_columns: false, column_name: columnName }));
+      if(ImputationMethod !== "drop_column"){
+        dispatch(getMissingValuePercentage({ dataset_name: selectedDataset, get_all_columns: false, column_name: columnName }));
+      }
     }
   }, [datasetUpdateState.revertChangesRequestStatus, datasetUpdateState.saveChangesRequestStatus])
 
   // Calling backend APIs
   useEffect(() => {
-    if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
+    if (["", null, undefined].includes(selectedDataset) === false && ["", null, undefined,"undefined"].includes(columnName) === false) {
       dispatch(getMissingValuePercentage({ dataset_name: selectedDataset, get_all_columns: false, column_name: columnName }));
     }
   }, [selectedDataset, columnName])
@@ -266,7 +266,7 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
                 columnValue={[]}
                 numericalToValue={null}
                 numericalFromValue={null}
-                reload={missingValueImputationState.dataset_modify_status}
+                reload={missingValueImputationState.impute_missing_value_req_status === REQUEST_STATUS_SUCCEEDED || missingValueImputationState.impute_missing_value_req_status === REQUEST_STATUS_FAILED}
                 parameters={{
                   "categorical_values": {},
                   "numerical_values": {}

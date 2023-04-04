@@ -89,7 +89,7 @@ const Navbar = () => {
             });
         }
 
-        // dispatch(resetDatasetUpdateRequestStatus());
+        dispatch(resetDatasetUpdateRequestStatus());
 
     }, [datasetUpdateState.revertChangesRequestStatus, datasetUpdateState.saveChangesRequestStatus, datasetUpdateState.getMetadataRequestStatus])
 
@@ -130,7 +130,7 @@ const Navbar = () => {
                                         : <Typography variant="subtitle2">
                                             Save
                                             {
-                                                (datasetUpdateState.dataset_modify_status)
+                                                (datasetUpdateState.datasetModifyStatus)
                                                     ? <sup> &#x2a; </sup>
                                                     : null
                                             }
@@ -141,7 +141,7 @@ const Navbar = () => {
                     </Box>
                     <Box sx={{ mr: 1, width: "5.5rem" }}>
                         <Tooltip title="Once You Click on this Button, All the Changes will be Reverted Back to Original Dataset">
-                            <Button variant="outlined" fullwidth size="small" color="error" startIcon={<RevertIcon />} onClick={revertDatasetChanges}>Revert</Button>
+                            <Button variant="outlined" fullWidth size="small" color="error" startIcon={<RevertIcon />} onClick={revertDatasetChanges}>Revert</Button>
                         </Tooltip>
                     </Box>
                     < ProfileMenu />
