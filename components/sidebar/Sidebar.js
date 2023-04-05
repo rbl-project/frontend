@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
-import { List } from '@mui/material';
+import { List,Box } from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
 import { useSelector } from 'react-redux';
 
@@ -13,7 +13,6 @@ import TableChartIcon from '@mui/icons-material/TableChart';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 import MissingValueImputationIcon from '@mui/icons-material/Troubleshoot';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
-
 import GlobalDataRepresentationIcon from '@mui/icons-material/RemoveRedEye';
 
 // Components
@@ -43,19 +42,8 @@ import {
     DATA_DISCRETIZATION_PATH,
     DATASET_VIEW,
 } from '/constants/Constants';
-import { Box } from '@mui/system';
 
 const drawerWidth = DRAWER_WIDTH;
-
-
-// const DrawerHeader = styled('div')(({ theme }) => ({
-//     display: 'flex',
-//     alignItems: 'center',
-//     minHeight:"6vh",
-//     justifyContent: 'flex-end',
-//     padding: theme.spacing(0, 1),
-//     ...theme.mixins.toolbar,
-// }));
 
 
 const Sidebar = () => {
