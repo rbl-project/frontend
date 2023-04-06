@@ -22,6 +22,9 @@ import { REQUEST_STATUS_LOADING, DATA_DISCRETIZATION, REQUEST_STATUS_FAILED, REQ
 
 const DataDiscretizationMainSection = () => {
 
+    const columnMin = 10;
+    const columnMax = 100;
+
     // Redux State
     const dispatch = useDispatch();
     const datasetUpdateState = useSelector((state) => state.datasetUpdate);
@@ -33,20 +36,68 @@ const DataDiscretizationMainSection = () => {
     // Local State for Search Column SearchBar
     const [searchColumn, setSearchColumn] = useState(null);
 
+    // Local State for Default Category Input Field
+    const [defaultCategory, setDefaultCategory] = useState("Default");
+    // Local State for valid Input Fields
+    const [isValidInput, setIsValidInput] = useState(true);
+
     // Local State for Count of Range Input Fields
     const [rangeInputFieldsCount, setRangeInputFieldsCount] = useState(1);
-
     // Local State for Range Input Fields
-    const [rangeInputFields, setRangeInputFields] = useState([{ start: { value: 0, inclusive: true }, end: { value: 100, inclusive: true }, category: "Category 1" }]);
+    const [rangeInputFields, setRangeInputFields] = useState([{ start: { value: columnMin, inclusive: true }, end: { value: columnMax, inclusive: true }, categoryName: "Category 1" }]);
+    // Local State for All Start and End Values of Range Input Fields
+    const [rangeValues, setRangeValues] = useState({ [columnMin]: [true], [columnMax]: [true] }); // { value:[true-> Inclusive, false -> Exclusive], value: [true-> Inclusive, false -> Exclusive], ... }
 
 
     // Handle Add Range Input Field Button Click
     const handleAddRangeInputFields = () => {
+        const maxEnd = Math.max(...Object.keys(rangeValues));
+        setRangeValues((prevRangeValues) => {
+            const newRangeValues = { ...prevRangeValues };
+            newRangeValues[maxEnd].push(false);
+            if (newRangeValues[columnMax] === undefined) {
+                newRangeValues[columnMax] = [true]
+            }
+            else {
+                newRangeValues[columnMax].push(true);
+            }
+            return newRangeValues;
+        });
+        setRangeInputFields([...rangeInputFields, { start: { value: maxEnd, inclusive: false }, end: { value: columnMax, inclusive: true }, categoryName: `Category ${rangeInputFieldsCount + 1}` }]);
         setRangeInputFieldsCount(rangeInputFieldsCount + 1);
     };
 
     // Handle Remove Range Input Field Button Click
-    const handleRemoveRangeInputFields = () => {
+    const handleRemoveRangeInputFields = (index) => {
+        const rangeFieldToRemove = rangeInputFields[index];
+        setRangeValues((prevRangeValues) => {
+            const newRangeValues = { ...prevRangeValues };
+            // remove start value
+            const startValue = rangeFieldToRemove.start.value;
+            const startInclusiveStatus = rangeFieldToRemove.start.inclusive;
+            const startInclusiveIndex = newRangeValues[startValue].indexOf(startInclusiveStatus);
+            if (startInclusiveIndex > -1) {
+                newRangeValues[startValue].splice(startInclusiveIndex, 1);
+            }
+            if (newRangeValues[startValue].length === 0) {
+                delete newRangeValues[startValue];
+            }
+
+            // remove end value
+            const endValue = rangeFieldToRemove.end.value;
+            const endInclusiveStatus = rangeFieldToRemove.end.inclusive;
+            const endInclusiveIndex = newRangeValues[endValue].indexOf(endInclusiveStatus);
+            if (endInclusiveIndex > -1) {
+                newRangeValues[endValue].splice(endInclusiveIndex, 1);
+            }
+            if (newRangeValues[endValue].length === 0) {
+                delete newRangeValues[endValue];
+            }
+
+            return newRangeValues;
+        });
+
+        setRangeInputFields(rangeInputFields.filter((rangeInputField, i) => i !== index));
         setRangeInputFieldsCount(rangeInputFieldsCount - 1);
     };
 
@@ -118,12 +169,12 @@ const DataDiscretizationMainSection = () => {
 
                         {/* Min Value of Column */}
                         <Box sx={{ mr: 1, }}>
-                            <Chip label="Min: 10" color="info" variant="outlined" />
+                            <Chip label={`Min: ${columnMin}`} color="info" variant="outlined" />
                         </Box>
 
                         {/* Max Value of Column */}
                         <Box sx={{ mr: 7, }}>
-                            <Chip label="Max: 100" color="secondary" variant="outlined" />
+                            <Chip label={`Max: ${columnMax}`} color="secondary" variant="outlined" />
                         </Box>
 
                     </Box>
@@ -136,6 +187,8 @@ const DataDiscretizationMainSection = () => {
                                 id="outlined-adornment-default-category"
                                 type='text'
                                 sx={{ pr: 1 }}
+                                value={defaultCategory}
+                                onChange={(e) => setDefaultCategory(e.target.value)}
                                 endAdornment={
                                     <InputAdornment position="end">
                                         <Tooltip arrow title="This Will be taken as Category Name for those numbers which does not lie in given Ranges" placement="top">
@@ -150,11 +203,20 @@ const DataDiscretizationMainSection = () => {
 
 
                     {/* First Start, End and Category-Name Input Field Area*/}
-                    <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", mt: 2, }}>
-                        <RangeInputFields inputState={rangeInputFields[0]} />
+                    <Box sx={{ display: "flex", flexDirection: "row", alignItems: "flex-start", mt: 2, }}>
+                        <RangeInputFields
+                            index={0}
+                            min={columnMin}
+                            max={columnMax}
+                            inputState={rangeInputFields}
+                            setInputState={setRangeInputFields}
+                            rangeValues={rangeValues}
+                            setRangeValues={setRangeValues}
+                            setIsValidInput={setIsValidInput}
+                        />
                         {/* Add Button */}
                         <Box >
-                            <IconButton onClick={handleAddRangeInputFields}>
+                            <IconButton onClick={handleAddRangeInputFields} sx={{ p: "2px" }}>
                                 <AddIcon sx={{ fontSize: "2rem" }} color="success" />
                             </IconButton>
                         </Box>
@@ -163,15 +225,24 @@ const DataDiscretizationMainSection = () => {
                     {/* Loop on Range Input Fields */}
                     <>
                         {
-                            [...Array(rangeInputFieldsCount - 1)].map((idx) => {
+                            [...Array(rangeInputFieldsCount - 1)].map((e, idx) => {
                                 return (
                                     <>
                                         {/* Start, End and Category-Name Input Field Area*/}
-                                        < Box key={idx+1} sx={{ display: "flex", flexDirection: "row", alignItems: "center", mt: 1 }}>
-                                            <RangeInputFields inputState={rangeInputFields[idx+1]} />
+                                        < Box key={idx + 1} sx={{ display: "flex", flexDirection: "row", alignItems: "flex-start", mt: 1 }}>
+                                            <RangeInputFields
+                                                index={idx + 1}
+                                                min={columnMin}
+                                                max={columnMax}
+                                                inputState={rangeInputFields}
+                                                setInputState={setRangeInputFields}
+                                                rangeValues={rangeValues}
+                                                setRangeValues={setRangeValues}
+                                                setIsValidInput={setIsValidInput}
+                                            />
                                             {/* Add Button */}
                                             <Box >
-                                                <IconButton onClick={handleRemoveRangeInputFields}>
+                                                <IconButton onClick={() => { handleRemoveRangeInputFields(idx + 1) }} sx={{ p: "2px" }}>
                                                     <RemoveIcon sx={{ fontSize: "2rem" }} color="error" />
                                                 </IconButton>
                                             </Box>
@@ -183,10 +254,9 @@ const DataDiscretizationMainSection = () => {
                         }
                     </>
 
-
                     {/* Apply Changes Button */}
                     <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-                        <Button variant="contained" color="primary" sx={{ mr: 1 }} startIcon={<DoneIcon />}>Apply Changes</Button>
+                        <Button disabled={!isValidInput} variant="contained" color="primary" sx={{ mr: 1 }} startIcon={<DoneIcon />}>Apply Changes</Button>
                     </Box>
 
                     <Divider sx={{ my: 2 }} />
