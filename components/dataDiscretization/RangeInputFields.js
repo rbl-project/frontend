@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, FormControl, Tooltip, TextField, Checkbox, InputLabel, OutlinedInput, InputAdornment, FormHelperText } from '@mui/material';
 
 
-const RangeInputFields = ({ inputState, setInputState, index, rangeValues, min, max, setIsValidInput, setRangeValues }) => {
+const RangeInputFields = ({ inputState, setInputState, index, min, max, setIsValidInput }) => {
 
     // Local State for Start Field Error Status and Message
     const [startInputError, setStartInputError] = useState({ error: false, message: '' });
@@ -24,34 +24,35 @@ const RangeInputFields = ({ inputState, setInputState, index, rangeValues, min, 
         return isOutOfRange;
     }
 
-    // Check if number already exists in range
-    const isNumberAlreadyExists = (number) => {
-        let isExists = false;
-        const numberNotInRangeValues = rangeValues[number] === undefined;
+    // // Check if number already exists in range
+    // const isNumberAlreadyExists = (number) => {
+    //     let isExists = false;
+    //     const numberNotInRangeValues = inputState.reduce((acc, range) => {  // Check if number is not in range values
+    //         if (range.start.value === number || range.end.value === number) {
+    //             acc = false;
+    //         }
+    //         return acc;
+    //     }, true);
 
-        const numberIsNotStartNumber = inputState[index].start.value !== number;
-        const numberIsNotEndNumber = inputState[index].end.value !== number;
+    //     const numberIsNotStartNumber = inputState[index].start.value !== number;
+    //     const numberIsNotEndNumber = inputState[index].end.value !== number;
 
-        isExists = numberNotInRangeValues && numberIsNotStartNumber && numberIsNotEndNumber ? true : false;
-        return isExists;
-    }
+    //     isExists = numberNotInRangeValues && numberIsNotStartNumber && numberIsNotEndNumber ? true : false;
+    //     return isExists;
+    // }
 
     // check if number is in some range
     const isNumberInSomeRange = (number, inclusiveStatus) => {
         let isInSomeRange = false;
         inputState.map((range, i) => {
             // If number comes in some other range
-            if (range.start.value < number && range.end.value > number && i !== index) {
+            if (range.start.value <= number && range.end.value >= number && i !== index) { 
                 isInSomeRange = true;
+                if( !(number === range.end.value && inclusiveStatus === true && range.end.inclusive === true ) || (number === range.start.value && inclusiveStatus === true && range.start.inclusive === true)){
+                    isInSomeRange = false;
+                }
             }
-            // If number is equal to start number and start number is not inclusive
-            else if (range.start.value == number && range.start.inclusive === inclusiveStatus && i !== index) {
-                isInSomeRange = true;
-            }
-            // If number is equal to end number and end number is not inclusive
-            else if (range.end.value == number && range.end.inclusive === inclusiveStatus && i !== index) {
-                isInSomeRange = true;
-            }
+
         })
         return isInSomeRange;
     }
@@ -72,10 +73,10 @@ const RangeInputFields = ({ inputState, setInputState, index, rangeValues, min, 
             isValid = false;
             message = `Number should be between ${min} and ${max}`;
         }
-        else if (isNumberAlreadyExists(number.value)) {
-            isValid = false;
-            message = `Number already exists`;
-        }
+        // else if (isNumberAlreadyExists(number.value)) {
+        //     isValid = false;
+        //     message = `Number already exists`;
+        // }
         else if (inputState[index].start.value >= inputState[index].end.value) {
             isValid = false;
             message = `Start Number should be less than End Number`;
@@ -86,7 +87,7 @@ const RangeInputFields = ({ inputState, setInputState, index, rangeValues, min, 
         }
 
         setIsValidInput(isValid);
-        // console.log("validVState", inputState, rangeValues);
+        console.log("validVState", inputState,);
         return { error: !isValid, message: message, nanValue: nanValue };
     }
 
@@ -94,43 +95,12 @@ const RangeInputFields = ({ inputState, setInputState, index, rangeValues, min, 
     const handleStartChange = (e) => {
         const value = e.target.value;
         let validValue = 0;
-        // console.log("validValue", validValue, inputState[index].start.value);
+        console.log("validValue", validValue, inputState[index].start.value);
 
         if (isNotNumber(value)) {
             setStartInputError({ error: true, message: "Not a Valid Number" });
-            setRangeValues((prevState) => {
-                const newState = { ...prevState };
-                const prevValueList = newState[inputState[index].start.value] === undefined ? [] : newState[inputState[index].start.value];
-                const indexOfPrevValue = prevValueList.indexOf(inputState[index].start.inclusive);
-                prevValueList.splice(indexOfPrevValue, 1);
-                if (prevValueList.length === 0) {
-                    delete newState[inputState[index].start.value];
-                }
-                else {
-                    newState[inputState[index].start.value] = prevValueList;
-                }
-                return newState;
-            });
         } else {
             validValue = Number(value);
-            setRangeValues((prevState) => {
-                const newState = { ...prevState };
-                const prevValueList = newState[inputState[index].start.value] === undefined ? [] : newState[inputState[index].start.value];
-                const prevStateValidValueList = newState[validValue] === undefined ? [] : newState[validValue];
-
-                // If number has two occurences in rangeValues
-                if (prevValueList.length > 1) {
-                    const indexOfPrevValue = prevValueList.indexOf(inputState[index].start.inclusive);
-                    prevValueList.splice(indexOfPrevValue, 1);
-                }
-                else {
-                    delete newState[inputState[index].start.value];
-                }
-
-                prevStateValidValueList.push(inputState[index].start.inclusive);
-                newState[validValue] = prevStateValidValueList;
-                return newState;
-            });
         }
         setInputState((prevState) => {
             const newState = [...prevState];
@@ -148,59 +118,21 @@ const RangeInputFields = ({ inputState, setInputState, index, rangeValues, min, 
             newState[index].start.inclusive = value;
             return newState;
         });
-        setRangeValues((prevState) => {
-            const newState = { ...prevState };
-            const prevValue = newState[inputState[index].start.value];
-            const indexOfPrevOppositeValue = prevValue.indexOf(!value);
-            prevValue[indexOfPrevOppositeValue] = value;
-            return newState;
-        });
     };
 
     // Chnage handler for End input field
     const handleEndChange = (e) => {
         const value = e.target.value;
         let validValue = 0;
-        // console.log("validValue", validValue, inputState[index].end.value);
+        console.log("validValue", validValue, inputState[index].end.value);
 
         if (isNotNumber(value)) {
             setStartInputError({ error: true, message: "Not a Valid Number" });
-            setRangeValues((prevState) => {
-                const newState = { ...prevState };
-                const prevValueList = newState[inputState[index].end.value] === undefined ? [] : newState[inputState[index].end.value];
-                const indexOfPrevValue = prevValueList.indexOf(inputState[index].end.inclusive);
-                prevValueList.splice(indexOfPrevValue, 1);
-                if (prevValueList.length === 0) {
-                    delete newState[inputState[index].end.value];
-                }
-                else {
-                    newState[inputState[index].end.value] = prevValueList;
-                }
-                return newState;
-            });   
         }
         else {
-
             validValue = Number(value);
-
-            setRangeValues((prevState) => {
-                const newState = { ...prevState };
-                const prevValueList = newState[inputState[index].end.value] === undefined ? [] : newState[inputState[index].end.value];
-                const prevStateValidValueList = newState[validValue] === undefined ? [] : newState[validValue];
-
-                // If number has two occurences in rangeValues
-                if (prevValueList.length > 1) {
-                    const indexOfPrevValue = prevValueList.indexOf(inputState[index].end.inclusive);
-                    prevValueList.splice(indexOfPrevValue, 1);
-                }
-                else {
-                    delete newState[inputState[index].end.value];
-                }
-                prevStateValidValueList.push(inputState[index].end.inclusive);
-                newState[validValue] = prevStateValidValueList;
-                return newState;
-            });
         }
+
         setInputState((prevState) => {
             const newState = [...prevState];
             newState[index].end.value = validValue;
@@ -214,13 +146,6 @@ const RangeInputFields = ({ inputState, setInputState, index, rangeValues, min, 
         setInputState((prevState) => {
             const newState = [...prevState];
             newState[index].end.inclusive = value;
-            return newState;
-        });
-        setRangeValues((prevState) => {
-            const newState = { ...prevState };
-            const prevValue = newState[inputState[index].end.value];
-            const indexOfPrevOppositeValue = prevValue.indexOf(!value);
-            prevValue[indexOfPrevOppositeValue] = value;
             return newState;
         });
     };

@@ -45,24 +45,10 @@ const DataDiscretizationMainSection = () => {
     const [rangeInputFieldsCount, setRangeInputFieldsCount] = useState(1);
     // Local State for Range Input Fields
     const [rangeInputFields, setRangeInputFields] = useState([{ start: { value: columnMin, inclusive: true }, end: { value: columnMax, inclusive: true }, categoryName: "Category 1" }]);
-    // Local State for All Start and End Values of Range Input Fields
-    const [rangeValues, setRangeValues] = useState({ [columnMin]: [true], [columnMax]: [true] }); // { value:[true-> Inclusive, false -> Exclusive], value: [true-> Inclusive, false -> Exclusive], ... }
-
 
     // Handle Add Range Input Field Button Click
     const handleAddRangeInputFields = () => {
-        const maxEnd = Math.max(...Object.keys(rangeValues));
-        setRangeValues((prevRangeValues) => {
-            const newRangeValues = { ...prevRangeValues };
-            newRangeValues[maxEnd].push(false);
-            if (newRangeValues[columnMax] === undefined) {
-                newRangeValues[columnMax] = [true]
-            }
-            else {
-                newRangeValues[columnMax].push(true);
-            }
-            return newRangeValues;
-        });
+        const maxEnd = Math.max(...rangeInputFields.map((rangeInputField) => rangeInputField.end.value));
         setRangeInputFields([...rangeInputFields, { start: { value: maxEnd, inclusive: false }, end: { value: columnMax, inclusive: true }, categoryName: `Category ${rangeInputFieldsCount + 1}` }]);
         setRangeInputFieldsCount(rangeInputFieldsCount + 1);
     };
@@ -70,33 +56,6 @@ const DataDiscretizationMainSection = () => {
     // Handle Remove Range Input Field Button Click
     const handleRemoveRangeInputFields = (index) => {
         const rangeFieldToRemove = rangeInputFields[index];
-        setRangeValues((prevRangeValues) => {
-            const newRangeValues = { ...prevRangeValues };
-            // remove start value
-            const startValue = rangeFieldToRemove.start.value;
-            const startInclusiveStatus = rangeFieldToRemove.start.inclusive;
-            const startInclusiveIndex = newRangeValues[startValue].indexOf(startInclusiveStatus);
-            if (startInclusiveIndex > -1) {
-                newRangeValues[startValue].splice(startInclusiveIndex, 1);
-            }
-            if (newRangeValues[startValue].length === 0) {
-                delete newRangeValues[startValue];
-            }
-
-            // remove end value
-            const endValue = rangeFieldToRemove.end.value;
-            const endInclusiveStatus = rangeFieldToRemove.end.inclusive;
-            const endInclusiveIndex = newRangeValues[endValue].indexOf(endInclusiveStatus);
-            if (endInclusiveIndex > -1) {
-                newRangeValues[endValue].splice(endInclusiveIndex, 1);
-            }
-            if (newRangeValues[endValue].length === 0) {
-                delete newRangeValues[endValue];
-            }
-
-            return newRangeValues;
-        });
-
         setRangeInputFields(rangeInputFields.filter((rangeInputField, i) => i !== index));
         setRangeInputFieldsCount(rangeInputFieldsCount - 1);
     };
@@ -210,8 +169,6 @@ const DataDiscretizationMainSection = () => {
                             max={columnMax}
                             inputState={rangeInputFields}
                             setInputState={setRangeInputFields}
-                            rangeValues={rangeValues}
-                            setRangeValues={setRangeValues}
                             setIsValidInput={setIsValidInput}
                         />
                         {/* Add Button */}
@@ -236,8 +193,6 @@ const DataDiscretizationMainSection = () => {
                                                 max={columnMax}
                                                 inputState={rangeInputFields}
                                                 setInputState={setRangeInputFields}
-                                                rangeValues={rangeValues}
-                                                setRangeValues={setRangeValues}
                                                 setIsValidInput={setIsValidInput}
                                             />
                                             {/* Add Button */}
