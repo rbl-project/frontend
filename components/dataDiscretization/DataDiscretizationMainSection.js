@@ -1,29 +1,48 @@
 import React, { useState, useEffect } from 'react';
-import { Autocomplete, Box, Paper, FormControl, Tooltip, ListItemText, TextField, Grid, Chip, Typography, Divider, IconButton, InputLabel, OutlinedInput, InputAdornment, CircularProgress, Checkbox, Button } from '@mui/material';
+import { Autocomplete, Box, Paper, FormControl, Tooltip, ListItemText, TextField, Typography, Divider, CircularProgress, Select, MenuItem, InputLabel } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 // Components
-import RangeInputFields from './RangeInputFields';
+import CustomDiscretizationInputs from './CustomDiscretizationInputs';
+import DiscretizationInputs from './DiscretizationInputs';
+import ColumnDescriptionPopover from './ColumnDescriptionPopover';
 import GlobalDataRepresentationContent from "/components/globalDataRepresentation/GlobalDataRepresentationContent";
 
 // Redux Actions
 import { setOpenMenuItem } from "/store/globalStateSlice";
 
-// Icons
-import AddIcon from '@mui/icons-material/AddCircle';
-import RemoveIcon from '@mui/icons-material/RemoveCircle';
-import InfoIcon from '@mui/icons-material/Info';
-import DoneIcon from '@mui/icons-material/Done';
+
 
 // Constants
 import { REQUEST_STATUS_LOADING, DATA_DISCRETIZATION, REQUEST_STATUS_FAILED, REQUEST_STATUS_SUCCEEDED } from "/constants/Constants";
+
+const TabPanel = ({ children, value, index, ...other }) => {
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+            height="100%"
+        >
+            {value === index && (
+                <Box sx={{ pt: 1, height: "100%" }}>
+                    {children}
+                </Box>
+            )}
+        </div>
+    );
+}
 
 
 const DataDiscretizationMainSection = () => {
 
     const columnMin = 10;
     const columnMax = 100;
+    const nRows = 20;
 
     // Redux State
     const dispatch = useDispatch();
@@ -35,34 +54,22 @@ const DataDiscretizationMainSection = () => {
     const [columns, setColumns] = useState([]);
     // Local State for Search Column SearchBar
     const [searchColumn, setSearchColumn] = useState(null);
+    // Local State to Check if Column is Selected
+    const [isColumnSelected, setIsColumnSelected] = useState(false);
+    // Local State for Strategy
+    const [strategy, setStrategy] = useState("uniform");
 
-    // Local State for Default Category Input Field
-    const [defaultCategory, setDefaultCategory] = useState("Default");
-    // Local State for valid Input Fields
-    const [isValidInput, setIsValidInput] = useState(true);
-
-    // Local State for Count of Range Input Fields
-    const [rangeInputFieldsCount, setRangeInputFieldsCount] = useState(1);
-    // Local State for Range Input Fields
-    const [rangeInputFields, setRangeInputFields] = useState([{ start: { value: columnMin, inclusive: true }, end: { value: columnMax, inclusive: true }, categoryName: "Category 1" }]);
-
-    // Handle Add Range Input Field Button Click
-    const handleAddRangeInputFields = () => {
-        const maxEnd = Math.max(...rangeInputFields.map((rangeInputField) => rangeInputField.end.value));
-        setRangeInputFields([...rangeInputFields, { start: { value: maxEnd, inclusive: false }, end: { value: columnMax, inclusive: true }, categoryName: `Category ${rangeInputFieldsCount + 1}` }]);
-        setRangeInputFieldsCount(rangeInputFieldsCount + 1);
-    };
-
-    // Handle Remove Range Input Field Button Click
-    const handleRemoveRangeInputFields = (index) => {
-        const rangeFieldToRemove = rangeInputFields[index];
-        setRangeInputFields(rangeInputFields.filter((rangeInputField, i) => i !== index));
-        setRangeInputFieldsCount(rangeInputFieldsCount - 1);
-    };
 
     // Handle Search Column SearchBar Selection or Deselection
     const handleSearchCoulmnChange = (event, newValue, reason) => {
         setSearchColumn(newValue);
+        if(newValue !== null && newValue !== undefined && newValue !== ""){
+            setIsColumnSelected(true);
+        }
+        else{
+            setIsColumnSelected(false);
+        }
+    
         // If Clear Button is Clicked
         if (reason === "clear") {
             setColumns(datasetUpdateState.metadata?.numerical_column_list);
@@ -71,6 +78,11 @@ const DataDiscretizationMainSection = () => {
         else {
             setColumns(datasetUpdateState.metadata?.numerical_column_list?.filter((column) => column === newValue));
         }
+    };
+
+    // Handle Strategy Selection
+    const handleStrategyChange = (event) => {
+        setStrategy(event.target.value);
     };
 
     // Set Local State when Metadata is Fetched
@@ -94,151 +106,98 @@ const DataDiscretizationMainSection = () => {
                     <Divider sx={{ my: 1 }} />
                 </Box>
 
-                { /* Loading State */}
-                {/* {missingValueImputationState.get_missing_value_percentage_req_status === REQUEST_STATUS_LOADING ? (
-                    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
-                        < CircularProgress size="3rem" color="inherit" />
-                    </Box>
-                ) : ( */}
-                <>
 
-                    {/* Select Column to Discretize, Min and Max Values of the Column */}
-                    < Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", mt: 1, mb: 2, }}>
+                {/* Select Column to Discretize, Strategy of Discretization, Column Description Icon */}
+                < Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", mt: 1, mb: 2, }}>
 
-                        {/* Select Column Dropdown */}
-                        < Box sx={{ width: "20%", mr: 2 }}>
-                            <FormControl fullWidth size="small">
-                                <Autocomplete
-                                    fullWidth={true}
-                                    filterSelectedOptions={true}
-                                    id="combo-box-demo"
-                                    options={columns}
-                                    size="small"
-                                    value={searchColumn}
-                                    onChange={handleSearchCoulmnChange}
-                                    renderInput={(params) => <TextField sx={{}} {...params} label="Select Column" size="small" />}
-                                    renderOption={(props, option) => (
-                                        // < Tooltip title={option} placement="bottom-start" key={`tooltip-${option}`}>
-                                        <ListItemText key={option} {...props} primaryTypographyProps={{ sx: { overflow: "hidden", textOverflow: "ellipsis" } }} >{option}</ListItemText>
-                                        // </Tooltip>
-                                    )}
-                                />
-                            </FormControl>
-                        </Box>
-
-                        {/* Min Value of Column */}
-                        <Box sx={{ mr: 1, }}>
-                            <Chip label={`Min: ${columnMin}`} color="info" variant="outlined" />
-                        </Box>
-
-                        {/* Max Value of Column */}
-                        <Box sx={{ mr: 7, }}>
-                            <Chip label={`Max: ${columnMax}`} color="secondary" variant="outlined" />
-                        </Box>
-
-                    </Box>
-
-                    {/* Default Category Input Field  */}
-                    <Box sx={{ width: "20%", mt: 2 }}>
+                    {/* Select Column Dropdown */}
+                    < Box sx={{ width: "20%", mr: 2 }}>
                         <FormControl fullWidth size="small">
-                            <InputLabel htmlFor="outlined-adornment-default-category">Default Category</InputLabel>
-                            <OutlinedInput
-                                id="outlined-adornment-default-category"
-                                type='text'
-                                sx={{ pr: 1 }}
-                                value={defaultCategory}
-                                onChange={(e) => setDefaultCategory(e.target.value)}
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <Tooltip arrow title="This Will be taken as Category Name for those numbers which does not lie in given Ranges" placement="top">
-                                            < InfoIcon />
-                                        </Tooltip>
-                                    </InputAdornment>
-                                }
-                                label="Default Category"
+                            <Autocomplete
+                                fullWidth={true}
+                                filterSelectedOptions={true}
+                                id="combo-box-demo"
+                                options={columns}
+                                size="small"
+                                value={searchColumn}
+                                onChange={handleSearchCoulmnChange}
+                                renderInput={(params) => <TextField required sx={{}} {...params} label="Select Column" size="small" />}
+                                renderOption={(props, option) => (
+                                    // < Tooltip title={option} placement="bottom-start" key={`tooltip-${option}`}>
+                                    <ListItemText key={option} {...props} primaryTypographyProps={{ sx: { overflow: "hidden", textOverflow: "ellipsis" } }} >{option}</ListItemText>
+                                    // </Tooltip>
+                                )}
                             />
                         </FormControl>
                     </Box>
 
-
-                    {/* First Start, End and Category-Name Input Field Area*/}
-                    <Box sx={{ display: "flex", flexDirection: "row", alignItems: "flex-start", mt: 2, }}>
-                        <RangeInputFields
-                            index={0}
-                            min={columnMin}
-                            max={columnMax}
-                            inputState={rangeInputFields}
-                            setInputState={setRangeInputFields}
-                            setIsValidInput={setIsValidInput}
-                        />
-                        {/* Add Button */}
-                        <Box >
-                            <IconButton onClick={handleAddRangeInputFields} sx={{ p: "2px" }}>
-                                <AddIcon sx={{ fontSize: "2rem" }} color="success" />
-                            </IconButton>
-                        </Box>
+                    {/* Select Startegy Dropdown */}
+                    <Box sx={{ width: "20%", mr: 2 }}>
+                        <FormControl fullWidth size="small">
+                            < InputLabel id="demo-simple-select-label-startegy">Strategy</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label-strategy"
+                                id="demo-simple-select"
+                                value={strategy}
+                                label="Strategy"
+                                onChange={handleStrategyChange}
+                            >
+                                <MenuItem value={"uniform"}>Equal Width</MenuItem>
+                                <MenuItem value={"quantile"}>Equal Frequency</MenuItem>
+                                <MenuItem value={"kmeans"}>K-Means</MenuItem>
+                                <MenuItem value={"custom"}>Custom</MenuItem>
+                            </Select>
+                        </FormControl>
                     </Box>
 
-                    {/* Loop on Range Input Fields */}
-                    <>
-                        {
-                            [...Array(rangeInputFieldsCount - 1)].map((e, idx) => {
-                                return (
-                                    <>
-                                        {/* Start, End and Category-Name Input Field Area*/}
-                                        < Box key={idx + 1} sx={{ display: "flex", flexDirection: "row", alignItems: "flex-start", mt: 1 }}>
-                                            <RangeInputFields
-                                                index={idx + 1}
-                                                min={columnMin}
-                                                max={columnMax}
-                                                inputState={rangeInputFields}
-                                                setInputState={setRangeInputFields}
-                                                setIsValidInput={setIsValidInput}
-                                            />
-                                            {/* Add Button */}
-                                            <Box >
-                                                <IconButton onClick={() => { handleRemoveRangeInputFields(idx + 1) }} sx={{ p: "2px" }}>
-                                                    <RemoveIcon sx={{ fontSize: "2rem" }} color="error" />
-                                                </IconButton>
-                                            </Box>
-                                        </Box >
-                                    </>
-                                )
-                            })
-
-                        }
-                    </>
-
-                    {/* Apply Changes Button */}
-                    <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-                        <Button disabled={!isValidInput} variant="contained" color="primary" sx={{ mr: 1 }} startIcon={<DoneIcon />}>Apply Changes</Button>
+                    {/* Column Description Icon */}
+                    <Box>
+                        < ColumnDescriptionPopover />
                     </Box>
 
-                    <Divider sx={{ my: 2 }} />
+                </Box>
 
-                    {/* Result Component  */}
-                    <Box >
-                        <Typography variant="h6" gutterBottom sx={{ textAlign: 'start', color: "black" }}>
-                            Result
-                        </Typography>
-                        <GlobalDataRepresentationContent
-                            currPage={0}
-                            column={''}
-                            columnValue={[]}
-                            numericalToValue={null}
-                            numericalFromValue={null}
-                            reload={false}
-                            parameters={{
-                                "categorical_values": {},
-                                "numerical_values": {}
-                            }}
-                        />
-                    </Box>
-                </>
+
+                {/* Discretization Inputs  */}
+                <Box>
+                    <TabPanel value={strategy} index={"uniform"}>
+                        <DiscretizationInputs strategy={strategy} nRows={nRows} columnName={searchColumn} isColumnSelected={isColumnSelected} />
+                    </TabPanel>
+                    <TabPanel value={strategy} index={"quantile"}>
+                        <DiscretizationInputs strategy={strategy} nRows={nRows} columnName={searchColumn} isColumnSelected={isColumnSelected} />
+                    </TabPanel>
+                    <TabPanel value={strategy} index={"kmeans"}>
+                        <DiscretizationInputs strategy={strategy} nRows={nRows} columnName={searchColumn} isColumnSelected={isColumnSelected} />
+                    </TabPanel>
+                    < TabPanel value={strategy} index={"custom"}>
+                        <CustomDiscretizationInputs strategy={strategy} columnMin={columnMin} columnMax={columnMax} columnName={searchColumn} isColumnSelected={isColumnSelected} />
+                    </TabPanel>
+                </Box>
+
+                <Divider sx={{ my: 2 }} />
+
+                {/* Result Component  */}
+                <Box >
+                    <Typography variant="h6" gutterBottom sx={{ textAlign: 'start', color: "black" }}>
+                        Result
+                    </Typography>
+                    <GlobalDataRepresentationContent
+                        currPage={0}
+                        column={''}
+                        columnValue={[]}
+                        numericalToValue={null}
+                        numericalFromValue={null}
+                        reload={false}
+                        parameters={{
+                            "categorical_values": {},
+                            "numerical_values": {}
+                        }}
+                    />
+                </Box>
                 {/* )} */}
             </Box>
         </Paper >
     )
 }
 
-export default DataDiscretizationMainSection
+export default DataDiscretizationMainSection;

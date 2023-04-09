@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, FormControl, Tooltip, TextField, Checkbox, InputLabel, OutlinedInput, InputAdornment, FormHelperText } from '@mui/material';
 
 
-const RangeInputFields = ({ inputState, setInputState, index, min, max, setIsValidInput }) => {
+const RangeInputFields = ({ inputState, setInputState, index, min, max, setIsValidInput}) => {
 
     // Local State for Start Field Error Status and Message
     const [startInputError, setStartInputError] = useState({ error: false, message: '' });
@@ -24,23 +24,6 @@ const RangeInputFields = ({ inputState, setInputState, index, min, max, setIsVal
         return isOutOfRange;
     }
 
-    // // Check if number already exists in range
-    // const isNumberAlreadyExists = (number) => {
-    //     let isExists = false;
-    //     const numberNotInRangeValues = inputState.reduce((acc, range) => {  // Check if number is not in range values
-    //         if (range.start.value === number || range.end.value === number) {
-    //             acc = false;
-    //         }
-    //         return acc;
-    //     }, true);
-
-    //     const numberIsNotStartNumber = inputState[index].start.value !== number;
-    //     const numberIsNotEndNumber = inputState[index].end.value !== number;
-
-    //     isExists = numberNotInRangeValues && numberIsNotStartNumber && numberIsNotEndNumber ? true : false;
-    //     return isExists;
-    // }
-
     // check if number is in some range
     const isNumberInSomeRange = (number, inclusiveStatus) => {
         let isInSomeRange = false;
@@ -48,7 +31,7 @@ const RangeInputFields = ({ inputState, setInputState, index, min, max, setIsVal
             // If number comes in some other range
             if (range.start.value <= number && range.end.value >= number && i !== index) { 
                 isInSomeRange = true;
-                if( !(number === range.end.value && inclusiveStatus === true && range.end.inclusive === true ) || (number === range.start.value && inclusiveStatus === true && range.start.inclusive === true)){
+                if( !((number === range.end.value && inclusiveStatus === true && range.end.inclusive === true ) || (number === range.start.value && inclusiveStatus === true && range.start.inclusive === true))){
                     isInSomeRange = false;
                 }
             }
@@ -73,10 +56,6 @@ const RangeInputFields = ({ inputState, setInputState, index, min, max, setIsVal
             isValid = false;
             message = `Number should be between ${min} and ${max}`;
         }
-        // else if (isNumberAlreadyExists(number.value)) {
-        //     isValid = false;
-        //     message = `Number already exists`;
-        // }
         else if (inputState[index].start.value >= inputState[index].end.value) {
             isValid = false;
             message = `Start Number should be less than End Number`;
@@ -87,7 +66,6 @@ const RangeInputFields = ({ inputState, setInputState, index, min, max, setIsVal
         }
 
         setIsValidInput(isValid);
-        console.log("validVState", inputState,);
         return { error: !isValid, message: message, nanValue: nanValue };
     }
 
@@ -95,7 +73,6 @@ const RangeInputFields = ({ inputState, setInputState, index, min, max, setIsVal
     const handleStartChange = (e) => {
         const value = e.target.value;
         let validValue = 0;
-        console.log("validValue", validValue, inputState[index].start.value);
 
         if (isNotNumber(value)) {
             setStartInputError({ error: true, message: "Not a Valid Number" });
@@ -124,7 +101,6 @@ const RangeInputFields = ({ inputState, setInputState, index, min, max, setIsVal
     const handleEndChange = (e) => {
         const value = e.target.value;
         let validValue = 0;
-        console.log("validValue", validValue, inputState[index].end.value);
 
         if (isNotNumber(value)) {
             setStartInputError({ error: true, message: "Not a Valid Number" });
