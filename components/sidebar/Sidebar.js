@@ -14,6 +14,7 @@ import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 import MissingValueImputationIcon from '@mui/icons-material/Troubleshoot';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import GlobalDataRepresentationIcon from '@mui/icons-material/RemoveRedEye';
+import RepeatOneIcon from '@mui/icons-material/RepeatOne';
 
 // Components
 import SidebarItem from './SidebarItem';
@@ -121,7 +122,7 @@ const Sidebar = () => {
                     <List sx={{ mt: 0,mx:1 }}>
                     <hr style={{ borderColor: 'transparent', width: "100%", backgroundColor: "rgb(86 86 86)" }} />
                         <SidebarSubheader title="Feature Engineering" open={open}></SidebarSubheader>
-                        <SidebarItem itemKey={1} name={FEATURE_ENCODING} path={FEATURE_ENCODING_PATH} ItemIcon={InboxIcon} open={open} />
+                        <SidebarItem itemKey={1} name={FEATURE_ENCODING} path={FEATURE_ENCODING_PATH} ItemIcon={RepeatOneIcon} open={open} />
                         <SidebarItem itemKey={2} name={DATA_TRANSFORMATION} path={DATA_TRANSFORMATION_PATH} ItemIcon={MailIcon} open={open} />
                         <SidebarItem itemKey={3} name={DATA_DISCRETIZATION} path={DATA_DISCRETIZATION_PATH} ItemIcon={CleaningServicesIcon} open={open} />
                     </List>
