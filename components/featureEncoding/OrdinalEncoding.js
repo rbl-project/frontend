@@ -60,13 +60,9 @@ const OrdinalEncoding = () => {
     useEffect(() => {
         setOrdinalEncodingQuery({
             ...ordinalEncodingQuery,
-            column: {
-                custom_mapping: customMapping,
-                cust_mapping_info: {
-                    col: column,
-                    mapping: mapping
-                }
-            }
+            column_name: column,
+            custom_mapping: customMapping,
+            mapping: mapping
         })
         console.log("Ordinal Encoding Query: ", ordinalEncodingQuery);
     }, [column, customMapping, mapping])
@@ -74,7 +70,9 @@ const OrdinalEncoding = () => {
 
     const handleCustomValueSubmit = () => {
         let newMapping = mapping;
-        newMapping[columnValue] = customValue;
+        for(let i=0; i<columnValue.length; i++){
+            newMapping[columnValue[i]] = customValue;
+        }
         setMapping(newMapping)
 
         setColumnValue([]);
