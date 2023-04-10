@@ -24,10 +24,9 @@ import {
     TableBody,
     Paper,
 } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 // Components
-import CategoricalColumnDropDown from './CategoricalColumnDropDown';
 import ApplyChangesButton from './ApplyChangesButton';
 
 // icons
@@ -38,10 +37,16 @@ import CloseIcon from '@mui/icons-material/Close';
 // API Endpoints
 import * as API from "/api";
 
+// actions
+import { ordinalEncoding } from '/store/featureEncodingSlice';
+import { getMetaData } from "/store/datasetUpdateSlice";
+
 const OrdinalEncoding = () => {
 
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     const datasetUpdateState = useSelector((state) => state.datasetUpdate);
+
+    const dispatch = useDispatch();
 
     const [ordinalEncodingQuery, setOrdinalEncodingQuery] = useState({});
 
@@ -64,7 +69,6 @@ const OrdinalEncoding = () => {
             custom_mapping: customMapping,
             mapping: mapping
         })
-        console.log("Ordinal Encoding Query: ", ordinalEncodingQuery);
     }, [column, customMapping, mapping])
 
 
@@ -78,7 +82,6 @@ const OrdinalEncoding = () => {
         setColumnValue([]);
         setCustomValue("");
 
-        console.log("Ordinal Encoding Query: ", ordinalEncodingQuery);
     }
 
     const resetEncodingData = () => {
@@ -92,18 +95,21 @@ const OrdinalEncoding = () => {
     }
 
     // final API call
-    const ordinalEncoding = () => {
-        // console.log("TargetEncoding.js: ", columnList, customMapping);s
+    const ordinalEncodingAPI = async () => {
         let final_query = {
             dataset_name: selectedDataset,
             encoding_info: ordinalEncodingQuery
         }
-        console.log("ordinalEncodingQuery Encoding Query: ", final_query);
+
+        await dispatch(ordinalEncoding(final_query))
+        
         setColumn([])
         setCustomMapping(false)
         setColumnValue([]);
         setCustomValue("");
         setOrdinalEncodingQuery({});
+
+        await dispatch(getMetaData({ dataset_name: selectedDataset }));
     }
 
     // ============= Search Value   =================
@@ -228,7 +234,7 @@ const OrdinalEncoding = () => {
 
             }
 
-            <ApplyChangesButton disableCondition={column == ""} applyFunction={ordinalEncoding} />
+            <ApplyChangesButton disableCondition={column == ""} applyFunction={ordinalEncodingAPI} />
 
 
 

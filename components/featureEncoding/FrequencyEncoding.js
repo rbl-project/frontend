@@ -2,16 +2,19 @@ import React, { useState, useEffect } from 'react';
 import {
     Box,
     Typography,
-    Button,
     FormControlLabel,
     FormGroup,
     Checkbox
 } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 // Components
 import CategoricalColumnDropDown from './CategoricalColumnDropDown';
 import ApplyChangesButton from './ApplyChangesButton';
+
+// actions
+import { frequencyEncoding } from '/store/featureEncodingSlice';
+import { getMetaData } from "/store/datasetUpdateSlice";
 
 
 const FrequencyEncoding = () => {
@@ -19,6 +22,7 @@ const FrequencyEncoding = () => {
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     const [frequencyEncodingQuery, setFrequencyEncodingQuery] = useState({});
 
+    const dispatch = useDispatch();
 
     const [columnList, setColumnList] = useState([]);
     const [normalize, setNormalize] = useState(false);
@@ -26,7 +30,6 @@ const FrequencyEncoding = () => {
 
     // to update the query when columnList or catName changes
     useEffect(() => {
-        console.log("frequencyEncoding.js: ", columnList, normalize);
         setFrequencyEncodingQuery({
             column_list: columnList,
             normalize: normalize
@@ -34,16 +37,19 @@ const FrequencyEncoding = () => {
     }, [columnList, normalize])
 
     // final API call
-    const frequencyEncoding = () => {
-        console.log("frequencyEncoding.js: ", columnList, normalize);
+    const frequencyEncodingAPI = async() => {
         let final_query = {
             dataset_name: selectedDataset,
             encoding_info: frequencyEncodingQuery
         }
-        console.log("Frequency Encoding Query: ", final_query);
+
+        await dispatch(frequencyEncoding(final_query));
+
         setColumnList([])
         setNormalize(false)
         setFrequencyEncodingQuery({});
+
+        await dispatch(getMetaData({ dataset_name: selectedDataset }));
     }
 
     return (
@@ -63,7 +69,7 @@ const FrequencyEncoding = () => {
                 </FormGroup>
             </Box>
 
-            <ApplyChangesButton disableCondition={columnList.length == 0} applyFunction={frequencyEncoding} />
+            <ApplyChangesButton disableCondition={columnList.length == 0} applyFunction={frequencyEncodingAPI} />
         </>
     )
 }

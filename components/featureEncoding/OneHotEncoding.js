@@ -2,22 +2,27 @@ import React, { useState, useEffect } from 'react';
 import {
     Box,
     Typography,
-    Button,
     FormControlLabel,
     FormGroup,
     Checkbox
 } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 // Components
 import CategoricalColumnDropDown from './CategoricalColumnDropDown';
 import ApplyChangesButton from './ApplyChangesButton';
+
+// actions
+import { oneHotEncoding } from '/store/featureEncodingSlice';
+import { getMetaData } from "/store/datasetUpdateSlice";
 
 
 const OneHotEncoding = () => {
 
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     const [oneHotEncodingQuery, setOneHotEncodingQuery] = useState({});
+
+    const dispatch = useDispatch();
 
 
     const [columnList, setColumnList] = useState([]);
@@ -26,7 +31,6 @@ const OneHotEncoding = () => {
 
     // to update the query when columnList or catName changes
     useEffect(() => {
-        console.log("OneHotEncoding.js: ", columnList, catName);
         setOneHotEncodingQuery({
             column_list: columnList,
             use_cat_name: catName
@@ -34,16 +38,18 @@ const OneHotEncoding = () => {
     }, [columnList, catName])
 
     // final API call
-    const oneHotEncoding = () => {
-        console.log("OneHotEncoding.js: ", columnList, catName);
+    const oneHotEncodingAPI = async() => {
         let final_query = {
             dataset_name: selectedDataset,
             encoding_info: oneHotEncodingQuery
         }
-        console.log("One Hot Encoding Query: ", final_query);
+        await dispatch(oneHotEncoding(final_query));
+
         setColumnList([])
         setUseCatName(false)
         setOneHotEncodingQuery({});
+
+        await dispatch(getMetaData({ dataset_name: selectedDataset }));
     }
 
     return (
@@ -71,7 +77,7 @@ const OneHotEncoding = () => {
                 </FormGroup>
             </Box>
 
-            <ApplyChangesButton disableCondition={columnList.length == 0} applyFunction={oneHotEncoding} />
+            <ApplyChangesButton disableCondition={columnList.length == 0} applyFunction={oneHotEncodingAPI} />
         </>
     )
 }

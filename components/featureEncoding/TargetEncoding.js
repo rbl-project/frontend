@@ -9,11 +9,14 @@ import {
     Autocomplete,
     TextField
 } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 // Components
-import CategoricalColumnDropDown from './CategoricalColumnDropDown';
 import ApplyChangesButton from './ApplyChangesButton';
+
+// actions
+import { targetEncoding } from '/store/featureEncodingSlice';
+import { getMetaData } from "/store/datasetUpdateSlice";
 
 
 const TargetEncoding = () => {
@@ -22,6 +25,7 @@ const TargetEncoding = () => {
     const datasetUpdateState = useSelector((state) => state.datasetUpdate);
     const [targetEncodingQuery, setTargetEncodingQuery] = useState({});
 
+    const dispatch = useDispatch();
 
     const [columnList, setColumnList] = useState([]);
     const [targetColumn, setTargetColumn] = useState("")
@@ -30,7 +34,6 @@ const TargetEncoding = () => {
 
     // to update the query when columnList or catName changes
     useEffect(() => {
-        console.log("TargetEncoding.js: ", columnList, leaveOneOut);
         setTargetEncodingQuery({
             column_list: columnList,
             leaveOneOut: leaveOneOut,
@@ -39,17 +42,20 @@ const TargetEncoding = () => {
     }, [columnList, leaveOneOut, targetColumn])
 
     // final API call
-    const oneHotEncoding = () => {
-        console.log("TargetEncoding.js: ", columnList, leaveOneOut);
+    const targetEncodingAPI = async() => {
         let final_query = {
             dataset_name: selectedDataset,
             encoding_info: targetEncodingQuery
         }
-        console.log("TargetEncoding Encoding Query: ", final_query);
+
+        await dispatch(targetEncoding(final_query));
+
         setColumnList([])
         setLeaveOneOut(false)
         setTargetColumn("");
         setTargetEncodingQuery({});
+
+        await dispatch(getMetaData({ dataset_name: selectedDataset }));
     }
 
     return (
@@ -81,7 +87,7 @@ const TargetEncoding = () => {
                             fullWidth={true}
                             filterSelectedOptions={true}
                             id="combo-box-demo"
-                            options={Object.keys(datasetUpdateState.metadata).length > 0 ? datasetUpdateState.metadata.categorical_column_list : []}
+                            options={Object.keys(datasetUpdateState.metadata).length > 0 ? datasetUpdateState.metadata.column_list : []}
                             size="small"
                             value={targetColumn}
                             // sx={{ width: "130px", padding: "0px" }}
@@ -115,7 +121,7 @@ const TargetEncoding = () => {
                 </FormGroup>
             </Box>
 
-            <ApplyChangesButton disableCondition={columnList.length == 0 || targetColumn == ""} applyFunction={oneHotEncoding} />
+            <ApplyChangesButton disableCondition={columnList.length == 0 || targetColumn == ""} applyFunction={targetEncodingAPI} />
         </>
     )
 }

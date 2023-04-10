@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Autocomplete,
     Box,
     Paper,
     FormControl,
-    Tooltip,
-    ListItemText,
-    TextField,
     Typography,
     Divider,
-    CircularProgress,
     Select,
     MenuItem,
-    InputLabel,
-    Button
-} from '@mui/material';
+    InputLabel} from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -32,15 +25,13 @@ import BinaryEncoding from './BinaryEncoding';
 import { setOpenMenuItem } from "/store/globalStateSlice";
 
 // Icons
-import DoneIcon from "@mui/icons-material/Done";
 
 //actions
-import { getMetaData } from "/store/datasetUpdateSlice";
+import { resetRequestStatus } from "/store/featureEncodingSlice";
 
 
 // Constants
 import {
-    REQUEST_STATUS_LOADING, 
     FEATURE_ENCODING, 
     REQUEST_STATUS_FAILED, 
     REQUEST_STATUS_SUCCEEDED,
@@ -70,6 +61,7 @@ const TabPanel = ({ children, value, index, ...other }) => {
 const FeatureEncodingMainSection = () => {
 
     const selectedMenuItem = useSelector((state) => state.global.openMenuItem);
+    const featureEncodingState = useSelector((state) => state.featureEncoding);
     
     const dispatch = useDispatch();
     const [strategy, setStrategy] = useState("one-hot");
@@ -81,6 +73,34 @@ const FeatureEncodingMainSection = () => {
             dispatch(setOpenMenuItem(FEATURE_ENCODING));
         }
     }, []);
+
+    useEffect(() => {
+        if (featureEncodingState.requestStatus === REQUEST_STATUS_SUCCEEDED) {
+            toast.success(featureEncodingState.message, {
+                position: "bottom-right",
+                autoClose: false,
+                hideProgressBar: false,
+                autoClose: 2000,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "light",
+            });
+            dispatch(resetRequestStatus());
+
+        } else if (featureEncodingState.requestStatus === REQUEST_STATUS_FAILED) {
+            toast.error(featureEncodingState.message, {
+                position: "bottom-right",
+                autoClose: false,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "light",
+            });
+            dispatch(resetRequestStatus());
+        }
+    }, [featureEncodingState.message])
 
     return (
         <Paper elevation={0}>
