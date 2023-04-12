@@ -80,3 +80,10 @@ export const changeColumnType = (formData) => API.post("/change-column-type",for
 
 // Data Discretization APIs
 export const dataDiscretization = (formData) => API.post("/data-discretization",formData);
+
+// Feature Encoding APIs
+export const oneHotEncoding = (formData) => API.post("/one-hot-encoding",formData);
+export const ordinalEncoding = (formData) => API.post("/ordinal-encoding",formData);
+export const targetEncoding = (formData) => API.post("/target-encoding",formData);
+export const binaryEncoding = (formData) => API.post("/binary-encoding",formData);
+export const frequencyEncoding = (formData) => API.post("/frequency-encoding",formData);

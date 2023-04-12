@@ -12,6 +12,7 @@ import missingValueImputationSlice from "./missingValueImputationSlice";
 import dataCleaningSlice from "./dataCleaningSlice";
 import datasetUpdateSlice from "./datasetUpdateSlice";
 import dataDiscretizationSlice from "./dataDiscretizationSlice";
+import featureEncodingSlice from "./featureEncodingSlice";
 
 const combineReducer = combineReducers({
     global:globalStateSlice,
@@ -24,7 +25,8 @@ const combineReducer = combineReducers({
     missingValueImputation:missingValueImputationSlice,
     dataCleaning:dataCleaningSlice,
     datasetUpdate:datasetUpdateSlice,
-    dataDiscretization:dataDiscretizationSlice
+    dataDiscretization:dataDiscretizationSlice,
+    featureEncoding:featureEncodingSlice,
 });
 
 export const makeStore = () => configureStore({reducer:combineReducer});
