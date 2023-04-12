@@ -54,7 +54,7 @@ const DatasetOverviewMainSection = () => {
     if (selectedDataset !== null && selectedDataset !== undefined && selectedDataset !== "") {
       dispatch(getBasicInformation(selectedDataset));
       dispatch(getGraphicalRepresentation(selectedDataset));
-      dispatch(getDescribeNumericalData(selectedDataset));
+      dispatch(getDescribeNumericalData({ dataset_name: selectedDataset, get_all_columns: true,column_name:"" }));
       dispatch(getDescribeCategoricalData(selectedDataset));
     }
   }, [selectedDataset]);

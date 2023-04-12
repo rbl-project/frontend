@@ -17,9 +17,6 @@ const CustomDiscretizationInputs = ({ nRows,columnName,isColumnSelected }) => {
     // Local State for Number of Bins Error Message
     const [numberOfBinsErrorMessage, setNumberOfBinsErrorMessage] = useState("");
 
-
-    // Local State for Encoding Type
-    const [encodingType, setEncodingType] = useState("ordinal");
     // Local State for Prefix
     const [prefix, setPrefix] = useState("Bin_");
 
@@ -72,22 +69,6 @@ const CustomDiscretizationInputs = ({ nRows,columnName,isColumnSelected }) => {
                     </FormControl>
                 </Box>
 
-                {/* Encoding Type */}
-                <Box sx={{ width: "20%", mr: 2 }}>
-                    <FormControl fullWidth size="small">
-                        <InputLabel id="demo-simple-select-label-encoding">Encoding Type</InputLabel>
-                        < Select
-                            labelId="demo-simple-select-label-encoding"
-                            id="demo-simple-select"
-                            value={encodingType}
-                            label="Encoding Type"
-                            onChange={(e) => setEncodingType(e.target.value)}
-                        >
-                            <MenuItem value={"ordinal"}>Ordinal</MenuItem>
-                            <MenuItem value={"onehot"}>One Hot</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Box>
 
                 {/* Prefix Input */}
                 <Box sx={{ width: "20%", mr: 2 }}>

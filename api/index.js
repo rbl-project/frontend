@@ -77,3 +77,6 @@ export const renameColumn = (formData) => API.post("/rename-column",formData);
 export const findAndReplace = (formData) => API.post("/find-and-replace",formData);
 export const changeDataType = (formData) => API.post("/change-data-type",formData);
 export const changeColumnType = (formData) => API.post("/change-column-type",formData);
+
+// Data Discretization APIs
+export const dataDiscretization = (formData) => API.post("/data-discretization",formData);

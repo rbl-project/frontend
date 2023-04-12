@@ -11,6 +11,7 @@ import GlobalDataRepresentationContent from "/components/globalDataRepresentatio
 
 // Redux Actions
 import { setOpenMenuItem } from "/store/globalStateSlice";
+import { getColumnDescription, dataDiscretization } from "/store/dataDiscretizationSlice";
 
 
 
@@ -47,6 +48,7 @@ const DataDiscretizationMainSection = () => {
     // Redux State
     const dispatch = useDispatch();
     const datasetUpdateState = useSelector((state) => state.datasetUpdate);
+    const dataDiscretizationState = useSelector((state) => state.dataDiscretization);
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     const selectedMenuItem = useSelector((state) => state.global.openMenuItem);
 
@@ -58,18 +60,20 @@ const DataDiscretizationMainSection = () => {
     const [isColumnSelected, setIsColumnSelected] = useState(false);
     // Local State for Strategy
     const [strategy, setStrategy] = useState("uniform");
+     // Local State for Encoding Type
+     const [encodingType, setEncodingType] = useState("ordinal");
 
 
     // Handle Search Column SearchBar Selection or Deselection
     const handleSearchCoulmnChange = (event, newValue, reason) => {
         setSearchColumn(newValue);
-        if(newValue !== null && newValue !== undefined && newValue !== ""){
+        if (newValue !== null && newValue !== undefined && newValue !== "") {
             setIsColumnSelected(true);
         }
-        else{
+        else {
             setIsColumnSelected(false);
         }
-    
+
         // If Clear Button is Clicked
         if (reason === "clear") {
             setColumns(datasetUpdateState.metadata?.numerical_column_list);
@@ -89,6 +93,13 @@ const DataDiscretizationMainSection = () => {
     useEffect(() => {
         setColumns(datasetUpdateState.metadata?.numerical_column_list);
     }, [datasetUpdateState.metadata]);
+
+    // When Column is Selected, Get Column Description
+    useEffect(() => {
+        if (searchColumn !== null && searchColumn !== undefined && searchColumn !== "") {
+            dispatch(getColumnDescription({ dataset_name: selectedDataset, get_all_columns: false,column_name:searchColumn }));
+        }
+    }, [searchColumn]);
 
     // Setting Open Menu Item When Page Loads or Refreshes
     useEffect(() => {
@@ -111,7 +122,7 @@ const DataDiscretizationMainSection = () => {
                 < Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", mt: 1, mb: 2, }}>
 
                     {/* Select Column Dropdown */}
-                    < Box sx={{ width: "20%", mr: 2 }}>
+                    < Box sx={{ width: "20%", mr: 1}}>
                         <FormControl fullWidth size="small">
                             <Autocomplete
                                 fullWidth={true}
@@ -121,7 +132,7 @@ const DataDiscretizationMainSection = () => {
                                 size="small"
                                 value={searchColumn}
                                 onChange={handleSearchCoulmnChange}
-                                renderInput={(params) => <TextField required sx={{}} {...params} label="Select Column" size="small" />}
+                                renderInput={(params) => <TextField {...params} label="Select Column" size="small" />}
                                 renderOption={(props, option) => (
                                     // < Tooltip title={option} placement="bottom-start" key={`tooltip-${option}`}>
                                     <ListItemText key={option} {...props} primaryTypographyProps={{ sx: { overflow: "hidden", textOverflow: "ellipsis" } }} >{option}</ListItemText>
@@ -129,6 +140,11 @@ const DataDiscretizationMainSection = () => {
                                 )}
                             />
                         </FormControl>
+                    </Box>
+
+                    {/* Column Description Icon */}
+                    <Box sx={{mr:2}}>
+                        < ColumnDescriptionPopover />
                     </Box>
 
                     {/* Select Startegy Dropdown */}
@@ -150,10 +166,23 @@ const DataDiscretizationMainSection = () => {
                         </FormControl>
                     </Box>
 
-                    {/* Column Description Icon */}
-                    <Box>
-                        < ColumnDescriptionPopover />
+                    {/* Encoding Type */}
+                    <Box sx={{ width: "20%", mr: 2 }}>
+                        <FormControl fullWidth size="small">
+                            <InputLabel id="demo-simple-select-label-encoding">Encoding Type</InputLabel>
+                            < Select
+                                labelId="demo-simple-select-label-encoding"
+                                id="demo-simple-select"
+                                value={encodingType}
+                                label="Encoding Type"
+                                onChange={(e) => setEncodingType(e.target.value)}
+                            >
+                                <MenuItem value={"ordinal"}>Ordinal</MenuItem>
+                                <MenuItem value={"onehot"}>One Hot</MenuItem>
+                            </Select>
+                        </FormControl>
                     </Box>
+
 
                 </Box>
 
