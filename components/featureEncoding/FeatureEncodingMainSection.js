@@ -12,7 +12,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 // Components
-import ColumnDescriptionPopover from './ColumnDescriptionPopover';
 import GlobalDataRepresentationContent from "/components/globalDataRepresentation/GlobalDataRepresentationContent";
 import OneHotEncoding from './OneHotEncoding';
 import OrdinalEncoding from './OrdinalEncoding';
@@ -134,9 +133,6 @@ const FeatureEncodingMainSection = () => {
                     </Box>
 
                     {/* Column Description Icon */}
-                    <Box>
-                        < ColumnDescriptionPopover />
-                    </Box>
 
                 </Box>
 
@@ -173,7 +169,7 @@ const FeatureEncodingMainSection = () => {
                         columnValue={[]}
                         numericalToValue={null}
                         numericalFromValue={null}
-                        reload={false}
+                        reload={featureEncodingState.requestStatus === REQUEST_STATUS_FAILED || featureEncodingState.requestStatus === REQUEST_STATUS_SUCCEEDED}
                         parameters={{
                             "categorical_values": {},
                             "numerical_values": {}
