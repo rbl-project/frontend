@@ -25,13 +25,13 @@ const RangeInputFields = ({ inputState, setInputState, index, min, max, setIsVal
     }
 
     // check if number is in some range
-    const isNumberInSomeRange = (number, inclusiveStatus) => {
+    const isNumberInSomeRange = (number, includedStatus) => {
         let isInSomeRange = false;
         inputState.map((range, i) => {
             // If number comes in some other range
             if (range.start.value <= number && range.end.value >= number && i !== index) { 
                 isInSomeRange = true;
-                if( !((number === range.end.value && inclusiveStatus === true && range.end.inclusive === true ) || (number === range.start.value && inclusiveStatus === true && range.start.inclusive === true))){
+                if( !((number === range.end.value && includedStatus === true && range.end.included === true ) || (number === range.start.value && includedStatus === true && range.start.included === true))){
                     isInSomeRange = false;
                 }
             }
@@ -60,7 +60,7 @@ const RangeInputFields = ({ inputState, setInputState, index, min, max, setIsVal
             isValid = false;
             message = `Start Number should be less than End Number`;
         }
-        else if (isNumberInSomeRange(number.value, number.inclusive)) {
+        else if (isNumberInSomeRange(number.value, number.included)) {
             isValid = false;
             message = `Number is in Some Range`;
         }
@@ -87,12 +87,12 @@ const RangeInputFields = ({ inputState, setInputState, index, min, max, setIsVal
 
     };
 
-    // Chnage handler for Start inclusive checkbox
-    const handleStartInclusiveChange = (e) => {
+    // Chnage handler for Start included checkbox
+    const handleStartIncludedChange = (e) => {
         const value = e.target.checked;
         setInputState((prevState) => {
             const newState = [...prevState];
-            newState[index].start.inclusive = value;
+            newState[index].start.included = value;
             return newState;
         });
     };
@@ -116,12 +116,12 @@ const RangeInputFields = ({ inputState, setInputState, index, min, max, setIsVal
         });
     };
 
-    // Chnage handler for End inclusive checkbox
-    const handleEndInclusiveChange = (e) => {
+    // Chnage handler for End included checkbox
+    const handleEndIncludedChange = (e) => {
         const value = e.target.checked;
         setInputState((prevState) => {
             const newState = [...prevState];
-            newState[index].end.inclusive = value;
+            newState[index].end.included = value;
             return newState;
         });
     };
@@ -163,8 +163,8 @@ const RangeInputFields = ({ inputState, setInputState, index, min, max, setIsVal
                         error={startInputError.error}
                         endAdornment={
                             <InputAdornment position="end">
-                                <Tooltip title="Check if you want Inclusive Start" placement="top">
-                                    <Checkbox disabled={startInputError.nanValue} checked={inputState[index].start.inclusive} onChange={handleStartInclusiveChange} />
+                                <Tooltip title="Check if you want Included Start" placement="top">
+                                    <Checkbox disabled={startInputError.nanValue} checked={inputState[index].start.included} onChange={handleStartIncludedChange} />
                                 </Tooltip>
                             </InputAdornment>
                         }
@@ -187,8 +187,8 @@ const RangeInputFields = ({ inputState, setInputState, index, min, max, setIsVal
                         error={endInputError.error}
                         endAdornment={
                             <InputAdornment position="end">
-                                <Tooltip title="Check if you want Inclusive End" placement="top">
-                                    <Checkbox disabled={endInputError.nanValue} checked={inputState[index].end.inclusive} onChange={handleEndInclusiveChange} />
+                                <Tooltip title="Check if you want Included End" placement="top">
+                                    <Checkbox disabled={endInputError.nanValue} checked={inputState[index].end.included} onChange={handleEndIncludedChange} />
                                 </Tooltip>
                             </InputAdornment>
                         }

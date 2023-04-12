@@ -78,6 +78,9 @@ export const findAndReplace = (formData) => API.post("/find-and-replace",formDat
 export const changeDataType = (formData) => API.post("/change-data-type",formData);
 export const changeColumnType = (formData) => API.post("/change-column-type",formData);
 
+// Data Discretization APIs
+export const dataDiscretization = (formData) => API.post("/data-discretization",formData);
+
 // Feature Encoding APIs
 export const oneHotEncoding = (formData) => API.post("/one-hot-encoding",formData);
 export const ordinalEncoding = (formData) => API.post("/ordinal-encoding",formData);

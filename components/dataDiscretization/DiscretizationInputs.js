@@ -1,13 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { Box, FormControl, Tooltip, InputLabel, MenuItem, OutlinedInput, InputAdornment, CircularProgress, Button, TextField, Select } from '@mui/material';
+import React, { useState, } from 'react';
+import { Box, FormControl, Tooltip, InputLabel, OutlinedInput, InputAdornment, CircularProgress, Button, TextField, Select } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Icons
 import InfoIcon from '@mui/icons-material/Info';
 import DoneIcon from '@mui/icons-material/Done';
 
+// Redux Actions
+import { dataDiscretization } from "/store/dataDiscretizationSlice";
+import { getMetaData } from '/store/datasetUpdateSlice';
 
-const CustomDiscretizationInputs = ({ nRows,columnName,isColumnSelected }) => {
+// Constants
+import { REQUEST_STATUS_LOADING } from "/constants/Constants";
+
+
+const DiscretizationInputs = ({ columnName, isColumnSelected, strategy, encodingType, setSearchColumn }) => {
+
+    // Redux
+    const dispatch = useDispatch();
+    const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
+    const dataDiscretizationState = useSelector((state) => state.dataDiscretization);
+
+    const nRows = dataDiscretizationState.column_description !== null ? dataDiscretizationState.column_description.count : 0;
 
     // Local State for Validity of Input
     const [isValidInput, setIsValidInput] = useState(true);
@@ -17,9 +31,6 @@ const CustomDiscretizationInputs = ({ nRows,columnName,isColumnSelected }) => {
     // Local State for Number of Bins Error Message
     const [numberOfBinsErrorMessage, setNumberOfBinsErrorMessage] = useState("");
 
-
-    // Local State for Encoding Type
-    const [encodingType, setEncodingType] = useState("ordinal");
     // Local State for Prefix
     const [prefix, setPrefix] = useState("Bin_");
 
@@ -48,11 +59,22 @@ const CustomDiscretizationInputs = ({ nRows,columnName,isColumnSelected }) => {
         }
     }
 
+    // Handle Apply Changes Button Click
+    const handleApplyChanges = async () => {
+        if (dataDiscretizationState.data_discretization_req_status !== REQUEST_STATUS_LOADING) {
+            await dispatch(dataDiscretization({ dataset_name: selectedDataset, column_name: columnName, strategy: strategy, encoding_type: encodingType, n_bins: numberOfBins, prefix: prefix }));
+            setSearchColumn(null);
+            dispatch(getMetaData({ dataset_name: selectedDataset }));
+        }
+    };
+
+
 
     return (
         <>
 
             <Box sx={{ display: "flex", mt: 2 }}>
+
                 {/* Number of Bins */}
                 <Box sx={{ width: "20%", mr: 2 }}>
                     <FormControl fullWidth size="small">
@@ -72,55 +94,47 @@ const CustomDiscretizationInputs = ({ nRows,columnName,isColumnSelected }) => {
                     </FormControl>
                 </Box>
 
-                {/* Encoding Type */}
-                <Box sx={{ width: "20%", mr: 2 }}>
-                    <FormControl fullWidth size="small">
-                        <InputLabel id="demo-simple-select-label-encoding">Encoding Type</InputLabel>
-                        < Select
-                            labelId="demo-simple-select-label-encoding"
-                            id="demo-simple-select"
-                            value={encodingType}
-                            label="Encoding Type"
-                            onChange={(e) => setEncodingType(e.target.value)}
-                        >
-                            <MenuItem value={"ordinal"}>Ordinal</MenuItem>
-                            <MenuItem value={"onehot"}>One Hot</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Box>
-
                 {/* Prefix Input */}
-                <Box sx={{ width: "20%", mr: 2 }}>
-                    <FormControl fullWidth size="small">
-                        <InputLabel htmlFor="outlined-adornment-prefix">Prefix</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-prefix"
-                            type="text"
-                            sx={{ pr: 1 }}
-                            value={prefix}
-                            onChange={(e) => setPrefix(e.target.value)}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <Tooltip arrow title="This will be used as Prefix in Name of the Bin" placement="top">
-                                        < InfoIcon sx={{ cursor: "pointer" }} />
-                                    </Tooltip>
-                                </InputAdornment>
-                            }
-                            label="Prefix"
-                        />
-                    </FormControl>
-                </Box>
+                {
+                    encodingType === "onehot" && (
+                        <Box sx={{ width: "20%", mr: 2 }}>
+                            <FormControl fullWidth size="small">
+                                <InputLabel htmlFor="outlined-adornment-prefix">Prefix</InputLabel>
+                                <OutlinedInput
+                                    id="outlined-adornment-prefix"
+                                    type="text"
+                                    sx={{ pr: 1 }}
+                                    value={prefix}
+                                    onChange={(e) => setPrefix(e.target.value)}
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <Tooltip arrow title="This will be used as Prefix in Name of the Bin" placement="top">
+                                                < InfoIcon sx={{ cursor: "pointer" }} />
+                                            </Tooltip>
+                                        </InputAdornment>
+                                    }
+                                    label="Prefix"
+                                />
+                            </FormControl>
+                        </Box>
+                    )
+                }
+
 
             </Box>
 
             {/* Apply Changes Button */}
             <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-                <Button disabled={!(isValidInput && isColumnSelected)} variant="contained" color="primary" sx={{ mr: 1 }} startIcon={<DoneIcon />}>
-                    Apply Changes
+                <Button disabled={!(isValidInput && isColumnSelected)} onClick={handleApplyChanges} variant="contained" color="primary" sx={{ mr: 1, width: "12rem" }} startIcon={dataDiscretizationState.data_discretization_req_status !== REQUEST_STATUS_LOADING && (<DoneIcon />)}>
+                    {
+                        dataDiscretizationState.data_discretization_req_status === REQUEST_STATUS_LOADING ?
+                            <CircularProgress size={20} color="inherit" />
+                            : "Apply Changes"
+                    }
                 </Button>
             </Box>
         </>
     )
 }
 
-export default CustomDiscretizationInputs;
+export default DiscretizationInputs;

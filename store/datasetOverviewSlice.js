@@ -40,8 +40,8 @@ export const getBasicInformation = createAsyncThunk('/basic-information', async 
     return response.data; // response.data is your entire object that is seen in postman as the response
 });
 
-export const getDescribeNumericalData = createAsyncThunk('/describe-numerical-data', async (dataset_name) => {
-    const response = await API.getDescribeNumericalData({ dataset_name: dataset_name });
+export const getDescribeNumericalData = createAsyncThunk('/describe-numerical-data', async (formData) => {
+    const response = await API.getDescribeNumericalData(formData);
     return response.data; // response.data is your entire object that is seen in postman as the response
 });
 export const getDescribeCategoricalData = createAsyncThunk('/describe-categorical-data', async (dataset_name) => {
@@ -58,7 +58,7 @@ const datasetOverviewSlice = createSlice({
     name: "datasetOverview",
     initialState: initialState,
     reducers: {
-        resetRequestStatus:(state,action) => {
+        resetRequestStatus: (state, action) => {
             state.basic_info_req_status = REQUEST_STATUS_IDLE;
             state.desc_num_cols_req_status = REQUEST_STATUS_IDLE;
             state.desc_cat_cols_req_status = REQUEST_STATUS_IDLE;
@@ -166,6 +166,6 @@ const datasetOverviewSlice = createSlice({
     }
 });
 
-export const {resetRequestStatus } = datasetOverviewSlice.actions;
+export const { resetRequestStatus } = datasetOverviewSlice.actions;
 
 export default datasetOverviewSlice.reducer;

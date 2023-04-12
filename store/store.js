@@ -11,6 +11,7 @@ import tabularRepresentationSlice from "./tabularRepresentationSlice";
 import missingValueImputationSlice from "./missingValueImputationSlice";
 import dataCleaningSlice from "./dataCleaningSlice";
 import datasetUpdateSlice from "./datasetUpdateSlice";
+import dataDiscretizationSlice from "./dataDiscretizationSlice";
 import featureEncodingSlice from "./featureEncodingSlice";
 
 const combineReducer = combineReducers({
@@ -24,6 +25,7 @@ const combineReducer = combineReducers({
     missingValueImputation:missingValueImputationSlice,
     dataCleaning:dataCleaningSlice,
     datasetUpdate:datasetUpdateSlice,
+    dataDiscretization:dataDiscretizationSlice,
     featureEncoding:featureEncodingSlice,
 });
 

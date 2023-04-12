@@ -54,6 +54,7 @@ const GlobalDataRepresentationContent = (props) => {
         }
     })
 
+    console.log("GlobalDataRepresentationContent xxxx",props);
     const dispatch = useDispatch();
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     const datasetUpdateState = useSelector((state) => state.datasetUpdate);
