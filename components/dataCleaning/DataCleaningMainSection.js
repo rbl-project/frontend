@@ -288,11 +288,11 @@ const DataCleaningMainSection = () => {
 
                             {/* Fotter Buttons */}
                             <Box sx={{ width: '100%', textAlign: 'end' }}>
-                                <Button variant="contained" color="primary" sx={{ m: 1 }} onClick={applyDataChanges}>
+                                <Button variant="contained" size="small" color="primary" sx={{ m: 1 }} onClick={applyDataChanges} startIcon={dataCleaningState.requestStatus !== REQUEST_STATUS_LOADING && (<DoneIcon />)}>
                                     {
                                         dataCleaningState.requestStatus === REQUEST_STATUS_LOADING
                                             ? <CircularProgress size={24} sx={{ color: 'white' }} />
-                                            : <DoneIcon />
+                                            : <>Apply Changes</>
                                     }
                                 </Button>
                             </Box>

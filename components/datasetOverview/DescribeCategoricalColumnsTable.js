@@ -34,11 +34,11 @@ const DescribeCategoricalColumnsTable = ({ rows }) => {
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
-                      < Tooltip title={value === null ? "null" : value} key={column.id} placement="bottom-start">
+                      // < Tooltip title={value === null ? "null" : value} key={column.id} placement="bottom-start">
                         <TableCell key={column.id} align={column.align} sx={{ fontWeight: column.id === "name" && 500, overflow: "hidden", textOverflow: "ellipsis" }}>
                           {value}
                         </TableCell>
-                      </Tooltip>
+                      // </Tooltip>
                     );
                   })}
                 </TableRow>

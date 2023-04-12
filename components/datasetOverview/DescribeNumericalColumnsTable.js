@@ -39,11 +39,11 @@ const DescribeNumericalColumnsTable = ({ rows }) => {
                     const value = row[column.id];
                     const cellContent = column.format && typeof value === 'number' ? column.format(value) : value === null ? "null" : value;
                     return (
-                      < Tooltip title={cellContent} key={column.id} placement="bottom-start">
+                      // < Tooltip title={cellContent} key={column.id} placement="bottom-start">
                         <TableCell key={column.id} align={column.align} sx={{ fontWeight: column.id === "name" && 500, overflow: "hidden", textOverflow: "ellipsis" }}>
                           {cellContent}
                         </TableCell>
-                      </Tooltip>
+                      // </Tooltip>
                     );
                   })}
                 </TableRow>

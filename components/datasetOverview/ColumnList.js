@@ -31,11 +31,11 @@ const ColumnList = ({ rows }) => {
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
-                      <Tooltip title={value} key={column.id} placement="bottom-start" disableHoverListener={column.id !== "column_name"}>
+                      // <Tooltip title={value} key={column.id} placement="bottom-start" disableHoverListener={column.id !== "column_name"}>
                         <TableCell key={column.id} align={column.align} sx={{ fontWeight: column.id === "column_name" && 500, overflow: "hidden", textOverflow: "ellipsis" }}>
                           {value}
                         </TableCell>
-                      </Tooltip>
+                      // </Tooltip>
                     );
                   })}
                 </TableRow>

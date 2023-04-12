@@ -56,6 +56,14 @@ export const DATA_TRANSFORMATION_PATH = FEATURE_ENGINEERING_PATH + "/data-transf
 export const DATA_DISCRETIZATION = "Data Discretization";
 export const DATA_DISCRETIZATION_PATH = FEATURE_ENGINEERING_PATH + "/data-discretization";
 
+// Feature Encoding Constants
+export const ONE_HOT_ENCODING = "one_hot_encoding";
+export const ORDINAL_ENCODING = "ordinal_encoding";
+export const BINARY_ENCODING = "binary_encoding";
+export const TARGET_ENCODING = "target_encoding";
+export const FREQUENCY_ENCODING = "frequency_encoding";
+
+
 
 
 

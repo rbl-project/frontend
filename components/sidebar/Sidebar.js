@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
-import { List } from '@mui/material';
+import { List,Box } from '@mui/material';
 import MuiDrawer from '@mui/material/Drawer';
 import { useSelector } from 'react-redux';
 
@@ -13,8 +13,8 @@ import TableChartIcon from '@mui/icons-material/TableChart';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 import MissingValueImputationIcon from '@mui/icons-material/Troubleshoot';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
-
 import GlobalDataRepresentationIcon from '@mui/icons-material/RemoveRedEye';
+import RepeatOneIcon from '@mui/icons-material/RepeatOne';
 
 // Components
 import SidebarItem from './SidebarItem';
@@ -43,19 +43,8 @@ import {
     DATA_DISCRETIZATION_PATH,
     DATASET_VIEW,
 } from '/constants/Constants';
-import { Box } from '@mui/system';
 
 const drawerWidth = DRAWER_WIDTH;
-
-
-// const DrawerHeader = styled('div')(({ theme }) => ({
-//     display: 'flex',
-//     alignItems: 'center',
-//     minHeight:"6vh",
-//     justifyContent: 'flex-end',
-//     padding: theme.spacing(0, 1),
-//     ...theme.mixins.toolbar,
-// }));
 
 
 const Sidebar = () => {
@@ -133,7 +122,7 @@ const Sidebar = () => {
                     <List sx={{ mt: 0,mx:1 }}>
                     <hr style={{ borderColor: 'transparent', width: "100%", backgroundColor: "rgb(86 86 86)" }} />
                         <SidebarSubheader title="Feature Engineering" open={open}></SidebarSubheader>
-                        <SidebarItem itemKey={1} name={FEATURE_ENCODING} path={FEATURE_ENCODING_PATH} ItemIcon={InboxIcon} open={open} />
+                        <SidebarItem itemKey={1} name={FEATURE_ENCODING} path={FEATURE_ENCODING_PATH} ItemIcon={RepeatOneIcon} open={open} />
                         <SidebarItem itemKey={2} name={DATA_TRANSFORMATION} path={DATA_TRANSFORMATION_PATH} ItemIcon={MailIcon} open={open} />
                         <SidebarItem itemKey={3} name={DATA_DISCRETIZATION} path={DATA_DISCRETIZATION_PATH} ItemIcon={CleaningServicesIcon} open={open} />
                     </List>

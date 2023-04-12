@@ -77,3 +77,10 @@ export const renameColumn = (formData) => API.post("/rename-column",formData);
 export const findAndReplace = (formData) => API.post("/find-and-replace",formData);
 export const changeDataType = (formData) => API.post("/change-data-type",formData);
 export const changeColumnType = (formData) => API.post("/change-column-type",formData);
+
+// Feature Encoding APIs
+export const oneHotEncoding = (formData) => API.post("/one-hot-encoding",formData);
+export const ordinalEncoding = (formData) => API.post("/ordinal-encoding",formData);
+export const targetEncoding = (formData) => API.post("/target-encoding",formData);
+export const binaryEncoding = (formData) => API.post("/binary-encoding",formData);
+export const frequencyEncoding = (formData) => API.post("/frequency-encoding",formData);
