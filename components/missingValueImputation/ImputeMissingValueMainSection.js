@@ -82,7 +82,6 @@ const ImputeMissingValueMainSection = ({ columnName }) => {
     }
   }
 
-console.log("status",missingValueImputationState);
   // toaster for dataCleaning state
   useEffect(() => {
 

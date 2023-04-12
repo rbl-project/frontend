@@ -35,6 +35,7 @@ const dataDiscretizationSlice = createSlice({
         resetRequestStatus: (state, action) => {
             state.data_discretization_req_status = REQUEST_STATUS_IDLE;
             state.get_column_description_req_status = REQUEST_STATUS_IDLE;
+            state.column_description = null;
             state.message = null;
         },
     },
@@ -67,6 +68,7 @@ const dataDiscretizationSlice = createSlice({
             .addCase(dataDiscretization.fulfilled, (state, action) => { // action.payload is the response.data
                 if (action.payload.status) {
                     state.data_discretization_req_status = REQUEST_STATUS_SUCCEEDED;
+                    state.message = action.payload.data.msg;
                 } else {
                     state.data_discretization_req_status = REQUEST_STATUS_FAILED;
                     state.message = action.payload.error; // error sent by us from our backend
