@@ -1,34 +1,18 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## DataTreat
+Fronted Repository for RBL Project 
 
-## Getting Started
+This is next js project which serves to be the frontend for DataTreat project.
 
-First, run the development server:
+#### Guide to run the porject
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+**System Requirements**
+1. Node Version: v16.15.1
+2. Npm Version: 8.12.1
+3. Preferes OS: Ubuntu 20.04 LTS
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Steps**
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. Make a directory `rbl_frontend` and clone the project in it.
+2. Run `npm i`
+3. Make the file `.env.local` and copy the environment variables in it from resources repository
+4. Run `npm run dev` to run the project locally
