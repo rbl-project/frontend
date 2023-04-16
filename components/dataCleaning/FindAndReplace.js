@@ -73,7 +73,7 @@ const FindAndReplaceSection = ({ setApiTaskType, findReplaceQuery, setFindReplac
             let newOptions = res.data['data']['search_result']
             setColValueOptions(newOptions)
         }).catch((err) => {
-            console.log(err);
+            // console.log(err);
         })
 
     }, [inputValue])

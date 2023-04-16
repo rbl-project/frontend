@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Autocomplete, Box, Paper, FormControl, Tooltip, Button, ListItemText, TextField, Typography, Divider, Select, MenuItem, InputLabel, Chip } from '@mui/material';
+import { Autocomplete, Box, Paper, FormControl, Tooltip,CircularProgress,  Button, ListItemText, TextField, Typography, Divider, Select, MenuItem, InputLabel, Chip } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 // Icons
 import DoneIcon from '@mui/icons-material/Done';
-import ClearIcon from '@mui/icons-material/HighlightOff';
-import ClearIcon2 from '@mui/icons-material/DeleteForever';
+import ClearIcon from '@mui/icons-material/DeleteForever';
 
 // Redux Actions
 import { setOpenMenuItem } from "/store/globalStateSlice";
+import { resetRequestStatus,dataTransformation } from "/store/dataTransformationSlice";
+import { getMetaData } from '/store/datasetUpdateSlice';
 
 // Constants
 import { DATA_TRANSFORMATION, REQUEST_STATUS_FAILED, REQUEST_STATUS_SUCCEEDED, REQUEST_STATUS_LOADING } from "/constants/Constants";
@@ -25,9 +26,10 @@ const DataTransformationMainSection = () => {
     const datasetUpdateState = useSelector((state) => state.datasetUpdate);
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     const selectedMenuItem = useSelector((state) => state.global.openMenuItem);
+    const dataTransformationState = useSelector((state) => state.dataTransformation);
 
-    // Local State for Transformation Type
-    const [transformationType, setTransformationType] = useState("normalization");
+    // Local State for Transformation Method
+    const [transformationMethod, setTransformationMethod] = useState("normalization");
     // Local State for Search Column SearchBar
     const [searchColumn, setSearchColumn] = useState(null);
     // Local State for ColumnOptions (Numerical Columns)
@@ -61,6 +63,13 @@ const DataTransformationMainSection = () => {
         }
     };
 
+    const handleApplyChanges = async () => {
+        if (dataTransformationState.data_transformation_req_status !== REQUEST_STATUS_LOADING) {
+            await dispatch(dataTransformation({dataset_name: selectedDataset, transformation_method: transformationMethod, column_list: selectedColumns}));
+            dispatch(getMetaData({dataset_name:selectedDataset}));
+        }
+    };
+
     // Set Local State when Metadata is Fetched
     useEffect(() => {
         setSelectedColumns([]);
@@ -74,7 +83,38 @@ const DataTransformationMainSection = () => {
         }
     }, []);
 
-    console.log("selectedColumn", selectedColumns, "columnOptions", columnOptions);
+    // toaster for data Transformation state
+    useEffect(() => {
+        // In case of success
+        if (dataTransformationState.data_transformation_req_status === REQUEST_STATUS_SUCCEEDED) {
+            toast.success(dataTransformationState.message, {
+                position: "bottom-right",
+                autoClose: false,
+                hideProgressBar: false,
+                autoClose: 2000,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "light",
+            });
+            dispatch(resetRequestStatus());
+        }
+
+        // In case of failure
+        else if (dataTransformationState.data_transformation_req_status === REQUEST_STATUS_FAILED) {
+            toast.error(dataTransformationState.message, {
+                position: "bottom-right",
+                autoClose: false,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "light",
+            });
+            dispatch(resetRequestStatus());
+        }
+
+    }, [dataTransformationState.data_transformation_req_status])
 
     return (
         <Paper elevation={0}>
@@ -90,16 +130,16 @@ const DataTransformationMainSection = () => {
                 <Box sx={{ px: 2, mt: 2 }}>
 
                     < Box sx={{ display: "flex", flexDirection: "row", }}>
-                        {/* Select Transformation Type */}
+                        {/* Select Transformation Method */}
                         <Box sx={{ width: "20%", mr: 2 }}>
                             <FormControl fullWidth size="small">
-                                < InputLabel id="demo-simple-select-label-transformation-type">Transformation Type</InputLabel>
+                                < InputLabel id="demo-simple-select-label-transformation-type">Transformation Method</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label-transformation-type"
                                     id="demo-simple-select"
-                                    value={transformationType}
-                                    label="Transformation Type"
-                                    onChange={(event) => setTransformationType(event.target.value)}
+                                    value={transformationMethod}
+                                    label="Transformation Method"
+                                    onChange={(event) => setTransformationMethod(event.target.value)}
                                 >
                                     <MenuItem value={"normalization"}>Normalization</MenuItem>
                                     <MenuItem value={"standardization"}>Standardization</MenuItem>
@@ -147,20 +187,18 @@ const DataTransformationMainSection = () => {
 
                         {/* Clear All Selected Columns Button  */}
                         <Box>
-                            <Button variant='outlined' size="small" color="error" disabled={selectedColumns.length === 0} onClick={handleDeleteAllColumns} startIcon={<ClearIcon2 />}>Clear</Button>
+                            <Button variant='outlined' size="small" color="error" disabled={selectedColumns.length === 0} onClick={handleDeleteAllColumns} startIcon={<ClearIcon />}>Clear</Button>
                         </Box>
                     </Box>
 
                     {/* Apply Changes Button */}
                     <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-                        {/* <Button disabled={!(isValidInput && isColumnSelected)} onClick={handleApplyChanges} variant="contained" color="primary" sx={{ mr: 1, width: "12rem" }} startIcon={dataDiscretizationState.data_discretization_req_status !== REQUEST_STATUS_LOADING && (<DoneIcon />)}> */}
-                        <Button variant="contained" color="primary" sx={{ mr: 1, width: "12rem" }} startIcon={(<DoneIcon />)}>
-                            {/* {
-                                dataDiscretizationState.data_discretization_req_status === REQUEST_STATUS_LOADING ?
+                        <Button variant="contained" disabled={selectedColumns.length === 0} color="primary" onClick={handleApplyChanges} sx={{ mr: 1, width: "12rem" }} startIcon={dataTransformationState.data_transformation_req_status === REQUEST_STATUS_LOADING && (<DoneIcon />)}>
+                            {
+                                dataTransformationState.data_transformation_req_status === REQUEST_STATUS_LOADING ?
                                     <CircularProgress size={20} color="inherit" />
                                     : "Apply Changes"
-                            } */}
-                            Apply Changes
+                            }
                         </Button>
                     </Box>
                 </Box>
@@ -178,7 +216,7 @@ const DataTransformationMainSection = () => {
                         columnValue={[]}
                         numericalToValue={null}
                         numericalFromValue={null}
-                        reload={false}
+                        reload={dataTransformationState.data_transformation_req_status === REQUEST_STATUS_FAILED || dataTransformationState.data_transformation_req_status === REQUEST_STATUS_SUCCEEDED}
                         parameters={{
                             "categorical_values": {},
                             "numerical_values": {}

@@ -73,7 +73,6 @@ const UploadDatasetTab = ({ handleModalClose }) => {
 
   // Update Toast On Success or Failure of Dataset Upload
   useEffect(() => {
-    // console.log("datasetState",datasetState);
     if (datasetState.datasetUploadStatus === REQUEST_STATUS_SUCCEEDED) {
       toast.update(toastId.current, {
         render: datasetState.message,

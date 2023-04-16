@@ -157,7 +157,6 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
             dispatch(setRequestStatus({ requestStatus: REQUEST_STATUS_IDLE }));
             setRequestCreatorId(null);
         }).catch((err) => {
-            // console.log(err);
             toast.error(err, {
                 position: "bottom-right",
                 autoClose: false,
@@ -195,7 +194,6 @@ const AvailableDatasetTab = ({ handleModalClose }) => {
 
     // Show Alert Messages
     useEffect(() => {
-        // console.log(datasetState,requestCreatorId);
         if (datasetState.requestStatus === REQUEST_STATUS_FAILED) {
             toast.error([undefined, null, ""].includes(datasetState.message) ? CUSTOM_ERROR_MESSAGE : datasetState.message, {
                 position: "bottom-right",

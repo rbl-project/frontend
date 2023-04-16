@@ -13,6 +13,7 @@ import dataCleaningSlice from "./dataCleaningSlice";
 import datasetUpdateSlice from "./datasetUpdateSlice";
 import dataDiscretizationSlice from "./dataDiscretizationSlice";
 import featureEncodingSlice from "./featureEncodingSlice";
+import dataTransformationSlice from "./dataTransformationSlice";
 
 const combineReducer = combineReducers({
     global:globalStateSlice,
@@ -27,6 +28,7 @@ const combineReducer = combineReducers({
     datasetUpdate:datasetUpdateSlice,
     dataDiscretization:dataDiscretizationSlice,
     featureEncoding:featureEncodingSlice,
+    dataTransformation:dataTransformationSlice,
 });
 
 export const makeStore = () => configureStore({reducer:combineReducer});

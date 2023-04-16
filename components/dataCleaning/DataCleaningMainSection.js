@@ -215,7 +215,7 @@ const DataCleaningMainSection = () => {
             }))
 
         } else {
-            console.log("No API Task Type");
+            // console.log("No API Task Type");
         }
 
         dispatch(getMetaData({ dataset_name: selectedDataset }));

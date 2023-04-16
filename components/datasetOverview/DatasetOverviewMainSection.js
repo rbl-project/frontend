@@ -75,7 +75,6 @@ const DatasetOverviewMainSection = () => {
 
   // Error HAndling
   useEffect(() => {
-    // console.log("datasetOverviewState", datasetOverviewState);
     if (
       datasetOverviewState.basic_info_req_status === REQUEST_STATUS_FAILED ||
       datasetOverviewState.desc_num_cols_req_status === REQUEST_STATUS_FAILED ||

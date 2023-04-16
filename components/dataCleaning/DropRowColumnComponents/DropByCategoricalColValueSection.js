@@ -72,7 +72,7 @@ const DropByCategoricalColValueSection = ({ setApiTaskType, dropByCategoricalQue
             let newOptions = res.data['data']['search_result']
             setOptions(newOptions)
         }).catch((err) => {
-            console.log(err);
+            // console.log(err);
         })
 
     }, [inputValue, dropValue])

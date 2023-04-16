@@ -65,7 +65,6 @@ const SearchParameters = ({ searchQuery, setSearchQuery }) => {
 
         setSearchColumn('');
         setSearchValue([]);
-        // console.log(tabularRepresentationState.categorical_column_values["Species"]);
     }
 
     const handleSearchColumnNumericalSubmit = () => {
