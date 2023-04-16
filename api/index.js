@@ -87,3 +87,6 @@ export const ordinalEncoding = (formData) => API.post("/ordinal-encoding",formDa
 export const targetEncoding = (formData) => API.post("/target-encoding",formData);
 export const binaryEncoding = (formData) => API.post("/binary-encoding",formData);
 export const frequencyEncoding = (formData) => API.post("/frequency-encoding",formData);
+
+// Data Transformation APIs
+export const dataTransformation = (formData) => API.post("/data-transformation",formData);

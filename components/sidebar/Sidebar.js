@@ -1,20 +1,20 @@
 import React from 'react';
+import MuiDrawer from '@mui/material/Drawer';
 import { styled, useTheme } from '@mui/material/styles';
 import { List,Box } from '@mui/material';
-import MuiDrawer from '@mui/material/Drawer';
 import { useSelector } from 'react-redux';
 
 // Icons
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import ScatterPlotIcon from '@mui/icons-material/ScatterPlot';
-import DatasetIcon from '@mui/icons-material/Dataset';
-import TableChartIcon from '@mui/icons-material/TableChart';
-import AutoGraphIcon from '@mui/icons-material/AutoGraph';
+import DataOverviewIcon from '@mui/icons-material/Dataset';
+import DataCorrelationIcon from '@mui/icons-material/ScatterPlot';
+import TabularRepresentationIcon from '@mui/icons-material/TableChart';
+import GraphicalRepresentationIcon from '@mui/icons-material/AutoGraph';
 import MissingValueImputationIcon from '@mui/icons-material/Troubleshoot';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
+import FeatureEncodingIcon from '@mui/icons-material/RepeatOne';
+import DataTranformationIcon from '@mui/icons-material/CompareArrows';
+import DataDiscretizationIcon from '@mui/icons-material/TextRotationNone';
 import GlobalDataRepresentationIcon from '@mui/icons-material/RemoveRedEye';
-import RepeatOneIcon from '@mui/icons-material/RepeatOne';
 
 // Components
 import SidebarItem from './SidebarItem';
@@ -104,10 +104,10 @@ const Sidebar = () => {
                     {/* Exploratory Data Analysis Functions */}
                     <List sx={{ mt: 0,mx:1 }} >
                         <SidebarSubheader title="Exploratory Data Analysis" open={open}></SidebarSubheader>
-                        <SidebarItem itemKey={1} name={DATASET_OVERVIEW} path={DATASET_OVERVIEW_PATH} ItemIcon={DatasetIcon} open={open} />
-                        <SidebarItem itemKey={2} name={DATA_CORRELATION} path={DATA_CORRELATION_PATH} ItemIcon={ScatterPlotIcon} open={open} />
-                        <SidebarItem itemKey={3} name={TABULAR_REPRESENTATION} path={TABULAR_REPRESENTATION_PATH} ItemIcon={TableChartIcon} open={open} />
-                        <SidebarItem itemKey={4} name={GRAPHICAL_REPRESENTATION} path={GRAPHICAL_REPRESENTATION_PATH} ItemIcon={AutoGraphIcon} open={open} />
+                        <SidebarItem itemKey={1} name={DATASET_OVERVIEW} path={DATASET_OVERVIEW_PATH} ItemIcon={DataOverviewIcon} open={open} />
+                        <SidebarItem itemKey={2} name={DATA_CORRELATION} path={DATA_CORRELATION_PATH} ItemIcon={DataCorrelationIcon} open={open} />
+                        <SidebarItem itemKey={3} name={TABULAR_REPRESENTATION} path={TABULAR_REPRESENTATION_PATH} ItemIcon={TabularRepresentationIcon} open={open} />
+                        <SidebarItem itemKey={4} name={GRAPHICAL_REPRESENTATION} path={GRAPHICAL_REPRESENTATION_PATH} ItemIcon={GraphicalRepresentationIcon} open={open} />
                     </List >
 
                     {/* Data Preprocessing Functions */}
@@ -122,9 +122,9 @@ const Sidebar = () => {
                     <List sx={{ mt: 0,mx:1 }}>
                     <hr style={{ borderColor: 'transparent', width: "100%", backgroundColor: "rgb(86 86 86)" }} />
                         <SidebarSubheader title="Feature Engineering" open={open}></SidebarSubheader>
-                        <SidebarItem itemKey={1} name={FEATURE_ENCODING} path={FEATURE_ENCODING_PATH} ItemIcon={RepeatOneIcon} open={open} />
-                        <SidebarItem itemKey={2} name={DATA_TRANSFORMATION} path={DATA_TRANSFORMATION_PATH} ItemIcon={MailIcon} open={open} />
-                        <SidebarItem itemKey={3} name={DATA_DISCRETIZATION} path={DATA_DISCRETIZATION_PATH} ItemIcon={CleaningServicesIcon} open={open} />
+                        <SidebarItem itemKey={1} name={FEATURE_ENCODING} path={FEATURE_ENCODING_PATH} ItemIcon={FeatureEncodingIcon} open={open} />
+                        <SidebarItem itemKey={2} name={DATA_TRANSFORMATION} path={DATA_TRANSFORMATION_PATH} ItemIcon={DataTranformationIcon} open={open} />
+                        <SidebarItem itemKey={3} name={DATA_DISCRETIZATION} path={DATA_DISCRETIZATION_PATH} ItemIcon={DataDiscretizationIcon} open={open} />
                     </List>
                 </Box>
                 <Box sx={{ mb: 1,mx:1 }}>

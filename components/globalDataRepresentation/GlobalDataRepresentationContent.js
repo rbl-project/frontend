@@ -54,7 +54,6 @@ const GlobalDataRepresentationContent = (props) => {
         }
     })
 
-    console.log("GlobalDataRepresentationContent xxxx",props);
     const dispatch = useDispatch();
     const selectedDataset = useSelector((state) => state.dataset.selectedDataset);
     const datasetUpdateState = useSelector((state) => state.datasetUpdate);
@@ -136,7 +135,7 @@ const GlobalDataRepresentationContent = (props) => {
             let newOptions = res.data['data']['search_result']
             setOptions(newOptions)
         }).catch((err) => {
-            console.log(err);
+            // console.log(err);
         })
 
     }, [inputValue, columnValue,])
